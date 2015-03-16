@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>值得借鉴的Google测试经验 | ShareCore</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="近来读了《Google软件测试之道》一书，以下是我从书里得来的两点经验：
+一.紧密结合开发过程与测试
+测试之难，保证产品开发质量之难，每个公司每个团队，都会碰到各自的的问题和困难。但最为常见的抱怨（尤其是在互联网行业）是：开发人员不重视测试，测试人员人手不足，开发迭代又快，测不过来。不少团队还喜欢争论开发测试比是1：1还是1：5或者5：1的问题,经常搬出微软这些传统软件巨头的开发测试比是多少多少来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="值得借鉴的Google测试经验">
+<meta property="og:url" content="http://sharecore.net/2014/06/29/值得借鉴的Google测试经验/index.html">
+<meta property="og:site_name" content="ShareCore">
+<meta property="og:description" content="近来读了《Google软件测试之道》一书，以下是我从书里得来的两点经验：
+一.紧密结合开发过程与测试
+测试之难，保证产品开发质量之难，每个公司每个团队，都会碰到各自的的问题和困难。但最为常见的抱怨（尤其是在互联网行业）是：开发人员不重视测试，测试人员人手不足，开发迭代又快，测不过来。不少团队还喜欢争论开发测试比是1：1还是1：5或者5：1的问题,经常搬出微软这些传统软件巨头的开发测试比是多少多少来">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="值得借鉴的Google测试经验">
+<meta name="twitter:description" content="近来读了《Google软件测试之道》一书，以下是我从书里得来的两点经验：
+一.紧密结合开发过程与测试
+测试之难，保证产品开发质量之难，每个公司每个团队，都会碰到各自的的问题和困难。但最为常见的抱怨（尤其是在互联网行业）是：开发人员不重视测试，测试人员人手不足，开发迭代又快，测不过来。不少团队还喜欢争论开发测试比是1：1还是1：5或者5：1的问题,经常搬出微软这些传统软件巨头的开发测试比是多少多少来">
+  
+    <link rel="alternative" href="/atom.xml" title="ShareCore" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">ShareCore</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Jack Hacker</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="q" value="site:http://sharecore.net"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-值得借鉴的Google测试经验" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/06/29/值得借鉴的Google测试经验/" class="article-date">
+  <time datetime="2014-06-28T16:01:03.000Z" itemprop="datePublished">2014-06-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      值得借鉴的Google测试经验
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>近来读了《Google软件测试之道》一书，以下是我从书里得来的两点经验：</p>
+<p><strong>一.紧密结合开发过程与测试</strong></p>
+<p>测试之难，保证产品开发质量之难，每个公司每个团队，都会碰到各自的的问题和困难。但最为常见的抱怨（尤其是在互联网行业）是：<strong>开发人员不重视测试，测试人员人手不足，开发迭代又快，测不过来</strong>。不少团队还喜欢争论开发测试比是1：1还是1：5或者5：1的问题,经常搬出微软这些传统软件巨头的开发测试比是多少多少来为自己辩护。其实，靠堆积人海战术的测试，是不适合在线型的快速的产品交付模式的。Google在这条路上就是另辟新径。</p>
+<p>Google的“新径”说到底其实也很简单，就是将开发过程和测试混合在一起，密不可分，他们认为测试是开发过程中必不可少的部分，当开发过程和测试一起携手联姻时，即是质量达成之时。 </p>
+<p>Google的测试主管Patrick说道：<br><strong><em>一个团队能编写出高质量的产品的唯一途径是全体人员共同对质量负责，包括产品经理，开发人员，测试人员等所有人。达到此目的最好方式是使测试人员有能力将测试变成代码库的一个实际功能，而测试功能的地位和应该与真是客户看到的任何其它功能同等重要。</em></strong></p>
+<p>Google将工程师团队分成以下三种角色：</p>
+<p><strong>1. 软件开发工程师(SWE，software engineer)</strong></p>
+<p>SWE就是传统上的开发角色，他们的职责就是实现用户使用功能的代码。但是除此之外，<strong>SWE还需要编写测试代码，包括进行测试驱动的设计，单元测试，参与构建各种大小规模的测试等</strong>。简单来说，SWE所有时间都是花在了代码编写上，包括功能代码以及对这些功能代码进行测试用的测试代码。</p>
+<p><strong>2. 软件测试开发工程师(SET,software engineer in test)</strong></p>
+<p><strong>SET应该是Google能促进开发过程与测试紧密合起来的最关键角色</strong>。SET的工作重心在于提供可测试性和通用性测试的基础框架上。传统的测试由于这一角色的缺乏，导致产品的可测试性难以保证，最后沦为开发人员由于编写测试代码困难，不愿意去写测试代码，而测试人员由于模块化测试困难，导致不能尽早介入到开发流程中去，而只能在产品交互后做停留在表面的集成测试。</p>
+<p>而SET这一角色的存在，很好的解决了这一个问题。SET会提供各种mock/fake框架，SWE在编写代码时，可以利用这些框架与外部依赖解耦，使得产品的单元测试和测试的自动执行变得相当容易。同时，集成测试也可以更早地进行，提高了测试人员的效率。</p>
+<p><strong>3.测试工程师(TE,test engineer)</strong></p>
+<p><strong>TE更多地代表的是用户利益，他们需要把用户放在第一位来思考</strong>。 TE需要组织整体的质量实践，分析和解释测试执行结果，驱动测试执行，构建端到端的自动化测试。他们早期会通过关注bug数，以<strong>确认开发人员在测试方面是做得到位</strong>。当bug数减少后，他们在以用户使用的场景，来进行<strong>探索性的测试</strong>。</p>
+<p>以上三个角色的紧密配合，完成了开发过程与测试的“联姻”。而这个负责“牵红线的月老”，我想就是SET这个角色。SET是产品可测试性的保证。同时，可测试性不只是将开发过程和测试紧密结合的基础，同时还是检验代码质量和架构是否优良的最好工具。我一直信奉下面这个公式：<strong><em>可测试性=低耦合=优秀的代码=良好的架构</em></strong></p>
+<p><strong>二.版本发布的“爬，走，跑”模式</strong></p>
+<p>熟悉google产品的，应该经常能看到google许多发布的版本后面都带着beta的标签，如我现在是用的chrome版本就是“33.0.1750.29 beta”。许多产品在线运营了多年，beta的标签也没有去掉，这个标签是在警示用户，产品仍处于改良之中。对于最终用户，只有产品达到99.99%的可用性，才会将beta的标签去掉。</p>
+<p>一般一个产品在发布给用户之前，一般要经历金丝雀版本，开发版本，测试版本，beta或正式发布版本。</p>
+<p><strong>金丝雀版本</strong>:即每日构建版本，用来排除一些明显问题的版本。这是一个极不稳定的版本，可能随时崩溃。一般只有产品的工程师（开发或测试人员）才会安装使用金丝雀版本。</p>
+<p><strong>开发版本</strong>：这个是开发人员日常使用的版本，一般是每周发布一个。该版本具有一定的功能并通过了一系列的测试。所有这个产品下的工程师都被要求去安装这个版本，并在日常工作中真正使用它。这其实体现“Eating your own dog food”的软件开发“黄金法则”。</p>
+<p><strong>测试版本</strong>：这是一个通过了持续测试的版本,一般是一个月里最佳版本。一般可以被挑选为内部尝鲜，当做整个公司的“dog food”。如果该版本能持续表现良好，可作为beta测试的候选版本。</p>
+<p><strong>beta或发布版本</strong>：这个版本由非常稳定的测试版本演变而来，并经历了内部使用和通过所有质量考核的一个版本，也是对外发布的第一个版本。</p>
+<p>这种“爬，走，跑”的模式，能给产品提供一个测试验证的良好机会，并尽快得到使用过程中的反馈。</p>
+<p>以上两点，就是《Google软件测试之道》一书能带来的两点经验，书的其它大部分内容是许多Google内部人士的访谈，我认为这部分都“太Google”了，价值不是太大，也是此书的问题所在。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://sharecore.net/2014/06/29/值得借鉴的Google测试经验/" data-id="ci7c4545e001wzkrrk3an1c9q" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/测试/">测试</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/07/05/可扩展架构设计的三个维度/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          可扩展架构设计的三个维度
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/06/21/过载保护算法浅析/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">过载保护算法浅析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang/">Golang</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/历史/">历史</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础知识/">基础知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/复杂性/">复杂性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常识/">常识</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术常识/">技术常识</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/春秋/">春秋</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务化/">服务化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/架构/">架构</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模式匹配/">模式匹配</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2014/08/24/模式匹配初析/">模式匹配初析</a>
+          </li>
+        
+          <li>
+            <a href="/2014/08/10/字符编码常识及问题解析/">字符编码常识及问题解析</a>
+          </li>
+        
+          <li>
+            <a href="/2014/08/02/浅谈服务化架构/">浅谈服务化架构</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/27/面对喷子明哲保身/">面对喷子明哲保身</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/20/技术的进化/">技术的进化</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 Jack Hacker<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>过载保护算法浅析 | ShareCore</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="何为过载保护？所谓“过载”，即需求超过了负载能力;而“保护”则是指当“过载”发生了，采取必要的措施保护自己不受“伤害”。在计算机领域，尤其是分布式系统领域，“过载保护”是一个重要的概念。一个不具备“过载保护”功能的系统，是非常危险和脆弱的，很可能由于瞬间的压力激增，引起“雪崩效应”，导致系统的各个部分都同时崩溃，停止服务。这就好像在没有保险丝的保护下，电压突然变高，导致所有的电器都会被损坏一样，“">
+<meta property="og:type" content="article">
+<meta property="og:title" content="过载保护算法浅析">
+<meta property="og:url" content="http://sharecore.net/2014/06/21/过载保护算法浅析/index.html">
+<meta property="og:site_name" content="ShareCore">
+<meta property="og:description" content="何为过载保护？所谓“过载”，即需求超过了负载能力;而“保护”则是指当“过载”发生了，采取必要的措施保护自己不受“伤害”。在计算机领域，尤其是分布式系统领域，“过载保护”是一个重要的概念。一个不具备“过载保护”功能的系统，是非常危险和脆弱的，很可能由于瞬间的压力激增，引起“雪崩效应”，导致系统的各个部分都同时崩溃，停止服务。这就好像在没有保险丝的保护下，电压突然变高，导致所有的电器都会被损坏一样，“">
+<meta property="og:image" content="/images/Leaky_bucket.JPG">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="过载保护算法浅析">
+<meta name="twitter:description" content="何为过载保护？所谓“过载”，即需求超过了负载能力;而“保护”则是指当“过载”发生了，采取必要的措施保护自己不受“伤害”。在计算机领域，尤其是分布式系统领域，“过载保护”是一个重要的概念。一个不具备“过载保护”功能的系统，是非常危险和脆弱的，很可能由于瞬间的压力激增，引起“雪崩效应”，导致系统的各个部分都同时崩溃，停止服务。这就好像在没有保险丝的保护下，电压突然变高，导致所有的电器都会被损坏一样，“">
+  
+    <link rel="alternative" href="/atom.xml" title="ShareCore" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">ShareCore</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Jack Hacker</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="q" value="site:http://sharecore.net"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-过载保护算法浅析" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/06/21/过载保护算法浅析/" class="article-date">
+  <time datetime="2014-06-20T16:01:40.000Z" itemprop="datePublished">2014-06-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      过载保护算法浅析
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>何为<strong>过载保护</strong>？所谓“过载”，即需求超过了负载能力;而“保护”则是指当“过载”发生了，采取必要的措施保护自己不受“伤害”。在计算机领域，尤其是分布式系统领域，“过载保护”是一个重要的概念。一个不具备“过载保护”功能的系统，是非常危险和脆弱的，很可能由于瞬间的压力激增，引起“<strong>雪崩效应</strong>”，导致系统的各个部分都同时崩溃，停止服务。这就好像在没有保险丝的保护下，电压突然变高，导致所有的电器都会被损坏一样，“过载保护”功能是系统的“保险丝”。</p>
+<p>去年开始，写了一个RPC服务框架，用以承接各个业务系统在其上进行各类业务服务接口的开发与部署，供远端调用。之于此类的框架，“过载保护”就是一个必须具备的功能特性，用以保护底层提供服务的业务系统不受“恶意”调用或突发性调用的破坏。而在整个实现整个功能的过程中，我发现实现“过载保护”算法是一个很有趣也比较有挑战的活。今天就稍微介绍一下这方面的算法吧。</p>
+<p>可能跟大多数人一样，拿到这个算法需求很容易想到一个简单而又有点粗暴的算法：设置一个单位时间（如10s）内的最大访问量，并维护一个单位时间里的计数器，当访问请求到达时，先判断单位控制时间是否已经超时，如果已经超时，重置计数器为0;否则，将计数器加1,并判断计数器的值是否超过最大访问量设置，如超过，则拒绝访问。</p>
+<p>具体的伪代码如下：（当然，具体的代码实现还有考虑并发的情况）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> timeStamp=getNowTime();</span><br><span class="line"><span class="keyword">int</span> reqCount=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxReqCount=<span class="number">10000</span>;<span class="comment">//时间周期内最大请求数</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">long</span> effectiveDuration=<span class="number">10</span>;<span class="comment">//时间控制周期</span></span><br><span class="line"></span><br><span class="line"><span class="function">bool <span class="title">grant</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> now=getNowTime();</span><br><span class="line">    <span class="keyword">if</span> (now &lt;timeStamp+effectiveDuration)&#123;<span class="comment">//在时间控制范围内</span></span><br><span class="line">        reqCount++;</span><br><span class="line">        <span class="keyword">return</span> reqCount&gt;maxReqCount;<span class="comment">//当前时间范围内超过最大请求控制数</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        timeStamp=now;<span class="comment">//超时后重置</span></span><br><span class="line">        reqCount=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>该算法实现确实是实现了“单位时间里最大访问量控制”这一需求，但是，仔细研究下，发现它在两个单位时间的临界值上的处理是有缺陷的。如：设需要控制的最大请求数为1w, 在第一个单位时间的最后一秒里达到的请求数为1w,接下来第二个单位时间内的第一秒里达到请求数也是1w,由于超时重置发生在两个单位时间之间，所以这2w个请求都将通过控制，也就是说在2s里处理2w个请求，与我们设置的10s里1w个请求的需求相违背。</p>
+<p>换句话说，这个算法，对请求的控制不够平滑。那是不是还有更平滑的算法呢？有，<strong>漏桶算法（Leaky Bucket）</strong>就是其一。</p>
+<p><img src="/images/Leaky_bucket.JPG"></p>
+<p>（图来自wikipedia）</p>
+<p>如上图所示，我们假设系统是一个漏桶，当请求到达时，就是往漏桶里“加水”，而当请求被处理掉，就是水从漏桶的底部漏出。水漏出的速度是固定的，当“加水”太快，桶就会溢出，也就是“拒绝请求”。从而使得桶里的水的体积不可能超出桶的容量。</p>
+<p>上面的分析可以看出，该算法存在三个变量：桶的容量capacity，水漏出的速度rate，以及当前的水量water。</p>
+<p>算法伪代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> timeStamp=getNowTime();        </span><br><span class="line"><span class="keyword">int</span> capacity;        <span class="comment">// 桶的容量</span></span><br><span class="line"><span class="keyword">int</span> rate ;          <span class="comment">//水漏出的速度</span></span><br><span class="line"><span class="keyword">int</span> water;          <span class="comment">//当前水量</span></span><br><span class="line"></span><br><span class="line"><span class="function">bool <span class="title">grant</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">//先执行漏水，因为rate是固定的，所以可以认为“时间间隔*rate”即为漏出的水量</span></span><br><span class="line">  <span class="keyword">long</span>  now = getNowTime();</span><br><span class="line">  water = max(<span class="number">0</span>, water- (now - timeStamp)*rate);</span><br><span class="line">  timeStamp = now;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (water &lt; capacity) &#123; <span class="comment">// 水还未满，加水</span></span><br><span class="line">    water ++;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;<span class="comment">//水满，拒绝加水</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以上算法，我们可以通过调整capacity的值，来控制系统处理的最大请求数。而上文我们提到的时间边界处理的不够平滑问题，也可以很好的解决了，因为在每次进桶前都将执行“漏水”的操作，时间的切片不再是一个固定的值。</p>
+<p>如果你现在正在维基百科上查看“漏桶算法”的篇章，你会发现有一个与“漏桶算法”相关联的算法叫<strong>令牌桶(Tocken Bucket)</strong>算法。令牌桶算法的原理是系统会以一个恒定的速度往桶里放入令牌，而如果请求需要被处理，则需要先从桶里获取一个令牌，当桶里没有令牌可取时，则拒绝服务。从原理上看，令牌桶算法和漏桶算法是相反的，一个“进水”，一个是“漏水”。</p>
+<p>令牌桶算法伪代码如下，跟漏桶算法很相似：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> timeStamp=getNowTime();        </span><br><span class="line"><span class="keyword">int</span> capacity;              <span class="comment">// 桶的容量</span></span><br><span class="line"><span class="keyword">int</span> rate ;              <span class="comment">//令牌放入速度</span></span><br><span class="line"><span class="keyword">int</span> tokens;            <span class="comment">//当前水量</span></span><br><span class="line"></span><br><span class="line"><span class="function">bool <span class="title">grant</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">//先执行添加令牌的操作</span></span><br><span class="line">  <span class="keyword">long</span>  now = getNowTime();</span><br><span class="line">  tokens = max(capacity, tokens+ (now - timeStamp)*rate);</span><br><span class="line">  timeStamp = now;</span><br><span class="line">  <span class="comment">//令牌已用完，拒绝访问</span></span><br><span class="line">  <span class="keyword">if</span>(tokens&lt;<span class="number">1</span>)&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;<span class="comment">//还有令牌，领取令牌</span></span><br><span class="line">    tokens--;</span><br><span class="line">    retun <span class="keyword">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以上是关于漏桶算法和令牌桶算法的基本介绍，你趋向于用哪个呢？我现在用的是“漏桶”，没有什么原因，因为我首先看到的它，然后才看到“令牌桶”。但当然，实现这两个算法后，离真正的过载保护还有许多工程上的问题需要解决，比如当系统是多个节点组成的集群来提供服务时，我们需要统一的存储（一般用Redis之类的内存级存储较为合适）来维护当前桶的状态。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://sharecore.net/2014/06/21/过载保护算法浅析/" data-id="ci7c4544e000czkrrtf4k0jk2" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/架构/">架构</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/06/29/值得借鉴的Google测试经验/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          值得借鉴的Google测试经验
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/06/15/程序员持续学习之道/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">程序员持续学习之道</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang/">Golang</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/历史/">历史</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础知识/">基础知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/复杂性/">复杂性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常识/">常识</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术常识/">技术常识</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/春秋/">春秋</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务化/">服务化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/架构/">架构</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模式匹配/">模式匹配</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2014/08/24/模式匹配初析/">模式匹配初析</a>
+          </li>
+        
+          <li>
+            <a href="/2014/08/10/字符编码常识及问题解析/">字符编码常识及问题解析</a>
+          </li>
+        
+          <li>
+            <a href="/2014/08/02/浅谈服务化架构/">浅谈服务化架构</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/27/面对喷子明哲保身/">面对喷子明哲保身</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/20/技术的进化/">技术的进化</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 Jack Hacker<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

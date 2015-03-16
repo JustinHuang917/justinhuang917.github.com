@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ShareCore</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ShareCore">
+<meta property="og:url" content="http://sharecore.net/page/8/index.html">
+<meta property="og:site_name" content="ShareCore">
+<meta property="og:description">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ShareCore">
+<meta name="twitter:description">
+  
+    <link rel="alternative" href="/atom.xml" title="ShareCore" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">ShareCore</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Jack Hacker</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="q" value="site:http://sharecore.net"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Go并发编程模式进阶" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/06/10/Go并发编程模式进阶/" class="article-date">
+  <time datetime="2013-06-09T16:09:57.000Z" itemprop="datePublished">2013-06-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/06/10/Go并发编程模式进阶/">Go并发编程模式进阶</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前段时间Google的<a href="http://profiles.google.com/ajmani">Sameer Ajmani</a>在Google I/O上做了关于Go的并发模式的介绍。Slides<a href="http://talks.golang.org/2013/advconc.slide">在此</a>,youtube视频<a href="http://www.youtube.com/watch?feature=player_embedded&amp;v=QDDwwePbDtw">在此</a>(注：上述链接均需翻墙)。</p>
+<p>本篇的前提是对goroutine+channel的并发编程模式有基本的了解，建议能读懂下面这个经典ping-pong程序为好。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"><span class="comment">//定义一个结构</span></span><br><span class="line"><span class="keyword">type</span> Ball <span class="keyword">struct</span>&#123; hits <span class="typename">int</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	<span class="comment">//创建一个可传输Ball的channel</span></span><br><span class="line">	table := <span class="built_in">make</span>(<span class="keyword">chan</span> *Ball)</span><br><span class="line">	<span class="comment">//分别启动ping/pong的goroutine	</span></span><br><span class="line">	<span class="keyword">go</span> Player(<span class="string">"Ping"</span>, table)</span><br><span class="line">	<span class="keyword">go</span> Player(<span class="string">"Pong"</span>, table)</span><br><span class="line">	<span class="comment">//一个Ball进入channel，游戏开始</span></span><br><span class="line">	table &lt;- <span class="built_in">new</span>(Ball)</span><br><span class="line">	<span class="comment">//“主”程序暂停1s,等待ping/pong的goroutine执行</span></span><br><span class="line">	time.Sleep(<span class="number">1</span> * time.Second)</span><br><span class="line">	<span class="comment">//从channel取出Ball，游戏开始</span></span><br><span class="line">	&lt;-table</span><br><span class="line">	<span class="comment">//可通过引发异常，显示调用栈的详细信息</span></span><br><span class="line">	<span class="comment">//panic("show me the stacks")</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> Player(name <span class="typename">string</span>, table <span class="keyword">chan</span> *Ball) &#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="comment">//channel取出Ball，并hits++</span></span><br><span class="line">		ball := &lt;-table</span><br><span class="line">		ball.hits++</span><br><span class="line">		fmt.Println(name, ball.hits)</span><br><span class="line">		<span class="comment">//暂停1ms</span></span><br><span class="line">		time.Sleep(<span class="number">1</span> * time.Millisecond)</span><br><span class="line">		<span class="comment">//将Ball放回channel</span></span><br><span class="line">		table &lt;- ball</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>ping-pong程序的执行过程，可以用下图来表示。</p>
+<p><img src="/images/advgoroutine/pingpong.png" alt="ping-pong程序执行过程"></p>
+<p>接下来主要说说Go的并发编程里的一些“文艺”使用:如何通信?如何周期性处理事件？如何取消执行？这些高级用法的支持，除了依赖我们上面看到的goroutine+channel外，还要依赖于Go的一个statement：select+case。它可以用来管理和监听多个channel,从而起到“多路复用”的效果。他的基本语法如下。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line"><span class="keyword">case</span> xc &lt;- x:</span><br><span class="line">    <span class="comment">// 向channel(xc)发送一个对象(x)</span></span><br><span class="line"><span class="keyword">case</span> y := &lt;-yc:</span><br><span class="line">    <span class="comment">// 从channel(yc)获取一个对象并赋值到变量(y)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>下面我们以一个能持续从RSS获取资源项的例子来说明select的使用。<br>假设我们已经拥有下面这个接口所定义的功能：从一个RSS url获取资源项目(一次调用，获取一次,这个接口的模拟实现，见附1。)<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Fetcher <span class="keyword">interface</span> &#123;</span><br><span class="line">    Fetch() (items []Item, next time.Time, err error)<span class="comment">//能从某个rss url获取它的资源项，并能同时返回下一次获取的时间next。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们用下面这个接口来表示我们希望达到的功能：能从rss url上循环获取资源项，形成资源流的形式；循环获取功能，可以中止。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Subscription <span class="keyword">interface</span> &#123;</span><br><span class="line">	Updates() &lt;-<span class="keyword">chan</span> Item<span class="comment">//用channel来存放资源，即可实现流的显示</span></span><br><span class="line">	Close() error<span class="comment">//关闭获取</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先看一个这项功能的简单实现，熟悉多线程编程的，应该觉得很眼熟。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">type</span> NavieSub <span class="keyword">struct</span> &#123;</span><br><span class="line">	closed  <span class="typename">bool</span></span><br><span class="line">	err     error</span><br><span class="line">	updates <span class="keyword">chan</span> Item</span><br><span class="line">	fetcher Fetcher</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> (s *NavieSub) Close() error &#123;</span><br><span class="line">	s.closed = <span class="constant">true</span><span class="comment">//设置关闭标识为true</span></span><br><span class="line">	<span class="keyword">return</span> s.err</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">func</span> (s *NavieSub) Updates() &lt;-<span class="keyword">chan</span> Item &#123;</span><br><span class="line">	<span class="keyword">return</span> s.updates<span class="comment">//返回已经获取的资源项</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">func</span> (s *NavieSub) loop() &#123;<span class="comment">//循环获取的方法实现</span></span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> s.closed &#123;<span class="comment">//判断关闭标识</span></span><br><span class="line">			<span class="built_in">close</span>(s.updates)<span class="comment">//close是内置函数</span></span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		items, next, err := s.fetcher.Fetch()<span class="comment">//执行一次获取</span></span><br><span class="line">		<span class="keyword">if</span> err != <span class="constant">nil</span> &#123;</span><br><span class="line">			s.err = err</span><br><span class="line">			time.Sleep(<span class="number">10</span> * time.Second)</span><br><span class="line">			<span class="keyword">continue</span><span class="comment">//出错时暂停10秒后再开始下次循环</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span> _, item := <span class="keyword">range</span> items &#123;<span class="comment">//将获取的资源项写入，用于返回</span></span><br><span class="line">			s.updates &lt;- item</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> now := time.Now(); next.After(now) &#123;<span class="comment">//暂停到下次获取时间时，再开始下一次获取</span></span><br><span class="line">			time.Sleep(next.Sub(now))</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	fetcher := &amp;FakeFether&#123;channel: <span class="string">"sharecore.info"</span>&#125;</span><br><span class="line">	s := &amp;NavieSub&#123;</span><br><span class="line">		fetcher: fetcher,</span><br><span class="line">		updates: <span class="built_in">make</span>(<span class="keyword">chan</span> Item),</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> s.loop()<span class="comment">//启动一个例程执行loop方法（与启动一个线程类似）</span></span><br><span class="line"></span><br><span class="line">	time.AfterFunc(<span class="number">3</span>*time.Second, <span class="keyword">func</span>() &#123;</span><br><span class="line">		fmt.Println(<span class="string">"closed"</span>, s.Close())</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> item := <span class="keyword">range</span> s.Updates() &#123;</span><br><span class="line">		fmt.Println(item.Channel, item.Title)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那以上的简单实现，会有什么问题呢？</p>
+<p>首先，<strong>明显发现s.err和s.closed的访问是非同步的。</strong><br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">s.closed = <span class="constant">true</span> <span class="comment">//设置关闭标识为true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> s.closed &#123;<span class="comment">//判断关闭标识</span></span><br><span class="line">			<span class="built_in">close</span>(s.updates) <span class="comment">//close是内置函数</span></span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后，我们看到s.updates的定义如下:<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">s := &amp;NavieSub&#123;</span><br><span class="line">		fetcher: fetcher,</span><br><span class="line">		updates: <span class="built_in">make</span>(<span class="keyword">chan</span> Item),<span class="comment">//定义为没有buffer的channel，一个channel中同时只能有一个元素</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>根据上面的定义，s.updates一次只能有一个item进入，当它没有其他goroutine从它里面取出元素时，下面这行代码会<strong>发生堵塞</strong>。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s.updates &lt;- item</span><br></pre></td></tr></table></figure></p>
+<p>那以上问题我们有什么办法来避免呢？</p>
+        
+          <p class="article-more-link">
+            <a href="/2013/06/10/Go并发编程模式进阶/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://sharecore.net/2013/06/10/Go并发编程模式进阶/" data-id="ci7c4545n002czkrrwbrun46b" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="linux-Container的安装与使用介绍" class="article article-type-linux" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/03/17/Container的安装与使用介绍/" class="article-date">
+  <time datetime="2013-03-16T16:36:33.000Z" itemprop="datePublished">2013-03-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/03/17/Container的安装与使用介绍/">Linux Container的安装与使用介绍</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天想在机器上搭建一个我用Go写的玩的一个分布式文件小系统，可我只有一台Laptop和一台Desktop，两台都装的Ubuntu 12.04。我需要多几个隔离的OS来试验多节点。以前阅读看到过Linux Container的介绍，于是研究了下，用它来搭建了虚拟环境，在此作个记录，方便大家：<br>首先，安装 Linux Container:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install lxc</span><br></pre></td></tr></table></figure></p>
+<p>直接“yes”，继续完成安装。这一步能比较快的完成，只有13M多点的文件要下载。当然，完成这一步也只是完成了容器程序的安装，虚拟OS的安装在后面。</p>
+<p>安装完Linux Contaner后，可以在/usr/lib/lxc/templates目录下看到，可以安装哪些OS进来。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ ll /usr/lib/lxc/templates/</span><br><span class="line">drwxr-xr-x <span class="number">2</span> root root  <span class="number">4096</span>  <span class="number">7</span>月 <span class="number">21</span> <span class="number">11</span>:<span class="number">02</span> ./</span><br><span class="line">drwxr-xr-x <span class="number">4</span> root root  <span class="number">4096</span>  <span class="number">7</span>月 <span class="number">21</span> <span class="number">11</span>:<span class="number">02</span> ../</span><br><span class="line">-rwxr-xr-x <span class="number">1</span> root root  <span class="number">8227</span>  <span class="number">2</span>月 <span class="number">21</span> <span class="number">04</span>:<span class="number">29</span> lxc-busybox*</span><br><span class="line">-rwxr-xr-x <span class="number">1</span> root root  <span class="number">9806</span>  <span class="number">2</span>月 <span class="number">21</span> <span class="number">04</span>:<span class="number">29</span> lxc-debian*</span><br><span class="line">-rwxr-xr-x <span class="number">1</span> root root <span class="number">10520</span>  <span class="number">2</span>月 <span class="number">21</span> <span class="number">04</span>:<span class="number">29</span> lxc-fedora*</span><br><span class="line">-rwxr-xr-x <span class="number">1</span> root root  <span class="number">9094</span>  <span class="number">2</span>月 <span class="number">21</span> <span class="number">04</span>:<span class="number">29</span> lxc-opensuse*</span><br><span class="line">-rwxr-xr-x <span class="number">1</span> root root  <span class="number">5115</span>  <span class="number">2</span>月 <span class="number">21</span> <span class="number">04</span>:<span class="number">29</span> lxc-sshd*</span><br><span class="line">-rwxr-xr-x <span class="number">1</span> root root <span class="number">19736</span>  <span class="number">2</span>月 <span class="number">21</span> <span class="number">04</span>:<span class="number">29</span> lxc-ubuntu*</span><br><span class="line">-rwxr-xr-x <span class="number">1</span> root root <span class="number">10590</span>  <span class="number">2</span>月 <span class="number">21</span> <span class="number">04</span>:<span class="number">29</span> lxc-ubuntu-cloud*</span><br></pre></td></tr></table></figure></p>
+<p>接下来，可以建立虚拟OS了：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo lxc-create -t ubuntu -n lxc_ubuntu_1</span><br></pre></td></tr></table></figure></p>
+<p>参数说明：</p>
+<ul>
+<li><p>-t: OS类型</p>
+</li>
+<li><p>-n: 虚拟OS的名称</p>
+</li>
+</ul>
+<p>这一步需要比较长的时间，当然，也取决于你的网络下载速度。</p>
+<p>虚拟OS的版本，如果安装时没特别指定参数，与Host OS的版本是相同他的，比如host OS是i386，那安装的也是i386。可以用以下参数指定版本：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lxc-create -t ubuntu -n lxc_ubuntu_1 -- -r lucid <span class="operator">-a</span> i386</span><br></pre></td></tr></table></figure></p>
+<p>虚拟OS安装完成后，<strong>注意输出最后两行的用户名和密码提示，这是登录虚拟OS的默认帐号。</strong> </p>
+<p>你可以通过下面方式查看：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ ll /var/lib/lxc/</span><br><span class="line">drwxr-xr-x  <span class="number">4</span> root root <span class="number">4096</span>  <span class="number">7</span>月 <span class="number">21</span> <span class="number">20</span>:<span class="number">39</span> ./</span><br><span class="line">drwxr-xr-x <span class="number">63</span> root root <span class="number">4096</span>  <span class="number">7</span>月 <span class="number">21</span> <span class="number">11</span>:<span class="number">02</span> ../</span><br><span class="line">drwxr-xr-x  <span class="number">3</span> root root <span class="number">4096</span>  <span class="number">7</span>月 <span class="number">21</span> <span class="number">14</span>:<span class="number">14</span> lxc_ubuntu_1/</span><br></pre></td></tr></table></figure></p>
+<p>至此，虚拟OS安装完成了，你可以先更新package。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get updata</span><br><span class="line">$ sudo apt-get upgrade</span><br></pre></td></tr></table></figure>
+<p>至此，可以启动虚拟OS了。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo lxc-start -n lxc_ubuntu_1</span><br></pre></td></tr></table></figure></p>
+<p>同时，如果需要安装多个虚拟OS，可以使用复制命令完成复制：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo lxc-clone -o lxc_ubuntu_1 -n lxc_ubuntu_2</span><br></pre></td></tr></table></figure>
+<p>也可以删除已安装的虚拟OS：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo lxc-destroy -n lxc_ubuntu_2</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://sharecore.net/2013/03/17/Container的安装与使用介绍/" data-id="ci7c4543c0000zkrrtpgmzz9a" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span>
+    </nav>
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang/">Golang</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/历史/">历史</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础知识/">基础知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/复杂性/">复杂性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常识/">常识</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术常识/">技术常识</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/春秋/">春秋</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务化/">服务化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/架构/">架构</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模式匹配/">模式匹配</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2014/08/24/模式匹配初析/">模式匹配初析</a>
+          </li>
+        
+          <li>
+            <a href="/2014/08/10/字符编码常识及问题解析/">字符编码常识及问题解析</a>
+          </li>
+        
+          <li>
+            <a href="/2014/08/02/浅谈服务化架构/">浅谈服务化架构</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/27/面对喷子明哲保身/">面对喷子明哲保身</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/20/技术的进化/">技术的进化</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 Jack Hacker<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
