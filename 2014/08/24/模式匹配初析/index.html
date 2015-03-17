@@ -40,7 +40,7 @@
       </h1>
       
         <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">Jack Hacker</a>
+          <a href="/" id="subtitle">J.H</a>
         </h2>
       
     </div>
@@ -111,7 +111,8 @@
 <figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">loop</span><span class="params">(<span class="variable">Dict</span>)</span> -&gt;</span></span><br><span class="line">  <span class="keyword">receive</span>  <span class="comment">%消息接收的原语，获取调用方的消息</span></span><br><span class="line">      <span class="tuple">&#123;store, <span class="variable">Key</span>, <span class="variable">Value</span>&#125;</span> -&gt; <span class="comment">%匹配数据存储的消息，"store"</span></span><br><span class="line">          <span class="function_name">loop</span>(<span class="function_name">dict:store</span>(<span class="variable">Key</span>, <span class="variable">Value</span>, <span class="variable">Dict</span>)); <span class="comment">%真实的存储</span></span><br><span class="line">      <span class="tuple">&#123;<span class="variable">From</span>, <span class="tuple">&#123;get, <span class="variable">Key</span>&#125;</span>&#125;</span> -&gt; <span class="comment">%匹配数据获取的消息, From匹配消息来源，</span></span><br><span class="line">          <span class="variable">From</span> ! <span class="function_name">dict:fetch</span>(<span class="variable">Key</span>, <span class="variable">Dict</span>), <span class="comment">%向查询请求消息来源发送查询结果消息</span></span><br><span class="line">          <span class="function_name">loop</span>(<span class="variable">Dict</span>) <span class="comment">%尾递归：持续监听新的消息 </span></span><br><span class="line"><span class="keyword">end</span>.</span><br><span class="line"></span><br><span class="line"><span class="variable">Pid</span> = spawn(loop) <span class="comment">%启动一个进程(actor)，Pid为进程号</span></span><br><span class="line"></span><br><span class="line"><span class="variable">Pid</span>!<span class="tuple">&#123;store ,key1,<span class="string">"123"</span>&#125;</span> <span class="comment">%向进程发送一个键值对存储消息</span></span><br><span class="line"></span><br><span class="line"><span class="variable">Pid</span>!<span class="tuple">&#123;get,key1&#125;</span> <span class="comment">%发送一个查询消息，获取"key1"对应的值</span></span><br></pre></td></tr></table></figure>
 <p>上面展示例子模式匹配在erlang中进行消息匹配的使用，需要注意的一点是，这里的匹配是从上到下来进行的，即会先进行“store”的匹配，匹配失败的话才进行“get”匹配。消息匹配是erlang里的一项杀手锏特性，它能大大减少在消息处理的代码量，代码只要专注于实际算法的实现即可，将相应消息的解析和内容提取，交给模式匹配来完成。</p>
 <p>从本质上来讲，模式匹配体现的是一个解构的过程和手段，解构是日常编程过程中一个非常常见的场景，比如编译器将程序代码解析为一个抽象语法树（AST）就是一个解构的过程，再比如，将XML/JSON进行反序列化为程序对象也是一例。对于许多语言，并未提供强大的模式匹配特性，但是为了提供可扩展的解构功能，一般都会采取一些设计模式来解决。比如面向对象编程里，将解析操作抽离出独立的模块，采取基于基类的虚方法/抽象方法扩展的方式，然后结合想对应的规则配置，来完成有区别性的模式解构。但是，这样的方式，稍显笨重，代码量也更多，与模式匹配相比，不在一个复杂度等级之上。</p>
-<p>去年我用golang写了一个web框架，其中的路由解析过程就采取了类似的方式（代码位置：<a href="https://github.com/JustinHuang917/gof" target="_blank" rel="external">https://github.com/JustinHuang917/gof</a>）。通过如以下路由规则配置，匹配不同的URL模式，从URL中提取相应的参数：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">"RouteRules":[</span><br><span class="line">      &#123;</span><br><span class="line">          "/Order/&#123;id:[0-9]+&#125;":</span><br><span class="line">              &#123;"controller":"Order","action":"Order","id":"0"&#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">          "/&#123;controller&#125;/&#123;action&#125;":</span><br><span class="line">              &#123;"controller":"Home","action":"Index"&#125;</span><br><span class="line">      &#125;</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure></p>
+<p>去年我用golang写了一个web框架，其中的路由解析过程就采取了类似的方式（代码位置：<a href="https://github.com/JustinHuang917/gof" target="_blank" rel="external">https://github.com/JustinHuang917/gof</a>）。通过如以下路由规则配置，匹配不同的URL模式，从URL中提取相应的参数：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">"RouteRules":[</span><br><span class="line">      &#123;</span><br><span class="line">          "/Order/&#123;id:[0-9]+&#125;":</span><br><span class="line">              &#123;"controller":"Order","action":"Order","id":"0"&#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">          "/&#123;controller&#125;/&#123;action&#125;":</span><br><span class="line">              &#123;"controller":"Home","action":"Index"&#125;</span><br><span class="line">      &#125;</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
 <p>这个看似简单功能，我花了200多行代码才得以完成，使用的还是堪称语法最为精简的Golang，而如果使用Java/C#来完成，代码量肯定还要增加不少。而如果语言本身具有强大的模式匹配的话，实现代码将会变得非常精简。而这一次C#6.0声称引入模式匹配，希望是面向对象语言领域的一次有益尝试。</p>
 <p>同时，我也希望我喜欢的Golang在模式匹配上迈开尝试的脚步，在现有的goroutine+channel的组合上应用模式匹配，将是一件非常有效率的实践。现在Golang提供”select..case…“机制只能识别不同channel返回的消息，而不能识别实际消息的内容，这一点来说，与erlang相比，降低了CSP的编程效率。</p>
 <p>总结：</p>
@@ -120,7 +121,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://sharecore.net/2014/08/24/模式匹配初析/" data-id="ci7c4544q0011zkrrz9bjrn5v" class="article-share-link">Share</a>
+      <a data-url="http://sharecore.net/2014/08/24/模式匹配初析/" data-id="ci7dic78w000x5zrraon86xzx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/基础知识/">基础知识</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/模式匹配/">模式匹配</a></li></ul>
@@ -204,7 +205,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 Jack Hacker<br>
+      &copy; 2015 J.H<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
