@@ -120,7 +120,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://sharecore.net/2014/08/24/模式匹配初析/" data-id="ci7djyqki000xghrr0aohn49s" class="article-share-link">Share</a>
+      <a data-url="http://sharecore.net/2014/08/24/模式匹配初析/" data-id="ci7k68fkc000xdurrzcjd5h3h" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/基础知识/">基础知识</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/模式匹配/">模式匹配</a></li></ul>
@@ -207,7 +207,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://sharecore.net/2014/08/10/字符编码常识及问题解析/" data-id="ci7djyqkv001hghrrq7wbd049" class="article-share-link">Share</a>
+      <a data-url="http://sharecore.net/2014/08/10/字符编码常识及问题解析/" data-id="ci7k68fky001hdurrvkyajwhz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术常识/">技术常识</a></li></ul>
@@ -243,7 +243,7 @@
       
         <pre><code>这两年来，在服务化架构设计上的实践比较多，在此对关于服务化设计一些经验稍作总结，
 知识经验水平有限，如有欠缺和不准确的地方，还请指出修正！     
-</code></pre><p>我在<a href="http://sharecore.net/blog/2014/07/05/ke-kuo-zhan-jia-gou-de-san-ge-wei-du/" target="_blank" rel="external">《可扩展架构设计的三个维度》</a>一文里，谈到服务化架构（SOA）在保证系统扩展性上，是一个比较好的架构设计实践。也谈到了通过服务网关的形式来进行多服务的注册与管理等。但困于篇幅，并未展开讲关于服务化架构实现层面上的具体细节。本文就结合我这两年来，在服务化架构设计上的一些实践经验，谈谈一个服务化框架其应该具备的一些功能以及其基本实现方式。</p>
+</code></pre><p>我在<a href="http://sharecore.net/2014/07/05/%E5%8F%AF%E6%89%A9%E5%B1%95%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E7%9A%84%E4%B8%89%E4%B8%AA%E7%BB%B4%E5%BA%A6/" target="_blank" rel="external">《可扩展架构设计的三个维度》</a>一文里，谈到服务化架构（SOA）在保证系统扩展性上，是一个比较好的架构设计实践。也谈到了通过服务网关的形式来进行多服务的注册与管理等。但困于篇幅，并未展开讲关于服务化架构实现层面上的具体细节。本文就结合我这两年来，在服务化架构设计上的一些实践经验，谈谈一个服务化框架其应该具备的一些功能以及其基本实现方式。</p>
 <p>这里说到的“服务”，本质上来说，就是指“RPC”。单纯的RPC功能实现，其实很简单，无非就是client发起调用，中间某个组件（甚至就是client本身）拦截调用信息，序列化后将信息传输到server端，server端收到调用请求后反序列化，根据请求详细发起实际调用后返回响应传输回给client端。这样的RPC很常见，比如常见的存储过程调用就是一例。但是在一个复杂的业务环境，如何管理和协同这些大量的RPC才是最麻烦的事情。所以，在此谈的“服务化”更多指的是对RPC的管理。</p>
 <p>一个复杂业务环境下的大量RPC究竟会遇到哪些问题呢？换句话说，一个服务化管理框架究竟应该具备哪些功能特性才算基本完备呢？以下是我的一些看法</p>
 <p><strong>1.协议选型</strong></p>
@@ -287,7 +287,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://sharecore.net/2014/08/02/浅谈服务化架构/" data-id="ci7djyqke000pghrra22cwele" class="article-share-link">Share</a>
+      <a data-url="http://sharecore.net/2014/08/02/浅谈服务化架构/" data-id="ci7k68fk7000pdurr53i7asri" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/服务化/">服务化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/架构/">架构</a></li></ul>
