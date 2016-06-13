@@ -65,10 +65,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-Linux文件系统十问" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-如何阅读一本书" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2013/08/25/Linux文件系统十问/" class="article-date">
-  <time datetime="2013-08-24T16:32:10.000Z" itemprop="datePublished">2013-08-25</time>
+    <a href="/2014/05/10/如何阅读一本书/" class="article-date">
+  <time datetime="2014-05-09T16:05:32.000Z" itemprop="datePublished">2014-05-10</time>
 </a>
     
   </div>
@@ -79,7 +79,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2013/08/25/Linux文件系统十问/">Linux文件系统十问</a>
+      <a class="article-title" href="/2014/05/10/如何阅读一本书/">如何阅读一本书.md</a>
     </h1>
   
 
@@ -87,35 +87,58 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>今天读到<a href="http://djt.qq.com/article/view/620" target="_blank" rel="external">这篇文章:Linux文件系统十问，你知道吗？</a>，作了个总结笔记：</p>
-<p><strong>1、机械磁盘随机读写时速度非常慢，操作系统是采用什么技巧来提高随机读写的性能的？</strong></p>
-<p> 磁盘读写时间=寻道时间（找磁道）+盘面旋转时间（找扇区）+读／写时间，而旋转时间和读／写时间是常量，所以需要尽量缩短寻道时间。操作系统在分区时，按柱面的区域分区而不是盘面的区域分区，以缩短在同一个分区里连续读的寻道时间。</p>
-<p><strong>2、touch一个新的空文件占用磁盘空间吗？ 占用的话占用多少？</strong></p>
-<p> 一个新的空文件会占用磁盘空间，占的大小为一个inode的size.inode的详细介绍可查看: <a href="http://www.ruanyifeng.com/blog/2011/12/inode.html" target="_blank" rel="external">理解inode</a></p>
-<p><strong>3、新建一个空目录占用磁盘空间吗？占用多少？和新建一个文件相比，哪个占用的更大？</strong></p>
-<p>新建的空目录会占用磁盘空间，新目录会占用一个inode，同时分配一个block size（如4.0k）。<br>可如下方式查看空目录的大小。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">justinhuang@ubuntu:~/temp/temp$ du -h</span><br><span class="line"><span class="number">4.0</span>K	.</span><br></pre></td></tr></table></figure></p>
-<p>新建的文件，如果是空文件，不占用block。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">justinhuang@ubuntu:~/temp/temp$ &gt;<span class="number">1</span></span><br><span class="line">justinhuang@ubuntu:~/temp/temp$ &gt;<span class="number">2</span></span><br><span class="line">justinhuang@ubuntu:~/temp/temp$ ll</span><br><span class="line">总用量 <span class="number">8</span></span><br><span class="line">drwxrwxr-x  <span class="number">2</span> justinhuang justinhuang <span class="number">4096</span>  <span class="number">8</span>月 <span class="number">25</span> <span class="number">16</span>:<span class="number">14</span> ./</span><br><span class="line">drwxrwxr-x <span class="number">15</span> justinhuang justinhuang <span class="number">4096</span>  <span class="number">8</span>月 <span class="number">25</span> <span class="number">15</span>:<span class="number">08</span> ../</span><br><span class="line">-rw-rw-r--  <span class="number">1</span> justinhuang justinhuang    <span class="number">0</span>  <span class="number">8</span>月 <span class="number">25</span> <span class="number">16</span>:<span class="number">14</span> <span class="number">1</span></span><br><span class="line">-rw-rw-r--  <span class="number">1</span> justinhuang justinhuang    <span class="number">0</span>  <span class="number">8</span>月 <span class="number">25</span> <span class="number">16</span>:<span class="number">14</span> <span class="number">2</span></span><br><span class="line">justinhuang@ubuntu:~/temp/temp$ du -h</span><br><span class="line"><span class="number">4.0</span>K	.</span><br></pre></td></tr></table></figure></p>
-<p><strong>4、你知道文件名是记录在磁盘的什么地方吗？</strong></p>
-<p>文件名的记录存在目录的block中，所以当空文件过多后（多于一个block大小），会使重新分配的目录的block。使目录占用空间变大。</p>
-<p><strong>5、文件名最长多长？受什么制约？</strong></p>
-<p>Lunux文件名最长限制为255byte</p>
-<p><strong>6、文件名太长了会影响系统性能吗？为什么会产生影响？</strong></p>
-<p>文件名太长会导致文件名读取时花费更多的磁盘IO。</p>
-<p><strong>7、一个目录下最多能建立多少个文件？</strong></p>
-<p>受目录下inode的数量限制，但是文件太多，OS需要读取的block也增多。导致性能问题。</p>
-<p><strong>8、新建一个内容大小1k的文件，实际会占用多大的磁盘空间？</strong><br>一个block size(一般为4.0k)+一个inode size(一般为256byte)。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">justinhuang@ubuntu:~/temp/temp$ <span class="built_in">echo</span> <span class="string">""</span> &gt;<span class="number">1</span></span><br><span class="line">justinhuang@ubuntu:~/temp/temp$ ll</span><br><span class="line">总用量 <span class="number">12</span></span><br><span class="line">drwxrwxr-x  <span class="number">2</span> justinhuang justinhuang <span class="number">4096</span>  <span class="number">8</span>月 <span class="number">25</span> <span class="number">16</span>:<span class="number">23</span> ./</span><br><span class="line">drwxrwxr-x <span class="number">15</span> justinhuang justinhuang <span class="number">4096</span>  <span class="number">8</span>月 <span class="number">25</span> <span class="number">15</span>:<span class="number">08</span> ../</span><br><span class="line">-rw-rw-r--  <span class="number">1</span> justinhuang justinhuang    <span class="number">1</span>  <span class="number">8</span>月 <span class="number">25</span> <span class="number">16</span>:<span class="number">23</span> <span class="number">1</span></span><br><span class="line">justinhuang@ubuntu:~/temp/temp$ du -h</span><br><span class="line"><span class="number">8.0</span>K	.</span><br></pre></td></tr></table></figure></p>
-<p><strong>9、向操作系统发起读取文件2Byte的命令，操作系统实际会读取多少呢？</strong></p>
-<p>文件系统在向磁盘发起IO请求的时候，也是以block size为单位。所以会读取一个block size。这也是程序的局部性原理的应用</p>
-<p><strong>10、我们使用文件时要怎么样来能提高磁盘IO速度？</strong></p>
-<p>新建文件时，可以告诉OS你新建的文件大概需要的空间大小，以使OS尽量为文件分配连续的block，缩短寻道时间，提高读写性能。</p>
+        <p>我好读书，读的很繁杂，从计算机技术到历史到国学和哲学，系统方法论等都是我爱好读的。<br>但平时工作忙，尽管每天都坚持挤出一到两个小时的读书时间（牺牲睡眠时间），但读书时间与要读书的意愿上一直存在着矛盾，这意味着我需要高效率地读书。而我想，我的阅读能力可能得益于《如何阅读一本书》，一本讲“元阅读”的书。这本书第一版出版是1940年，到今天还被很多人拿来读，可见此书称得上是经典了。</p>
+<p>对此，我对这本书的内容稍作总结，希望能对同样爱读书的你，同样有帮助。</p>
+<h2 id="主动阅读">主动阅读</h2><p>当然，严格上来说，不存在完全被动的阅读。阅读越主动，效果很好。这个读者比另一个读者更主动一些，他在阅读世界里面的探索能就更强一些，收获更多一些，因而也更高明一些。读者对他自己，以及自己面前的书籍，要求阅读，获得的就越多。</p>
+<p>同时，主动阅读，更多的地意味着你需要读更多超过你能力范围的书，因为只有读超过自身能力范围的书，通过阅读过程中的不断思考与磨砺，你才能真正增进你的理解力和阅读能力，而完全在你能力范围内的书，只是让你获取更多资讯而已，而资讯的获取，在这个资讯如此发达的时代，你有太多的办法来获取。关于这一点，Justin作为一个关注“上层建筑”的程序员，去年在读《深入理解计算机系统》一书时，有很深刻的体会。此书，对当时的我来说，完全超越我在计算机技术上的认知能力，我花了很大的耐心，反复磨砺，寻找各种理解的方式，才将这书基本读完（暂时性的读完，还要不断重读）。但读完后，我发现我获取的不只是对更多计算机原理知识，而是更为深刻的计算机设计和架构的思想，更关键的是，我获得了驾驭这类书籍的信心于能力，这是平常在读一本《×××计算机语言》之类的书时获取不到的。</p>
+<h2 id="分层次阅读">分层次阅读</h2><p><strong>第一层次：基础阅读</strong></p>
+<p>初步的阅读能力和阅读技巧，也应该是读者都基本具备的层次。达到这阶段，只要求你能辨识书中的文字即可，即摆脱了文盲状态。</p>
+<p><strong>第二层次：检视阅读</strong></p>
+<p>检视阅读，才算是真正进入了阅读的层次，但当然，只有你必须是精通了基础阅读，比如现在，让你读一本外文书，你可能就进入不了这个层次。<br>对于检视阅读一般分成两种：</p>
+<p><em>有系统的略读与粗读</em><br>可以通过以下几个方法来略读：</p>
+<ol>
+<li><p>先看书名，然后有序就先看序。要明白一点，书名和序，肯定作者花费心思最多的地方，通过阅读它们，你基本可以对一本书进行<em>归类</em>了。</p>
+</li>
+<li><p>研究目录页。一个好的目录，可以助你对书的基本架构有概括性的了解，就像出发前，要先看一下地图一样。但是并不是每一本书的目录都是能设计好的。Justin曾经读过一本书叫《算法谜题》，它的目录居然是将100道算法题索引出来，而没有任何的归类于串联，后来，我也就基本断定这书，就是一本算法集锦而已，作者的思维本身就是混乱的，只能给它打上“浪费时间”的标签了。</p>
+</li>
+<li><p>从目录里挑选几个看起来跟主题相关的篇章来读读。对于这一点，我最喜欢的就是读开头和结尾，因为万事开头难，作者要开始写一本书，肯定需要深思熟虑，尽快地抛出作者自己的观点，抓住读者。而结尾呢，作者一般会作出观点的总结。如果发现作者的观点，完全在那你理解范围之类，我觉得没有很多必要读下去了，因为要铭记，只有“主动阅读”超越自己能力和理解的书，才能让你获得成长。当然，纯粹位获取知识，除外！</p>
+</li>
+<li><p>读读书的封面和包装。这上面一般都有出版者的话，或者作者的其它相关书籍的介绍，在这些“面包屑”里，你或许可以发现新的”珍珠“呢。我超爱干这事，经常在这里面，发现新的值得一读的书。</p>
+</li>
+</ol>
+<p><em>粗浅的阅读</em></p>
+<p>有难度的书，或者超越你能力范围的书，肯定不是易读的书。但如果要驾驭它，你需要先“粗读”，即在第一次读一本难读的书时，从头到尾先读一遍，碰到不懂的地方也不要停下来查询或者思索。完整地读一遍之后的了解，即使你只掌握了50%甚至更少，也能帮助你在后来重读第一次略过的部分时，增进理解。就算不重读，对一本难度很高的书了解了一半，也比什么都不了解要好——如果你在一碰上困难的地方就停住，最后可能对这本书真的一无所知了。</p>
+<p><strong>第三层次：分析阅读</strong></p>
+<p>阅读的第三个层次就是分析阅读，也是最重要的层次。分析阅读包括以下三个方面：</p>
+<ul>
+<li>了解书的内容 </li>
+<li>明白书到底在说什么</li>
+<li>评论一本书</li>
+</ul>
+<p>对于以上三个方面，作者列出了几条基本规则：</p>
+<ol>
+<li><p><strong><em>你一定要知道自己在读的哪一类书，而且越早知道越好。最好早在你开始阅读之前就先知道。</em></strong> 关于这一条规则，我倒是要提醒特别提醒那些喜欢给人荐书的朋友，如果你推荐一本书出去，你最好能先告知将要读这本书的人，这是一本什么类的书，这样读者才能按自己兴趣与认知，来尽快作出读或者不读的判断，或者选择相应的读法。</p>
+</li>
+<li><p><strong><em>使用一个单一的句子，或者最多几句话来叙述整本书的内容。</em></strong> 对于整体内容，光是一个模糊的认知是不够的，而判断你是否确切清楚整体内容，唯一判断的办法就是，你能不能用几句话来表达清楚。如果几句话表达不出来，或者要用更多的话来表达，代表你还没有将整体的内容看清楚。</p>
+</li>
+<li><p><strong><em>将书中重要篇章列举出来，说明它们如何按照顺序组成一个整体的架构。</em></strong> 于建筑设计，软件系统设计一样，可读性最高的书肯定达到了最完整的整体架构的程度。最好的书都有最睿智的架构。比如《史记》,可以轻易地将它分成12本纪，70列传，30世家，10表，8书，而本纪是全书的提纲，所以对于读者，先肯定要能通读所有的本纪系列，而后可在列传和世家里选择一些感兴趣的来读，而当读者对人物世系需要更多了解，就可以多去看看表。</p>
+</li>
+</ol>
+<p>找出作者在问的问题，或作者想要解决的问题</p>
+<p>一本书的作者在开始写作时，都是有一个问题或一连串的问题，而这本书的内容就是一个答案，或许多答案。而技巧高超的作者，会用艺术的手段，将问题和答案都隐藏起来，作为读者，最大的义务就是找出问题和答案。这个寻找的过程，也是读者理解力和阅读能力获得最大成长的手段之一。</p>
+<p><strong>第四层次：主题阅读</strong></p>
+<p>主题阅读是读书的最高层次，或称为最高目标。所谓主题阅读指的是，为了学习和理解某个特定的主题时，牵涉到的往往不只是一本书，而是需要去读一系列的书来研究和对比，从不同的书中相互补充观点，形成自己对这一主题的知识系统。</p>
+<p>做到主题阅读的层次，第一要求就是必须承认某一个主题读一本书是不够的，第二个要求则是，需要知道应该读那些书，而很明显，往往第二个要求比较难以达成。Justin本人对于这一点上经验还不是很多，毕竟不是专职搞研究的，平常对于某一主题的扩展阅读，大多数还是来自书籍本身的“面包屑”，比如前面说过的，书籍封面和序言里提到的同一作者的其它书籍。同时，一本优秀的书里，作者为了证明自己的观点，肯定也是旁征博引的，所以，作者在书中提到的这些相关书籍就是发掘宝藏的号地方。这在读Brooks教授（同时也是《人月神话》的作者）的《设计原本》时，我就大有体会。Brooks教授在它的书里，引用了很多其它经典书籍，也由此看出一位优秀的作者，肯定读破万卷书的。</p>
+<p><strong>总结：</strong></p>
+<p><em>读书是一种习惯，一种技巧，更是一门艺术。读书不只是为了获取资讯，更是为了增进理解力，从而更好的理解世界。一个人读书，只是将文字逐字逐句地阅读一遍往往是不够的，那顶多只能称之为消遣。一个人只是读自己理解了的书也是不够的，因为那样获取不到理解力的增长。而《如何阅读一本书》一书，教会我们的就是，如何“读懂”一本书，并在读的过程中获得成长。​</em></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://sharecore.net/2013/08/25/Linux文件系统十问/" data-id="ci7k7fi860024g3rr9nvttond" class="article-share-link">Share</a>
+      <a data-url="http://sharecore.net/2014/05/10/如何阅读一本书/" data-id="cipdyb15n001m62spmfidmkuv" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术常识/">技术常识</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/学习/">学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/常识/">常识</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书/">读书</a></li></ul>
 
     </footer>
   </div>
@@ -124,10 +147,10 @@
 
 
   
-    <article id="post-怎么写Go的基准测试" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-MapReduce的变体-HashFold介绍" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2013/07/04/怎么写Go的基准测试/" class="article-date">
-  <time datetime="2013-07-03T16:38:31.000Z" itemprop="datePublished">2013-07-04</time>
+    <a href="/2014/03/17/MapReduce的变体-HashFold介绍/" class="article-date">
+  <time datetime="2014-03-16T16:09:01.000Z" itemprop="datePublished">2014-03-17</time>
 </a>
     
   </div>
@@ -138,7 +161,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2013/07/04/怎么写Go的基准测试/">怎么写Go的基准测试</a>
+      <a class="article-title" href="/2014/03/17/MapReduce的变体-HashFold介绍/">MapReduce的变体:HashFold介绍</a>
     </h1>
   
 
@@ -146,45 +169,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Dave Cheney在他的blog写了一篇关于Go的基准测试编写的基本介绍(<a href="http://dave.cheney.net/2013/06/30/how-to-write-benchmarks-in-go" target="_blank" rel="external">链接</a>)。我以此为内容，整理输出内容。</p>
-<p>对自己编写package编写基准测试是必不可少的过程，尤其对于执行性能有重要影响的代码，更是需要。Go向来是以工具丰富而著称的，从代码格式调整，到单元测试，到<a href="http://golang.org/doc/articles/race_detector.html" target="_blank" rel="external">竞争检查</a>，以及我们接下来要介绍的基准测试，都提供方便的工具给开发者。</p>
-<p>我们以Fibonacci函数来介绍。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//fib.go</span></span><br><span class="line"><span class="keyword">func</span> Fib(n <span class="typename">int</span>) <span class="typename">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> n &lt; <span class="number">2</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> n</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> Fib(n-<span class="number">1</span>) + Fib(n-<span class="number">2</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>编写第一个benchmark testing:<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//fib_test.go</span></span><br><span class="line"><span class="keyword">func</span> BenchmarkFib10(b *testing.B) &#123;</span><br><span class="line">	<span class="comment">// 执行b.N 次Fib函数</span></span><br><span class="line">	<span class="keyword">for</span> n := <span class="number">0</span>; n &lt; b.N; n++ &#123;</span><br><span class="line">		Fib(<span class="number">10</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>以下几点需要注意：</p>
+        <p>说到MapReduce计算模型大家应该都清楚。今天我们来看一下MapReduce一个变体：HasFold。</p>
+<p>这种模型将MapReduce中一些没有细化的部分，如Map后数据如何排序再进行Reduce等，通过Hash表这一数据结构的性质做了清晰的描述。</p>
+<p>HashFold模型的大概过程大概是这样的：</p>
 <ul>
-<li>基准测试需要位于文件名为”｛packagename｝_test.go”的文件中，如这里的”fib_test.go”</li>
-<li>需要引入“testing”包</li>
-<li>基准测试函数需要以”Benchmark”为函数名的开头</li>
-<li>基准函数会执行许多遍。b.N的没次执行都会自增长，直到工具认为统计数据已经满足基准测试输出的要求。</li>
+<li>Map过程在接收原始数据之后，将数据生成key-value对。</li>
+<li>对于key重复的value，会将两个重复的value传给Fold过程，Fold过程会返回一个新值。</li>
 </ul>
-<p>完成以上代码，我们就可以调用工具执行测试了：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ go <span class="built_in">test</span> -bench=.</span><br><span class="line">testing: warning: no tests to run</span><br><span class="line">PASS</span><br><span class="line">BenchmarkFib10	 <span class="number">2000000</span>	       <span class="number">835</span> ns/op</span><br><span class="line">ok  	<span class="built_in">test</span>/fib	<span class="number">2.522</span>s</span><br></pre></td></tr></table></figure></p>
-<p>注意：</p>
-<ul>
-<li>以上结果的第一行和第二行结果是go test执行的结果。</li>
-<li>与go test相似，-bench flag可接收一个有效的正则表达式来执行符合条件的测试函数。</li>
-</ul>
-<p>同时，也轻易通过以下代码扩展，得到多个测试基准的结果：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> benchmarkFib(i <span class="typename">int</span>, b *testing.B) &#123;</span><br><span class="line">	<span class="keyword">for</span> n := <span class="number">0</span>; n &lt; b.N; n++ &#123;</span><br><span class="line">		Fib(i)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> BenchmarkFib1(b *testing.B)  &#123; benchmarkFib(<span class="number">1</span>, b) &#125;</span><br><span class="line"><span class="keyword">func</span> BenchmarkFib2(b *testing.B)  &#123; benchmarkFib(<span class="number">2</span>, b) &#125;</span><br><span class="line"><span class="keyword">func</span> BenchmarkFib3(b *testing.B)  &#123; benchmarkFib(<span class="number">3</span>, b) &#125;</span><br><span class="line"><span class="keyword">func</span> BenchmarkFib10(b *testing.B) &#123; benchmarkFib(<span class="number">10</span>, b) &#125;</span><br><span class="line"><span class="keyword">func</span> BenchmarkFib20(b *testing.B) &#123; benchmarkFib(<span class="number">20</span>, b) &#125;</span><br><span class="line"><span class="keyword">func</span> BenchmarkFib40(b *testing.B) &#123; benchmarkFib(<span class="number">40</span>, b) &#125;</span><br><span class="line"><span class="string">``</span><span class="string">` </span><br><span class="line">运行结果：</span><br><span class="line">`</span><span class="string">``</span> sh</span><br><span class="line">BenchmarkFib1	<span class="number">500000000</span>	         <span class="number">7.81</span> ns/op</span><br><span class="line">BenchmarkFib2	<span class="number">100000000</span>	        <span class="number">18.4</span> ns/op</span><br><span class="line">BenchmarkFib3	<span class="number">100000000</span>	        <span class="number">24.9</span> ns/op</span><br><span class="line">BenchmarkFib10	 <span class="number">1000000</span>	      <span class="number">1269</span> ns/op</span><br><span class="line">BenchmarkFib20	   <span class="number">20000</span>	    <span class="number">109198</span> ns/op</span><br><span class="line">BenchmarkFib40	       <span class="number">1</span>	<span class="number">1780678179</span> ns/op</span><br><span class="line">ok  	test/fib	<span class="number">14.852s</span></span><br></pre></td></tr></table></figure></p>
-<p>其他说明：</p>
-<ul>
-<li><p>每个测试的运行最小运行时间默认是1s，如果测试返回结果时，运行时间还没达到1s，b.N将以1, 2, 5, 10, 20, 50, … 的序列递增，然后重新运行测试代码。</p>
-</li>
-<li><p>注意上面的结果中，BenchmarkFib40只运行了一次，这是由于它的执行太慢。为了得到更大的样例数据，你可以通过设置最小运行时间来达到。设置-benchtime flag的即可。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">go <span class="built_in">test</span>  -bench=Fib40 -benchtime=<span class="number">10</span>s</span><br><span class="line">PASS</span><br><span class="line">BenchmarkFib40	      <span class="number">10</span>	<span class="number">1711313264</span> ns/op</span><br><span class="line">ok  	<span class="built_in">test</span>/fib	<span class="number">18.989</span>s</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>特别注意:</p>
-<ul>
-<li>由于b.N是字增的，所以要谨慎用它来做函数参数。不要患下面这样的错误，否则，测试运行将没法终止。<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> BenchmarkFibWrong(b *testing.B) &#123;</span><br><span class="line">	<span class="keyword">for</span> n := <span class="number">0</span>; n &lt; b.N; n++ &#123;</span><br><span class="line">		Fib(n)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> BenchmarkFibWrong2(b *testing.B) &#123;</span><br><span class="line">	Fib(b.N)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-
+<p>下面是MapReduce中典型示例：计算文件中的单词个数的实现（Go）</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"io/ioutil"</span></span><br><span class="line">	<span class="string">"regexp"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Pair <span class="keyword">struct</span> &#123;</span><br><span class="line">	key   <span class="typename">string</span></span><br><span class="line">	count <span class="typename">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> main() &#123;</span><br><span class="line">	fname := <span class="string">"README"</span></span><br><span class="line">	hash := Start(fname)</span><br><span class="line">	<span class="keyword">for</span> k, v := <span class="keyword">range</span> hash &#123;</span><br><span class="line">		fmt.Printf(<span class="string">"word:%s,count:%d\n"</span>, k, v)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> Start(fname <span class="typename">string</span>) <span class="keyword">map</span>[<span class="typename">string</span>]<span class="typename">int</span> &#123;</span><br><span class="line">	hash := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="typename">string</span>]<span class="typename">int</span>, <span class="number">0</span>)</span><br><span class="line">	bytes, _ := ioutil.ReadFile(fname)</span><br><span class="line">	source := <span class="typename">string</span>(bytes)</span><br><span class="line">	pairs := Map(source)<span class="comment">//调用Map分割输入</span></span><br><span class="line">	<span class="keyword">for</span> _, p := <span class="keyword">range</span> pairs &#123;</span><br><span class="line">		<span class="keyword">if</span> _, ok := hash[p.key]; !ok &#123;<span class="comment">//判断重复</span></span><br><span class="line">			hash[p.key] = p.count</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;<span class="comment">//如果重复，调用Fold函数</span></span><br><span class="line">			hash[p.key] = Fold(hash[p.key], p.count)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> hash</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> Map(source <span class="typename">string</span>) []Pair &#123;</span><br><span class="line">	pairs := <span class="built_in">make</span>([]Pair, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">	arr := strings.Split(source, <span class="string">"\n"</span>)</span><br><span class="line">	re := regexp.MustCompile(<span class="string">"[\\pP‘’“”]"</span>) </span><br><span class="line">	<span class="keyword">for</span> _, line := <span class="keyword">range</span> arr &#123;</span><br><span class="line">		newLine := re.ReplaceAllString(line, <span class="string">" "</span>)<span class="comment">//替换标点符号</span></span><br><span class="line">		<span class="keyword">for</span> _, word := <span class="keyword">range</span> strings.Split(newLine, <span class="string">" "</span>) &#123;</span><br><span class="line">			<span class="keyword">if</span> word != <span class="string">""</span> &#123;</span><br><span class="line">				k := strings.ToLower(word)<span class="comment">//转换为小写</span></span><br><span class="line">				pairs = <span class="built_in">append</span>(pairs, *&amp;Pair&#123;key: k, count: <span class="number">1</span>&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> pairs</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> Fold(v1, v2 <span class="typename">int</span>) <span class="typename">int</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> v1 + v2<span class="comment">//次数相加</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://sharecore.net/2013/07/04/怎么写Go的基准测试/" data-id="ci7k7fi7h001ag3rrhoqzzb0h" class="article-share-link">Share</a>
+      <a data-url="http://sharecore.net/2014/03/17/MapReduce的变体-HashFold介绍/" data-id="cipdyb16n002262spx2uj9jxm" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术常识/">技术常识</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
 
     </footer>
   </div>
@@ -193,10 +193,10 @@
 
 
   
-    <article id="post-春秋五霸之首——齐桓公的故事" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-防御性编程小例" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2013/06/29/春秋五霸之首——齐桓公的故事/" class="article-date">
-  <time datetime="2013-06-28T16:07:47.000Z" itemprop="datePublished">2013-06-29</time>
+    <a href="/2014/01/13/防御性编程小例/" class="article-date">
+  <time datetime="2014-01-12T16:06:36.000Z" itemprop="datePublished">2014-01-13</time>
 </a>
     
   </div>
@@ -207,7 +207,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2013/06/29/春秋五霸之首——齐桓公的故事/">春秋五霸之首——齐桓公的故事</a>
+      <a class="article-title" href="/2014/01/13/防御性编程小例/">防御性编程小例</a>
     </h1>
   
 
@@ -215,32 +215,30 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>昨晚重新翻阅了《史记·齐太公世家》，今天就跟大家重新说说春秋五霸之首齐桓公姜小白的故事吧。</p>
-<p>在说齐桓公这位“明君”的故事前，我们得先说点“恶心”的事，是关于齐桓公的上一位国君姜储儿齐襄公的。姜储儿是姜小白的哥哥，此人是一个冥顽不灵又一意孤行的庸君，他做过的最恶心的一件事情莫过于是跟他的妹妹文姜乱伦通奸了。当年，文姜嫁给了鲁国的国君姬允。有一次，姬允带着文姜来到齐国访问，姜储儿和文姜这对狗男女，既然趁此机会，重温旧梦。这时，姬允发现了两人的奸情，非常生气，并马上辞行回国。而姜储儿知道丑行败露，想杀死姬允了事。于是，他找机会把姬允灌醉，派了一个叫彭生的大力士把姬允杀死了。</p>
-<p>姬允被杀死，鲁国人也明知道内情是什么样的，但苦于军事力量太弱，不管把齐国怎么样，只是谴责下。姜储儿为了封口，一不做二不休地将彭生也一并杀了。尽管此事死无对证了，但姜储儿的两位弟弟姜纠和姜小白感觉到了不详的气息，于是纷纷逃亡。姜纠带着他的智囊管仲逃到了鲁国，他的生母是鲁国人。姜小白带着他的智囊鲍叔牙投奔到了莒国（今山东莒县）。</p>
-<p>彭生死后几年，有一次姜储儿去打猎，发现了一只野猪，他连射几箭都没有杀死它。这时，他的随从大喊一声：“是彭生！”。姜储儿立马吓得魂不附体，从马上摔了下来。等到救起他时，发现他的一只鞋子不见了。当晚就发生军事叛变，当叛军正找不到躲起来的姜储儿时，正好在暗道中发现了这只鞋子，于是抓到了姜储儿，并把他杀了。一个昏君，就这样罪有应得的死于叛军之首。叛军立姜储儿的堂弟姜无知为君，不久，又发生政变，姜无知也被杀掉了。</p>
-<p>这时，远在鲁国的姜纠和莒国的姜小白听到了这个消息，立马由鲁国和莒国的军队护送回国，两人商定，谁先回到齐国首府临缁谁就当国君。姜纠的智囊管仲，害怕姜小白会先到，于是，快马加鞭的赶上姜小白，向他射出一箭。可此箭并没有射中姜小白，只是中了他腰上的铜扣，姜小白怕他再射一箭，于是超级聪明的故意栽倒。管仲却聪明一世糊涂一时，以为姜小白死了，于是放心的逃走了。等姜纠和管仲赶到临缁，却发现姜小白早已登上了宝座。</p>
-<p>故事的发展，按常人的理解，肯定是姜纠和管仲都非死不可。但历史就是历史，它要成就一段霸业，必将发生一些不寻常的事情。这种不寻常的事情，曾多次的在立一个新的霸业时发生，以后我们再慢慢说。</p>
-<p>姜小白当上国君后，姜纠不服，率鲁国军队进攻齐国。可凭鲁国那点军事力量，哪是齐国的对手？马上被打败，于是鲁国只好求和。姜小白给出的求和条件是：杀死姜纠，缚送管仲。鲁国只好答应，杀死了姜纠，用囚车缚送管仲到临缁，在所有人以为管仲将被报仇羞辱然后死无全尸之时，故事来了大转弯。原来是因为姜小白的智囊鲍叔牙看重管仲的才能，向姜小白竭力推荐管仲当宰相。姜小白一生中第二次重要的选择，就是宽容地听取了鲍叔牙的建议，接纳了管仲，把他从囚车放出，立他为相。</p>
-<p>管仲的才能不是盖的，他当相后组织齐国改革，提出“尊王攘夷”的口号，为齐国在当时赢得了良好的政治口碑。经济上开放商业，并利用渔业，盐业（齐地临海），给瞻贫民，奖励贤能，齐桓公霸业终成，立“五霸”之首。我们与其说这是齐桓公的霸业，倒不如说是管仲的霸业。或者说，齐桓公只是一个躯壳，管仲才是灵魂。</p>
-<p>尽管，管仲对霸业的功劳居功至伟，但我们也不得不无比称赞齐桓公生平的最明智的两次选择。一是佯死保命，充分体现了他的机智；而是原谅管仲，体现了他的宽容之心。</p>
-<p>但是，大家也应该注意到，这种建立在某一位超强贤能之人之上的霸业是很不稳定的。当这位贤能之人离开或逝去后，根基和灵魂同样也就坍塌。</p>
-<p>公元前645年，管仲逝世。</p>
-<p>管仲病危时，警告齐桓公，不能信任他的三位亲信：竖刀，易牙，卫开方。<br>这三人，应该是历史上拍马屁的典范了。竖刀是一个太监，他本来不是太监，为了亲近伺候齐桓公，自愿接受宮刑。易牙是一位厨师，有一天齐桓公跟他说：“什么肉我都吃过，就是没有吃过人肉，不知道是什么味道？”当天晚上，就有一份异常美味的肉给他品尝，齐桓公大大赞赏了他，易牙说：“这是我三岁儿子的肉，我特意奉献国君您”。卫开方是一位贵族，追随齐桓公15年，都没有回家。这三人的“忠诚”表演，齐桓公甚是感动。</p>
-<p>管仲给他分析说：“人性是这样的，没有人不爱自己的身体超过别人，如果自己身体都可以下毒手，还有什么不能下毒手的？没有人不爱自己的儿女，连自己的儿女都可以下狠心，还有什么不能下狠心？没有人不爱自己的父母，十五年不见自己的父母而抛到脑后，还有什么不能抛到脑后？” 可怜的齐桓公，偏偏这事上没有听从的管仲的。</p>
-<p>司马迁里对管仲的分析是这样描写的：</p>
-<p><em>桓公问曰：“群臣谁可相者？”管仲曰：“知臣莫如君。” 公曰：“易牙如何？” 对曰：“杀子以适君，非人情，不可。” 公曰：“开方如何？” 对曰：“倍亲以适君，非人情，难近。”公曰：“竖刀如何？” 对曰:“自宫以适君，非人情，难亲。”管仲死，而桓公不用管仲言，卒近用三子，三子专权。</em></p>
-<p>后来，竖刀，易牙，卫开方这几人专政。桓公病重，这三人赶走原来的太子,拥立齐桓公的儿子姜无亏为太子。后，桓公的五个儿子相互争夺太子之位，桓公一死，连一个给他收尸的都没有，直到桓公的尸体在床上放了六十多天，尸体的蛆虫都爬出了窗户，才被当上国君的姜无亏收棺安葬。</p>
-<p>桓公死后，齐国的霸业也就此终止，前后不过40年的时间，甚为可惜。</p>
-<p>纵观齐桓公的一生，甚为精彩，聪明过，也糊涂过。刚刚我的老板也正好发了一条微信，说：平台，合作，团队，渠道，了解，心态，先天以及选择，没有一个不是重要的。这一些，不也都体现在了桓公和管仲的这个故事里吗？</p>
+        <p>今天面试一个人时，突然想起一个话题：<em>防御性编程</em> 。我们先看一个小程序，这也是以前出过的一道简单面试题：<strong>写一个函数，可以将一个小写字母转换为大写字母</strong>。这道简单的题，完全写对的答案却少之又少。大部分答案是这样的:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">toupper</span><span class="params">(<span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">      c=c-<span class="number">32</span>;</span><br><span class="line">   <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看似简单的答案，确实不完整的，或者说正好落入了题目本身的圈套。到此， 你或许看出了问题所在。对，问题就出现在参数c的取值判断上，最明显的就是当c小于32时，c-32小于0,返回值肯定不在字符取值范围内。所以，我们加上了判断：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">toupper</span><span class="params">(<span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(c&gt;<span class="number">32</span>)&#123;</span><br><span class="line">    c=c-<span class="number">32</span>;</span><br><span class="line">  &#125;</span><br><span class="line"> <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>加上了对参数c判断，这就是防御性编程的第一步了。可惜，在这道题里，这也还是错误。如果我们传入67(‘C’)来调用toupper,返回的是35（’#’）,显然也是错误的。所以，我们的代码防御，应该将c的合法取值限制在一个更小的范围(小写字母集合)。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">toupper</span><span class="params">(<span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(c&gt;=<span class="string">'a'</span> &amp;&amp; c&lt;=<span class="string">'z'</span>)&#123;</span><br><span class="line">     c=c-<span class="number">32</span>;</span><br><span class="line">  &#125;</span><br><span class="line"> <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>至此，代码可以正确工作了。（最可惜的是，很多同学写的代码已经“进展”到下面这样了，却还没有发现c的取值范围应该限制为小写字母集合）<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">toupper</span><span class="params">(<span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">  c+=<span class="string">'A'</span>-<span class="string">'a'</span>;</span><br><span class="line">  <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这就是<em>防御性编程</em>的最基本规则：保护程序免遭非法输入数据的破坏。</p>
+<p>或许你会比较乐观的认为，我的程序不会被非法输入来调用，当你这么想时，请参考一下<a href="http://zh.wikipedia.org/wiki/%E5%A2%A8%E8%8F%B2%E5%AE%9A%E5%BE%8B" target="_blank" rel="external">墨菲定律</a></p>
+<p>保护程序免遭非法输入数据的破坏,我们一般有以下几种方法：</p>
+<ol>
+<li><p><strong>检查所有来源于外部的数据的值：</strong> 当从文件，用户或网络等外部接口获取数据时，应该检查所有输入的值，不要有任何庆幸，以确保它们在合法的范围之类。比如，对于数值，应该确保它的可接受范围（如非负数）;对于字符串，要确保它长度合法;对于更多的安全要求的，还要进行sql注入，html/xml注入等的检查。</p>
+</li>
+<li><p><strong>检查子程序所有输入参数的值：</strong> 这点与第一条类似，只是输入来源于程序内部，而不是外部。比如一个空指针，一个空对象的检查等等。</p>
+</li>
+<li><p><strong>决定如何处理错误的输入值</strong>: 当你检查到程序的非法输入值后，要决定如何对这些非法值进行处理，是忽略还是抛出错误？要视情况而定，比如我们的toupper函数，忽略非法值输入是合理的。</p>
+</li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://sharecore.net/2013/06/29/春秋五霸之首——齐桓公的故事/" data-id="ci7k7fi7d0013g3rrbfd3ugrt" class="article-share-link">Share</a>
+      <a data-url="http://sharecore.net/2014/01/13/防御性编程小例/" data-id="cipdyb14r000362spour1ie65" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/历史/">历史</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/春秋/">春秋</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术常识/">技术常识</a></li></ul>
 
     </footer>
   </div>
@@ -251,7 +249,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
     </nav>
   
 </section>
@@ -264,7 +262,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang/">Golang</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/历史/">历史</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础知识/">基础知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/复杂性/">复杂性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常识/">常识</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术常识/">技术常识</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/春秋/">春秋</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务化/">服务化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/架构/">架构</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模式匹配/">模式匹配</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang/">Golang</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/历史/">历史</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础知识/">基础知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/复杂性/">复杂性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常识/">常识</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术常识/">技术常识</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/春秋/">春秋</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务化/">服务化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/架构/">架构</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模式匹配/">模式匹配</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -273,7 +271,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -285,23 +283,23 @@
       <ul>
         
           <li>
-            <a href="/2014/08/24/模式匹配初析/">模式匹配初析</a>
+            <a href="/2016/06/13/不平则鸣/">不平则鸣</a>
           </li>
         
           <li>
-            <a href="/2014/08/10/字符编码常识及问题解析/">字符编码常识及问题解析</a>
+            <a href="/2016/06/13/人言无可畏/">人言无可畏</a>
           </li>
         
           <li>
-            <a href="/2014/08/02/浅谈服务化架构/">浅谈服务化架构</a>
+            <a href="/2016/06/13/设计的思考/">设计的思考</a>
           </li>
         
           <li>
-            <a href="/2014/07/27/面对喷子明哲保身/">面对喷子明哲保身</a>
+            <a href="/2016/06/13/解决问题的思路/">解决问题的思路</a>
           </li>
         
           <li>
-            <a href="/2014/07/20/技术的进化/">技术的进化</a>
+            <a href="/2016/06/13/I-O模型基本介绍/">I/O模型基本介绍</a>
           </li>
         
       </ul>
@@ -316,7 +314,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 J.H<br>
+      &copy; 2016 J.H<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

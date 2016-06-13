@@ -65,10 +65,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-模式匹配初析" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-不平则鸣" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2014/08/24/模式匹配初析/" class="article-date">
-  <time datetime="2014-08-24T04:58:29.000Z" itemprop="datePublished">2014-08-24</time>
+    <a href="/2016/06/13/不平则鸣/" class="article-date">
+  <time datetime="2016-06-13T11:49:35.000Z" itemprop="datePublished">2016-06-13</time>
 </a>
     
   </div>
@@ -79,7 +79,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2014/08/24/模式匹配初析/">模式匹配初析</a>
+      <a class="article-title" href="/2016/06/13/不平则鸣/">不平则鸣</a>
     </h1>
   
 
@@ -87,43 +87,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>前几天看到篇C#6.0的draft spec，发现C#6.0里将惊现模式匹配。如是便在做了翻宣讲说“模式匹配”是一个很好用的特性，<br>但是不知道跟C#的结合会怎么样。而同时却又发现周边了解“模式匹配”的人好少，于是诞生了写一篇文章稍微介绍下这<br>一功能特性的想法。</p>
-<p>如果说模式匹配这一概念有人不知道，但是正则表达式应该绝大多数的程序员都知道的了。而简言之，模式匹配就是更强大的正则表达式，或者说正则表达式是模式匹配这一概念在字符串处理上的一个应用。有了正则表达式为例，我们可以为模式匹配定义一个更为通用的定义：</p>
-<pre><code>模式匹配是判断输入的数据（信息）是否与特定的结构相匹配，并按模式从中取得数据（信息）。
-</code></pre><p>如下以正则表达式为例，从输入数据value里按pattern提取数据digits的模式匹配过程。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> value=<span class="string">"abc123"</span>;</span><br><span class="line"><span class="keyword">var</span> pattern=<span class="regexp">/\d/g</span>;<span class="comment">//定义模式</span></span><br><span class="line"><span class="keyword">var</span> digits=value.match(pattern);<span class="comment">//["1","2","3"]</span></span><br></pre></td></tr></table></figure>
-<p>那更广泛意义上的模式匹配是什么呢？其实很简单，就是输入/提取数据（信息）的范围不再局限为字符串了，甚至可以是编程语言支持的所有数据结构。第一次接触模式匹配这一概念，是前几年学习erlang的时候，下面就主要以erlang为例，来对模式匹配稍作介绍。</p>
-<p>先上点erlang里的”甜点”为例来说明：</p>
-<p>(erlang基础知识：大写字母开头的声明为变量，比如下面例子里的P，H,T;小写字母的声明是原子,比如abc)</p>
-<pre><code>模式{<span class="function_or_atom">abc</span>，<span class="variable">P</span>}与输入数据项{<span class="function_or_atom">abc</span>,<span class="number">123</span>}匹配，并在匹配的同时，发生绑定<span class="variable">P</span><span class="arrow">-&gt;</span><span class="number">123</span>
-
-模式[<span class="variable">H</span>|<span class="variable">T</span>]与输入数据项[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]匹配，并在匹配的同时，发生绑定<span class="variable">H</span><span class="arrow">-&gt;</span><span class="number">1</span>,<span class="variable">T</span><span class="arrow">-&gt;</span>[<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]
-</code></pre><p>第一个例子匹配的过程如下：</p>
-<p>1.先进行类型匹配：模式和数据项都是一个元组（“{}”），匹配通过。</p>
-<p>2.模式元组的第一个元素为常量，进行匹配：模式和数据项都是“abc”,匹配通过。</p>
-<p>3.模式元组的第二个元素是一个变量P，同时后面不再有任何元素，结束匹配，并将P绑定到数据项第一个元素后的所有元素。</p>
-<p>第二个例子匹配过程如下：</p>
-<p>1.先进行类型匹配，模式和数据项都是一个列表（“[]”），匹配通过。</p>
-<p>2.模式”[H|T]”表示的是一个“首尾”匹配，用“|”分开两个变量（H，T），H表示的首元素匹配，T表示尾部（除首元素外的所有元素）匹配。匹配是通过的,并绑定H和T的值为首元素和尾元素。</p>
-<p>再来一个高级点的例子：使用模式匹配来处理消息的接收：</p>
-<p>(erlang基础知识：erlang的调用是基于CSP的，各个actor之间通过消息通讯带完成调用;receive原语是erlang提供的消息接收机制，可监听和接收来自其它actor发送来的消息;”！”标识符用于向对应的actor发送消息)。</p>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">loop</span><span class="params">(<span class="variable">Dict</span>)</span> -&gt;</span></span><br><span class="line">  <span class="keyword">receive</span>  <span class="comment">%消息接收的原语，获取调用方的消息</span></span><br><span class="line">      <span class="tuple">&#123;store, <span class="variable">Key</span>, <span class="variable">Value</span>&#125;</span> -&gt; <span class="comment">%匹配数据存储的消息，"store"</span></span><br><span class="line">          <span class="function_name">loop</span>(<span class="function_name">dict:store</span>(<span class="variable">Key</span>, <span class="variable">Value</span>, <span class="variable">Dict</span>)); <span class="comment">%真实的存储</span></span><br><span class="line">      <span class="tuple">&#123;<span class="variable">From</span>, <span class="tuple">&#123;get, <span class="variable">Key</span>&#125;</span>&#125;</span> -&gt; <span class="comment">%匹配数据获取的消息, From匹配消息来源，</span></span><br><span class="line">          <span class="variable">From</span> ! <span class="function_name">dict:fetch</span>(<span class="variable">Key</span>, <span class="variable">Dict</span>), <span class="comment">%向查询请求消息来源发送查询结果消息</span></span><br><span class="line">          <span class="function_name">loop</span>(<span class="variable">Dict</span>) <span class="comment">%尾递归：持续监听新的消息 </span></span><br><span class="line"><span class="keyword">end</span>.</span><br><span class="line"></span><br><span class="line"><span class="variable">Pid</span> = spawn(loop) <span class="comment">%启动一个进程(actor)，Pid为进程号</span></span><br><span class="line"></span><br><span class="line"><span class="variable">Pid</span>!<span class="tuple">&#123;store ,key1,<span class="string">"123"</span>&#125;</span> <span class="comment">%向进程发送一个键值对存储消息</span></span><br><span class="line"></span><br><span class="line"><span class="variable">Pid</span>!<span class="tuple">&#123;get,key1&#125;</span> <span class="comment">%发送一个查询消息，获取"key1"对应的值</span></span><br></pre></td></tr></table></figure>
-<p>上面展示例子模式匹配在erlang中进行消息匹配的使用，需要注意的一点是，这里的匹配是从上到下来进行的，即会先进行“store”的匹配，匹配失败的话才进行“get”匹配。消息匹配是erlang里的一项杀手锏特性，它能大大减少在消息处理的代码量，代码只要专注于实际算法的实现即可，将相应消息的解析和内容提取，交给模式匹配来完成。</p>
-<p>从本质上来讲，模式匹配体现的是一个解构的过程和手段，解构是日常编程过程中一个非常常见的场景，比如编译器将程序代码解析为一个抽象语法树（AST）就是一个解构的过程，再比如，将XML/JSON进行反序列化为程序对象也是一例。对于许多语言，并未提供强大的模式匹配特性，但是为了提供可扩展的解构功能，一般都会采取一些设计模式来解决。比如面向对象编程里，将解析操作抽离出独立的模块，采取基于基类的虚方法/抽象方法扩展的方式，然后结合想对应的规则配置，来完成有区别性的模式解构。但是，这样的方式，稍显笨重，代码量也更多，与模式匹配相比，不在一个复杂度等级之上。</p>
-<p>去年我用golang写了一个web框架，其中的路由解析过程就采取了类似的方式（代码位置：<a href="https://github.com/JustinHuang917/gof" target="_blank" rel="external">https://github.com/JustinHuang917/gof</a>）。通过如以下路由规则配置，匹配不同的URL模式，从URL中提取相应的参数：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">"RouteRules":[</span><br><span class="line">      &#123;</span><br><span class="line">          "/Order/&#123;id:[0-9]+&#125;":</span><br><span class="line">              &#123;"controller":"Order","action":"Order","id":"0"&#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">          "/&#123;controller&#125;/&#123;action&#125;":</span><br><span class="line">              &#123;"controller":"Home","action":"Index"&#125;</span><br><span class="line">      &#125;</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
-<p>这个看似简单功能，我花了200多行代码才得以完成，使用的还是堪称语法最为精简的Golang，而如果使用Java/C#来完成，代码量肯定还要增加不少。而如果语言本身具有强大的模式匹配的话，实现代码将会变得非常精简。而这一次C#6.0声称引入模式匹配，希望是面向对象语言领域的一次有益尝试。</p>
-<p>同时，我也希望我喜欢的Golang在模式匹配上迈开尝试的脚步，在现有的goroutine+channel的组合上应用模式匹配，将是一件非常有效率的实践。现在Golang提供”select..case…“机制只能识别不同channel返回的消息，而不能识别实际消息的内容，这一点来说，与erlang相比，降低了CSP的编程效率。</p>
-<p>总结：</p>
-<p>模式匹配是来自函数式编程领域的高效的编程功能特性，它能成倍增加“解构”代码的编写效率，明显降低代码复杂度。同时，尽管大多数的编程语言，尚未提供这一功能，但是实际代码编写过程中，我们可以借鉴其基于模式声明的思想，抽离出相应的模式匹配模块，在保证可扩展性的同时，控制数据（信息）匹配带来的代码复杂度。</p>
+        <p>今日读到韩愈的《送孟东野序》一文，为其“不平则鸣”的思想所吸引。源于儒家之传统，向来是习惯遵守仁道，遇不平而忍气吞声的，而韩公作为儒家大师还能有如此不平而鸣之气概，可见其思想的出类拔苹，不与时同。文章开头：大凡物不得其平则鸣…人之于言也亦然，有不得已者而后言。其歌也有思，其哭也有怀，凡出乎口而为声者，其皆有弗平者乎。 说的就是，人遇到不平，必然通过言语表达出来，或将不平写到他得歌与诗里。</p>
+<p>我在《人言无可畏》一文里说的，人都是需要表达的，只是人际关系的道义约束，让人变得不敢言说，将心中的不平与不惑抑制于内心，只待有一个无言语代价的时机，以一种或恶或假或无意义的方式表达出来。但是韩公告诫说，不要做这样的人，他告诉我们，遇到不平，必然用言语作出回响，这是万物必然之理，好比如平静的水面，静立的草木本也无声，但是风吹过他们后，他们必然报以应有的声音作为回应。</p>
+<p>关于韩公的字：退之，有一个故事：说韩公早年，科场屡试不中，偶遇才貌双全卢氏，说起其科场屡次失利的原因，卢氏题字：“人求言实，火求心虚， 欲成大器，必先退之”，韩公沉思，察觉出自己的日常骄傲，缺乏谦虚之情，遂取字“退之”。</p>
+<p>这个故事常用来规劝我们要谦虚为人，而在我看来，这应该是个杜撰的故事，或者说是漏洞百出的故事，因为从韩公后来的文字与为人来看，其一生基本与“退之”绝缘，此“不平则鸣”的《送孟东野序》一文就是例证。其名篇《伯夷颂》更是说：士之特立独行，适于义而已，不顾人之是非，皆豪杰之士，信道笃而自知明也。明显表露出，韩公作为一个有独立思想的读书人不会随波逐流，而是只会按他自己的道义来行事，也不会顾虑他人讲的是是非非，坚持自己的信仰，明明白白自己的为人。如此，坚持个人道义信仰之人，怎可被称为“退之”呢？</p>
+<p>韩公一生推动继承先秦两汉散文的传统，逆当时流行的骈体文之风，以致后被苏轼称为是“文起八代之衰”，足见其敢于挑战潮流之志。韩公又不遗余力推行“师道”，与当时“以为师而耻”的时代风气作对，而在佛、到盛行的大唐，韩公又是一个一生不与佛、道为行，不惧鬼神之人。短短五十多岁的人生，韩公从未“退之”，而是逆流勇进，敢为天下先。</p>
+<p>暂且不论，韩公坚守和奉行的道义之事，以今人眼光来看，是对或错，而其敢于守个人道义，抒不平之意，行不苟合之事，是我们非常缺乏的一种时代精神。我们也许真的没必要对周围不合自己道义的事情过于忍气吞声，也没必要为自己所行之事过多考虑是不是为潮流所容纳，遇不平则鸣，遇不义则逆，这是最符合人性的常情。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://sharecore.net/2014/08/24/模式匹配初析/" data-id="ci7k7fi79000xg3rr3nr4r1kn" class="article-share-link">Share</a>
+      <a data-url="http://sharecore.net/2016/06/13/不平则鸣/" data-id="cipdyj880002r62spzze1j7l3" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/基础知识/">基础知识</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/模式匹配/">模式匹配</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/常识/">常识</a></li></ul>
 
     </footer>
   </div>
@@ -132,10 +109,10 @@
 
 
   
-    <article id="post-字符编码常识及问题解析" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-人言无可畏" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2014/08/10/字符编码常识及问题解析/" class="article-date">
-  <time datetime="2014-08-10T15:53:04.000Z" itemprop="datePublished">2014-08-10</time>
+    <a href="/2016/06/13/人言无可畏/" class="article-date">
+  <time datetime="2016-06-13T11:48:11.000Z" itemprop="datePublished">2016-06-13</time>
 </a>
     
   </div>
@@ -146,7 +123,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2014/08/10/字符编码常识及问题解析/">字符编码常识及问题解析</a>
+      <a class="article-title" href="/2016/06/13/人言无可畏/">人言无可畏</a>
     </h1>
   
 
@@ -154,63 +131,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <pre><code>在面试的笔试题里出了一道开放性的题：请简述<span class="keyword">Unicode</span>与UTF-<span class="number">8</span>之间的关系。一道看似简单的题，能给出满意答案的却寥寥无几
-，确实挺失望的。所以今天就结合我以前做过的一个关于字符编码的分享，总结一些与字符编码相关的知识和问题。如果你这方面的
-知识已经掌握的足够了，可以忽略这篇文字。但如果你没法很好的回答我上面的面试题，或经常被乱码的问题所困扰，还是不妨一读。
-</code></pre><h2 id="基本常识">基本常识</h2><h3 id="1-位和字节">1.位和字节</h3><p>说起编码，我们必须从最基础的说起，<strong>位和字节</strong>(别觉得这个过于简单不值一说，我还真见过很多个不能区分这两者的程序员)。位（bit）是指计算机里存放的二进制值(0/1)，而8个位组合成的“位串”称为一个字节，容易算出，8个位的组合有256（ 2^8 ）个组合方式，其取值范围是“00000000-11111111”，常用十六进制来表示。比如“01000001”就是一个字节，其对应的十六进制值为“0x41”。</p>
-<p>而我们通常所讲的字符编码，就是指<strong>定义一套规则</strong>，将真实世界里的字母/字符与计算机的二进制序列进行相互转化。如我们可以针对上面的字节定义如下的转换规则：</p>
-<pre><code><span class="number">01000001</span>（<span class="number">0x41</span>）&lt;-&gt; <span class="number">65</span> &lt;-&gt; <span class="string">'A'</span>
-</code></pre><p>即用字位序“01000001”来表示字母’A’。</p>
-<h3 id="2-拉丁字符">2.拉丁字符</h3><p>拉丁字符是当今世界使用最广泛的符号了。通常我们说的拉丁字母，指的的是<strong>基础拉丁字母</strong>,即指常见的”ABCD“等26个英文字母，这些字母与英语中一些常见的符号（如数字，标点符号）称为<strong>基础拉丁字符</strong>，这些基础拉丁字符在使用英语的国家广为流行，当然在中国，也被用来当作汉语拼音使用。在欧洲其它一些非英语国家，为满足其语言需要，在基础拉丁字符的基础上，加上一些连字符，变音字符(如’Á’)，形成了<strong>派生拉丁字母</strong>，其表示的字符范围在各种语言有所不同，而<strong>完整意义上的拉丁字符是指这些变体字符与基础拉丁字符的全集</strong>。是比基础拉丁字符集大很多的一个集合。</p>
-<h2 id="编码标准">编码标准</h2><p>前文提到，字符编码是一套规则。既然是规则，就必须有标准。下面我就仔细说说常见的字符编码标准。</p>
-<h3 id="1-拉丁编码">1.拉丁编码</h3><p>ASCII的全称是American Standard Code for Information Interchange（美国信息交换标准代码）。顾名思义，这是现代计算机的发明国美国人设计的标准，而美国是一个英语国家，他们设定的<strong>ASCII编码也只支持基础拉丁字符</strong>。ASCII的设计也很简单，<strong>用一个字节（8个位）来表示一个字符，并保证最高位的取值永远为’0’</strong>。即表示字符含义的位数为7位，不难算出其可表达字符数为2^7 =128个。这128个字符包括95个可打印的字符（涵盖了26个英文字母的大小写以及英文标点符号能）与33个控制字符（不可打印字符）。例如下表，就是几个简单的规则对应：</p>
-<table><br><tr><th>字符类型</th><th>    字符</th><th>二进制  </th><th>    16进制</th><th>10进制</th></tr><br><tr><td>可打印字符</td><td>A</td><td>    01000001</td><td>    0x41</td><td>65</td></tr><br><tr><td>可打印字符</td><td>a</td><td>    01100001</td><td>    0x61</td><td>97</td></tr><br><tr><td>控制字符</td><td>    \r</td><td>00001101</td><td>    0x0D</td><td>13</td></tr><br><tr><td>控制字符</td><td>    \n</td><td>00001010</td><td>    0xA</td><td>10</td></tr><br></table>
-
-<p>前面说到了，ASCII是美国人设计的，只能支持基础拉丁字符，而当计算机发展到欧洲，欧洲其它不只是用的基础拉丁字符的国家（即用更大的派生拉丁字符集）该怎么办呢？</p>
-<p>当然，最简单的办法就是将美国人没有用到的<strong>第8位也用上</strong>就好了，这样能表达的字符个数就达到了2^8 =256个，相比较原来，增长了一倍， 这个编码规则也常被称为<strong>EASCII</strong>。EASCII基本解决了整个西欧的字符编码问题。但是对于欧洲其它地方如北欧，东欧地区，256个字符还是不够用，如是出现了<strong>ISO 8859</strong>,为解决256个字符不够用的问题，<strong>ISO 8859采取的不再是单个独立的编码规则，而是由一系列的字符集（共15个）所组成</strong>，分别称为ISO 8859-n(n=1,2,3…11,13…16,没有12)。其每个字符集对应不同的语言,如ISO 8859-1对应西欧语言，ISO 8859-2对应中欧语言等。其中大家所熟悉的<strong>Latin-1就是ISO 8859-1的别名,它表示整个西欧的字符集范围</strong>。<br><strong>需要注意的一点的是，ISO 8859-n与ASCII是兼容的，即其0000000(0x00)-01111111(0x7f)范围段与ASCII保持一致，而10000000（0x80）-11111111(0xFF)范围段被扩展用到不同的字符集。</strong></p>
-<h3 id="2-中文编码">2.中文编码</h3><p>以上我们接触到的拉丁编码，都是单字节编码，即用一个字节来对应一个字符。但这一规则对于其它字符集更大的语言来说，并不适应，比如中文，而是出现了用多个字节表示一个字符的编码规则。常见的中文GB2312（国家简体中文字符集）就是用两个字节来表示一个汉字（注意是表示一个汉字，对于拉丁字母，GB2312还是是用一个字节来表示以兼容ASCII）。我们用下表来说明各中文编码之间的规则和兼容性。</p>
-<p><img src="/images/codes/cn_codes.jpg" style="width:500px"></p>
-<p>对于中文编码，其规则实现上是很简单的，一般都是简单的<strong>字符查表</strong>即可，重要的是要注意其相互之间的<strong>兼容性</strong>问题。如如果选择BIG5字符集编码，就不能很好的兼容GB2312，当做繁转简时有可能导致个别字的冲突与不一致，但是GBK与GB2312之间就不存在这样的问题。</p>
-<h3 id="3-Unicode">3.Unicode</h3><p>以上可以看到，针对不同的语言采用不同的编码，有可能导致冲突与不兼容性，如果我们打开一份字节序文件，如果不知道其编码规则，就无法正确解析其语义，这也是产生乱码的根本原因。有没有一种规则是全世界字符统一的呢？当然有，Unicode就是一种。为了能独立表示世界上所有的字符，Unicode采用<strong>4个字节表示一个字符</strong>,这样理论上Unicode能表示的字符数就达到了2^31 = 2147483648 = 21 亿左右个字符，完全可以涵盖世界上一切语言所用的符号。我们以汉字”微信“两字举例说明：</p>
-<pre><code>微 &lt;<span class="function">-&gt;</span>  <span class="string">\u5fae</span>   &lt;<span class="function">-&gt;</span>  <span class="number">00000000</span> <span class="number">00000000</span> <span class="number">01011111</span> <span class="number">10101110</span>
-信 &lt;<span class="function">-&gt;</span>    <span class="string">\u4fe1</span>     &lt;<span class="function">-&gt;</span>  <span class="number">00000000</span> <span class="number">00000000</span> <span class="number">01001111</span> <span class="number">11100001</span>
-</code></pre><p>容易从上面的例子里看出，Unicode对所有的字符编码均需要四个字节，而这对于拉丁字母或汉字来说是浪费的，其前面三个或两个字节均是0,这对信息存储来说是极大的浪费。另外一个问题就是，如何区分Unicode与其它编码这也是一个问题，比如计算机怎么知道四个字节表示一个Unicode中的字符，还是分别表示四个ASCII的字符呢？</p>
-<p>以上两个问题，困扰着Unicode，让Unicode的推广上一直面临着困难。直至UTF-8作为Unicode的一种实现后，部分问题得到解决，才得以完成推广使用。说到此，我们可以回答文章一开始提出的问题了，<strong>UTF-8是Unicode的一种实现方式，而Unicode是一个统一标准规范，Unicode的实现方式除了UTF-8还有其它的，比如UTF-16等。</strong></p>
-<p>话说当初大牛Ben Thomson吃饭时，在一张餐巾纸上，设计出了UTF-8，然后回到房间，实现了第一版的UTF-8。关于UTF-8的基本规则，其实简单来说就两条（来自阮一峰老师的总结）：</p>
-<pre><code>规则1：对于单字节字符，字节的第一位为0，后7位为这个符号的Unicode码，所以对于拉丁字母，UTF-8与ASCII码是一致的。
-
-规则2：对于<span class="keyword">n</span>字节(<span class="keyword">n</span>&gt;1)的字符，第一个字节前<span class="keyword">n</span>位都设为1，第<span class="keyword">n</span>+1位为0，后面字节的前两位一律设为10，
-剩下没有提及的位，全部为这个符号的Unicode编码。
-</code></pre><p>通过，根据以上规则，可以建立一个Unicode取值范围与UTF-8字节序表示的对应关系，如下表，</p>
-<p><img src="/images/codes/utf8.jpg" style="width:500px"></p>
-<p>举例来说，’微’的Unicode是’\u5fae’，二进制表示是”00000000 00000000 01011111 10101110“，其取值就位于’0000 0800-0000 FFFF’之间，所以其UTF-8编码为’<strong>111</strong>00101 <strong>10</strong>111110 <strong>10</strong>101110’ （加粗部分为固定编码内容）。</p>
-<p>通过以上简单规则，UTF-8采取变字节的方式，解决了我们前文提到的关于Unicode的两大问题。同时，作为中文使用者需要注意的一点是<strong>Unicode(UTF-8)与GBK，GB2312这些汉字编码规则是完全不兼容的，也就是说这两者之间不能通过任何算法来进行转换,如需转换，一般通过GBK查表的方式来进行</strong>。</p>
-<h2 id="常见问题及解答">常见问题及解答</h2><h3 id="1-windows_Notepad中的编码ANSI保存选项，代表什么含义？">1.windows Notepad中的编码ANSI保存选项，代表什么含义？</h3><p>ANSI是windows的默认的编码方式，对于英文文件是ASCII编码，对于简体中文文件是GB2312编码（只针对Windows简体中文版，如果是繁体中文版会采用Big5码）。所以，<strong>如果将一个UTF-8编码的文件，另存为ANSI的方式，对于中文部分会产生乱码</strong>。</p>
-<h3 id="2-什么是UTF-8的BOM？">2.什么是UTF-8的BOM？</h3><p>BOM的全称是Byte Order Mark，BOM是微软给UTF-8编码加上的，用于标识文件使用的是UTF-8编码，即在UTF-8编码的文件起始位置，加入三个字节“EE BB BF”。这是微软特有的，标准并不推荐包含BOM的方式。采用加BOM的UTF-8编码文件，对于一些只支持标准UTF-8编码的环境，可能导致问题。比如，在Go语言编程中，对于包含BOM的代码文件，会导致编译出错。详细可见我的<a href="http://sharecore.info/blog/2013/04/05/parse-csv-to-sql-for-insert/" target="_blank" rel="external">这篇文章</a>。</p>
-<h3 id="3-为什么数据库Latin1字符集（单字节）可以存储中文呢？">3.为什么数据库Latin1字符集（单字节）可以存储中文呢？</h3><p>其实不管需要使用几个字节来表示一个字符，但最小的存储单位都是字节,所以，<strong>只要能保证传输和存储的字节顺序不会乱即可</strong>。作为数据库，只是作为存储的使用的话，只要能保证存储的顺序与写入的顺序一致，然后再按相同的字节顺序读出即可，翻译成语义字符的任务交给应用程序。比如’微’的UTF-8编码是’0xE5 0xBE 0xAE’，那数据库也存储’0xE5 0xBE 0xAE’三个字节，其它应用按顺序从数据库读取，再按UTF-8编码进行展现。这当然是一个看似完美的方案，但是只要写入，存储，读取过程中岔出任何别的编码，都可能导致乱码。</p>
-<h3 id="4-Mysql数据库中多个字符集变量（其它数据库其实也类似），它们之间分别是什么关系？">4.Mysql数据库中多个字符集变量（其它数据库其实也类似），它们之间分别是什么关系？</h3><p><img src="/images/codes/mysql_var.jpg" style="width:500px"></p>
-<p>我们分别解释：</p>
-<p><strong>character_set_client</strong>：客户端来源的数据使用的字符集，用于客户端显式告诉客户端所发送的语句中的的字符编码。</p>
-<p><strong>character_set_connection</strong>：连接层的字符编码，mysql一般用character_set_connection将客户端的字符转换为连接层表示的字符。</p>
-<p><strong>character_set_results</strong>:查询结果从数据库读出后，将转换为character_set_results返回给前端。</p>
-<p>而我们常见的解决乱码问题的操作：</p>
-<pre><code><span class="function"><span class="title">mysql_query</span><span class="params">(<span class="string">'SET NAMES GBK'</span>)</span></span>
-</code></pre><p>其相当于将以上三个字符集统一全部设置为GBK，这三者一致时，一般就解决了乱码问题。</p>
-<p>character_set_database:当前选中数据库的默认字符集，如当create table时没有指定字符集，将默认选择该字符集。</p>
-<p>character_set_database已经character_set_system，一般用于数据库系统内部的一些字符编码，处理数据乱码问题时，我们基本可以忽略。</p>
-<h3 id="5-什么情况下，表示信息丢失？">5.什么情况下，表示信息丢失？</h3><p>对于mysql数据库，我们可以通过<strong>hex(colname)</strong>函数（其它数据库也有类似的函数，一些文本文件编辑器也具有这个功能），查看实际存储的字节内容，如：</p>
-<p><img src="/images/codes/mysql_hex.jpg" style="width:500px"></p>
-<p>通过查看存储的字节序，我们可以从根本上了解存储的内容是什么编码了。而当发现<strong>存储的内容全部是’3F’时，就表明存储的内容由于编码问题，信息已经丢失了，无法再找回</strong>。</p>
-<p>之所以出现这种信息丢失的情况，一般是将不能相互转换的字符集之间做了转换，比如我们在前文说到，UTF-8只能一个个字节地变成Latin-1，但是根本不能转换的，因为两者之间没有转换规则，Unicode的字符对应范围也根本不在Latin-1范围内，所以只能用’?(0x3F)’代替了。</p>
-<h2 id="总结：">总结：</h2><p>本文从基础知识与实际中碰到的问题上，解析了字符编码相关内容。而之所以要从头介绍字符编码的基础知识，是为了更好的从原理上了解与解决日常碰到的编码问题，只有从根本上了解了不同字符集的规则及其之间的关系与兼容性，才能更好的解决碰到的乱码问题，也能避免由于程序中不正确的编码转换导致的信息丢失问题。</p>
+        <p>去年，天津爆炸的悲剧上演，看着鲜活的生命逝去，悲悯之心当然是不能避免的，这是作为善良之辈的常情使然。只是每一次悲惨的事故，最终却会演化成社会、网络上各派力量的针锋相对，彼此猜测和质疑的一幕闹剧，而随着时间慢慢推移，闹剧也会渐渐收场，大家好像突然都健忘了，情绪慢慢收敛，直到下一次的闹剧来临，将平复的情绪导向另一波高潮。而将民众情绪推向高潮的，是那些接连不断，纷然混乱，真伪莫辨的传说，我们当然也很习惯武断地将它定义为：谣言。</p>
+<p>语言是情绪排泄的通道。但我们却是生活在一个没有表达宽容度的环境，一句“人言可畏”吓坏了多少想说话的人。对于身边的事情我们都只能欲言又止，因为大家都习惯了用恶意的眼光看待周围的事物，包括言语。中庸之道横行，对于与己相关的世事，大家都习惯唯唯诺诺，尽量保证与之言语的对方，不会对自己产生恶意的理解，也就是常说的：不在言语上得罪人。可是，信奉中庸平和之道的社会，为何又会“谣言四起”呢？甚至这些“谣言”都是明显带有恶意的。我看原因就出在这中庸之道上的言语尊重。我们对周围人的客气，表达上的唯唯诺诺，灭不掉我们内心深处的表达诉求。当被周遭的人情世故压抑的太久，太多的“怨声载道”不能表达出来时，我们就将所有恶意的猜测与言语，在一次次的事故的风口上一股脑发泄出来。因为这些事故，一般都不与自己的人际关系直接相关，表达假与丑就都变得没有代价。没有代价，同时还能带来情绪排泄的快感 ，性价比很高，那就不如将所有积压的愁怨，一次性的释放出来。所以，整个人际关系对言语的不宽容而造成的全社会表达孤独，是每次“谣言四起”的真正祸根。</p>
+<p>人际之间对表达的不容忍，是几千年来深根于儒家土壤里的一棵毒蘑菇，一时半会，还没法去拔掉它，环境既然改变不了，谣言就必将存在。认识和承认谣言的必然存在性很重要，因为这决定了对待谣言的态度。我想，我们的主权者是没有认识到这一点的，从他们每次针对谣言祭出大棒来棒杀就可以看出其认识上的肤浅性。当谣言威胁到他们时，就成了“人言可畏”，他们过于敏感的神经，必然给出剧烈的反应。须不知，民众的思维向来都是线性的，在民众眼中，主权者反应剧烈的，就是离真相更近的事实，因为他们从来都不会信任任何主权者。而如果主权者能放开忌讳，人言无可畏，那就不会反应过度，而是会去用足够的事实与信息，去击破一个个可能不真实的谣言，也会有足够的诚意，去面对可能是真相的事实。主权者以宽容的姿态接受质疑，相信人言不可畏，另外一个好处就是能引导民众人际之间的表达宽容，缓解全社会的表达孤独。</p>
+<p>我们看似找到了破解谣言的药方，但是却会发现，这个药方，在一个从上至下的制度环境里，并不可行。从上至下，权力集中，哪来的宽容？少数人的决策，利益集中，谁愿改革？我们只能期望，传统的厚积能自身被慢慢被稀释，更加愿意相信人言无可畏，我们的表达孤独能不再被压抑，会有一个人际间表达更宽容的明天。</p>
+<p>应该会有吧？</p>
+<blockquote>
+<p>你的声音我听不见 现在是太吵太乱<br>你已经看了这么长的时间你怎么还不发言<br>是谁出的题这么的难 到处全都是正确答案<br>   ——何勇《钟鼓楼》(歌曲)</p>
+</blockquote>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://sharecore.net/2014/08/10/字符编码常识及问题解析/" data-id="ci7k7fi7n001hg3rrzjoksn2a" class="article-share-link">Share</a>
+      <a data-url="http://sharecore.net/2016/06/13/人言无可畏/" data-id="cipdyhfez002p62sp03cpcuoh" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术常识/">技术常识</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/常识/">常识</a></li></ul>
 
     </footer>
   </div>
@@ -219,10 +155,10 @@
 
 
   
-    <article id="post-浅谈服务化架构" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-设计的思考" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2014/08/02/浅谈服务化架构/" class="article-date">
-  <time datetime="2014-08-02T15:54:42.000Z" itemprop="datePublished">2014-08-02</time>
+    <a href="/2016/06/13/设计的思考/" class="article-date">
+  <time datetime="2016-06-13T11:44:38.000Z" itemprop="datePublished">2016-06-13</time>
 </a>
     
   </div>
@@ -233,7 +169,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2014/08/02/浅谈服务化架构/">浅谈服务化架构</a>
+      <a class="article-title" href="/2016/06/13/设计的思考/">设计的思考</a>
     </h1>
   
 
@@ -241,56 +177,28 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <pre><code>这两年来，在服务化架构设计上的实践比较多，在此对关于服务化设计一些经验稍作总结，
-知识经验水平有限，如有欠缺和不准确的地方，还请指出修正！     
-</code></pre><p>我在<a href="http://sharecore.net/2014/07/05/%E5%8F%AF%E6%89%A9%E5%B1%95%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E7%9A%84%E4%B8%89%E4%B8%AA%E7%BB%B4%E5%BA%A6/" target="_blank" rel="external">《可扩展架构设计的三个维度》</a>一文里，谈到服务化架构（SOA）在保证系统扩展性上，是一个比较好的架构设计实践。也谈到了通过服务网关的形式来进行多服务的注册与管理等。但困于篇幅，并未展开讲关于服务化架构实现层面上的具体细节。本文就结合我这两年来，在服务化架构设计上的一些实践经验，谈谈一个服务化框架其应该具备的一些功能以及其基本实现方式。</p>
-<p>这里说到的“服务”，本质上来说，就是指“RPC”。单纯的RPC功能实现，其实很简单，无非就是client发起调用，中间某个组件（甚至就是client本身）拦截调用信息，序列化后将信息传输到server端，server端收到调用请求后反序列化，根据请求详细发起实际调用后返回响应传输回给client端。这样的RPC很常见，比如常见的存储过程调用就是一例。但是在一个复杂的业务环境，如何管理和协同这些大量的RPC才是最麻烦的事情。所以，在此谈的“服务化”更多指的是对RPC的管理。</p>
-<p>一个复杂业务环境下的大量RPC究竟会遇到哪些问题呢？换句话说，一个服务化管理框架究竟应该具备哪些功能特性才算基本完备呢？以下是我的一些看法</p>
-<p><strong>1.协议选型</strong></p>
-<p><strong>数据序列化</strong></p>
-<p>为整个环境里的服务采用统一的数据序列化协议，其益处是显而易见的，能大大降低服务提供者和服务调用者之间的沟通成本，同时也可以为服务提供者减少应对不同数据协议需求而带来的代码复杂性。所以，在开始设计一个服务化框架时，第一件重要的事情就是选定一个标准的数据序列化协议。如何选择合适的序列化协议重点需要从<strong>扩展性，传输性能以及业界通用性（换句话说就是不同技术/语言的支持程度）</strong>三个因素里来协调选择。当前看来，在这三个方面都做的比较好，也是使用最广泛的就是<strong>Json</strong>和<strong>Protobuf</strong>了，基于文本的Json在可读性和灵活性上占优，而基于二进制的Protobuf在传输性能生更胜一筹。而如果整个环境开发的技术栈比较统一，比如全是Java/.NET，也可以选择对这一技术更加友好的序列化协议。我这一次选择的就是Json，因为从面对的业务情况来看，传输性能不是根本矛盾，而灵活性要求较高，同时服务使用者使用的技术也较为多样化。</p>
-<p>在序列化协议的选定上<strong>要避免的一个误区就是采用自定义协议而不是业界通用协议</strong>,自定义协议将很容易面临扩展性和使用推广方面的问题，同时，当有新的开发人员加入进来，其需要花费时间来学习与了解。</p>
-<p><strong>通讯协议选择</strong></p>
-<p>通讯协议上的选择上灵活性比较大，有多种选择，可以在基于HTTP或TCP链接上建立自己的通讯协议。比如可以设计一个简单的header（定长）+body（序列化的请求/响应）。如果采取json作序列化协议的情况下，可以跟我本次的选择一样，采取一个类似<a href="http://en.wikipedia.org/wiki/JSON-RPC" target="_blank" rel="external">json-rpc</a>, 完全基于json的通讯协议：</p>
-<p>Resust:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	"<span class="attribute">ActionName</span>":<span class="value"><span class="string">"Do"</span></span>,</span><br><span class="line">	"<span class="attribute">AppId</span>":<span class="value"><span class="string">"xxxxxx"</span></span>,</span><br><span class="line">	"<span class="attribute">RequestContent</span>":<span class="value">&#123;&#125;</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure></p>
-<p>Response:<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	“RequestId”:“xxxxxxxxx”，</span><br><span class="line">	“HasError”:false,</span><br><span class="line">	"ResponseContent":&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>对于服务访问对象主要为企业内部的情况，不太建议采取与http完全绑定的restful协议，这将牺牲链接层选择的灵活性。</p>
-<p><strong>2.注册与授权管理</strong></p>
-<p>注册管理是解决系统交互复杂性的必备良药，我建议超过三个系统之间的系统交互，都应该具备注册管理功能。对于服务化架构来说，注册管理也是最为核心的一项功能。当服务数量和服务使用者数量爆发性增长时，最难回答的问题就是“服务被谁使用了？”以及“有哪些服务可供使用？”，注册管理就是解决这两个问题的最佳方式与实践。 </p>
-<p>注册管理的实现上其实也很简单，提供一个Config Server（配置中心），收集服务提供者的注册信息（包括服务名称，服务地址（可以多个），版本，超时时间控制等），我们称为<strong>服务的元信息</strong>。而当服务使用者需要调用相应的服务时，就可以利用这些元信息来查找和调用相应的服务了。</p>
-<p>不过，在元信息的使用上，存在两者架构方式</p>
-<p>1.服务使用者访问统一的服务中转器，由服务中转器按照注册信息以及负载情况将请求转发到相应的服务地址上。服务执行后，响应信息返回到服务中心，服务中心将响应回送给调用方。</p>
-<p><img src="/images/soa/service_2.png" alt="service_2"></p>
-<p>这种方式的优点是能比较好的控制所有请求的调度。当服务元信息发生变化时，能及时地调整请求转发（负载）与超时控制等。缺点是请求和响应均需要由中转中心负责转发，性能耗费较大。同时，中转中心的可用性也容易产生问题，必须通过集群的方式来解决。</p>
-<p>2.服务使用者负责从配置中心获取服务地址等信息，然后有由服务使用者直接向相对应地址上的服务发送请求，请求也直接由服务提供者返回给服务调用者。同时，服务使用者本身可以缓存一定的服务元信息，防止每次访问都要从配置中心获取，以降低配置中心的负载，增强整个系统的可用性。当配置中心的服务元信息发生变化时，通过通知的方式告知服务使用者更新本地缓存。</p>
-<p><img src="/images/soa/service_1.png" alt="service_1"></p>
-<p>这种架构方式与第一种架构相比，能显著降低性能的损耗，以及服务使用者对中心节点的直接依赖。但代价是需要彻底改造服务使用者的调用方式，框架的代码必须侵入到客户端的开发中去。一般会针对不同的客户端提供clientLib，但当客户端实现方式多样化时，这种代价是非常大的。</p>
-<p>由于我这次面对的客户端多样性，客户端开发也不在控制范围内，所以选择就是第一种方式。</p>
-<p>关于授权，可以与注册管理相互结合，将授权信息同一保存到配置中心。对于企业内部访问的服务，做到通过IP+AppId授权应该就够了。这里有个经验是可以将授权和服务版本确认两者结合起来，即在<strong>授权的同时完成服务版本的确定</strong>，而不采取由客户端发起访问时指定版本的方式，这样做的好处是框架和服务提供者对于服务版本变更和灰度发布具有更高的可控制性。</p>
-<p><strong>3.路由与过载保护</strong></p>
-<p>在<a href="http://sharecore.net/blog/2014/07/05/ke-kuo-zhan-jia-gou-de-san-ge-wei-du/" target="_blank" rel="external">《可扩展架构设计的三个维度》</a>一文里谈到通过单元化架构以满足Z轴扩展，以满足差异性的需求或者做到安全隔离。而<strong>服务路由是实现这种单元化架构的基本保障</strong>，以保证能将来自不同访问者请求或者不同的请求内容，分发到不同的服务提供区域去，形成单元化架构的闭环。当然，路由功能并不一定需要框架来独立实现，业界许多通用的（软）负载均衡器可以协助实现，如Nginx/HAProxy/LVS这些。但是这类通用的负载均衡软件的问题是路由算法比较通用，当需要扩展到与业务逻辑相关的路由绑定时，比较麻烦，比如需要用户ID按权重分配路由。在此建议，<strong>可以采取通用的负载均衡软件当第一层接入，而在服务节点之间采取自己实现路由模块的方式。</strong>而在实现路由模块时，需要将扩展性上的考虑放在第一位。 </p>
-<p>对于服务化架构，保障提供服务提供者的业务系统不受“恶意”调用或突发性激增调用的破坏，过载保护功能至关重要，它能起到系统“保险丝”的效果。前文提到可用于接入的Nginx/HAProxy/LVS这些软件，也多少提供了过载保护的功能。如果自己实现过载保护模块，具体可参见我的<a href="http://sharecore.net/blog/2014/06/21/guo-zai-bao-hu-suan-fa-qian-xi/" target="_blank" rel="external">《过载保护算法浅析》</a>一文。对于过载保护的一个经验是：<strong>过载保护越靠近服务访问前端越好。</strong></p>
-<p><strong>4.服务拆分与组合化</strong></p>
-<p>传统的SOA概念，指的是不同的应用系统之间相互通过大粒度服务的方式进行集成。而当今的服务化架构已经摆脱了这一概念的束缚，更多讲的是系统内部模块级甚至是功能级的服务化模式。也就是说服务实现的粒度更小了。这当然为应用和服务的实现带来了更强的灵活性，服务交付周期也大大缩短了。但这样的细粒度拆分服务，带来的问题是项功能的实现需要访问的服务数量成倍的增加。如下图所示：一个客户下订单的功能实现需要分别访问：客户信息服务，产品类别服务，库存服务，订单管理服务等。</p>
-<p><img src="/images/soa/service_3.png" alt="service_3"></p>
-<p>这将显著增加功能实现的复杂性。为了解决这一问题，我们只能再次使用那条永远有效的“中间层定律”：<strong>任何计算机问题都可以通过中间加一层来解决。</strong> 我们可以将相应的服务组合成一个新的服务提供出去，比如上面的例子，我们可以按以下方式组合：</p>
-<p><img src="/images/soa/service_4.png" alt="service_4"></p>
-<p><strong>5.基于配置的服务运行时提供</strong></p>
-<p>前文已经概述了一个服务化框架应该具有的一些基本功能以及一些基本的架构实现方式。但这个服务框架究竟如何与业务开发相结合呢？也就是说业务逻辑代码与框架代码之间如何隔离,而不是让框架的功能代码侵入到业务逻辑代码的开发中来?这里通用的做法就是<strong>通过基于配置，由框架提供运行时，动态加载业务代码的方式</strong>。做到这点，只需要约束业务逻辑代码实现相应的接口/基类，然后打包成相应的组件（如jar/dll/so等）提供给框架加载运行即可，类似于java servlet的开发，业务开发完全不用关心服务化框架任何功能，专注开发业务逻辑即可。同时，对于既有代码的服务化也将变得简单，只需要稍加重构封装出实现相应的接口即可。</p>
-<p>配置类似于：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">service</span> <span class="attribute">serviceName</span>=<span class="value">"Customer.GetCustomer"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">biz</span> <span class="attribute">imp</span>=<span class="value">"com.customer.getCustomer"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">biz</span>&gt;</span>	</span><br><span class="line"><span class="tag">&lt;<span class="title">service</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>同时，这种基于组件配置的服务实现，对于组合组件实现服务也非常简单。只需要将上面的配置改为嵌套的方式既可以实现组合。比如对于订单生成服务只要组合如下：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">service</span> <span class="attribute">serviceName</span>=<span class="value">"Order.CreateOrder"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">biz</span> <span class="attribute">imp</span>=<span class="value">"com.inventory.checkInventory"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">biz</span> <span class="attribute">imp</span>=<span class="value">"com.order.createOrder"</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="title">biz</span> <span class="attribute">imp</span>=<span class="value">"com.inventory.updateInventory"</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="title">biz</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="title">biz</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">biz</span>&gt;</span>	</span><br><span class="line"><span class="tag">&lt;<span class="title">service</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p><strong>总结：</strong></p>
-<p>基本来看，服务化架构已经在业界完成了落地，尤其是互联网公司，更是基于这一架构的领先者，有许多经验值得借鉴。当然，这个落地的服务化架构，与当年被各大商业公司用WS-*和ESB玩坏的SOA概念相去甚远。也再一次证明，那些被鼓吹出来的技术概念，只有当那些商业公司不再炒作之时，方是其真正落地之日（SOA如此，当今热炒的“大数据”，“云计算”这些概念又何尝不会是如此呢？）。在技术被鼓吹得风头正劲时，千万要保持冷静，别被那些商业公司所忽悠,你完全可以自己实现更轻量级更具有扩展性的架构。不信的话，可以去问问，那些当年花大价钱去买SOA商业组件的公司，他们还好吗？</p>
+        <p>今天去一个商场找厕所，发现一个很奇葩的设计，厕所的门口前面有一个大概十米的走廊，从走廊的这一头，抬头可以看到走廊另一头女厕所 的标记，可是男厕所的标记却无法看见。好多位男士跟我一样站在走廊的这一头，不敢往里面走，怕走错进了女厕所。我环顾四周，确实没发现周围还有男厕所，只好冒着胆子往里走，大概走到女厕所的门口，才发现男厕所在我的右手边，它图标却挂在进去的门里，难怪站在走廊那一头，死活发现不了。</p>
+<p>这真是一个让人尴尬和难受的上厕所体验，这样的设计是明显反人类的。在我们的日常生活中，其实到处都充斥着这样的设计，设计者不经思考的设计，让我们原本简单的生活变得复杂与艰难。比如下面的设计：</p>
+<ul>
+<li><p>红灯可右转，在日常生活中，红灯亮后，车辆是不能行使的，现在将规则改成红灯可右转，让右转道上过马路的行人就不知如何是好了，司机和行人的理解误差和时间冲突，更容易造成事故。</p>
+</li>
+<li><p>电梯楼层按键，电梯的楼层按键一般设计为每层一个按钮，按钮上得数字表示了相应的楼层。当一栋楼只有10来层的，这还不是什么问题，但当一个楼层超过三十层，在三十个按钮数字里要找到你的目标，这真是对眼力的考验。尤其很多时候，电梯的光线还不充足的情况下。</p>
+</li>
+</ul>
+<p>电视机的遥控，他的按键加起来最少超过20个，一般情况下每个按键都是一个功能，但有的按键的功能超过一个，甚至是几个。所以，如果你要学会使用，就必须记住每个按键代表了哪些功能，还要记住按键之间的操作顺序。</p>
+<p>以上的种种不合理，我们每天的生活都得要顺应接受着，甚至当你不小心违反了它的规则设计，或者根本不会使用某项功能时，还要被歧视，说你掌握的知识不够，或思维反应慢等。可这些糟糕的问题，真的是我们自己的原因造成的吗？显然不是，我们只是不合理设计的受害者，让我们陷入难堪的不是我们自己的愚蠢，是设计者的愚蠢。明白这一点很重要，只有受害者不再“忍气吞声”，才能让设计者多点思考，做出更合理的设计。</p>
+<p>设计中有一条很重要的原则：<strong>可视性</strong>。它说的是设计出的产品，其正确的操作部位必须是显而易见的，而且能向用户传达正确的信息。而我们上面的厕所走廊设计和电梯按钮设计，显然是违背这一原则的，厕所的走廊，没有将男厕所的标记放在最明显的地方，传达出“这里有男厕所的信息”，才造成了所有男士的尷尬；而电梯的按钮，将正确的按钮藏在一堆按钮之间，并且每个按钮颜色、大小等都是一样的，造成了使用者根本难以找到正确按钮的问题，电视机的遥控也同样如此，功能和按键的不一一对应，导致使用者必须自己记住每个功能的操作，而不是通过按键的提醒就可以完成。</p>
+<p>设计中的另外一条重要设计原则：<strong>匹配</strong>。匹配原则是指产品的设计必须使用者所在的环境和使用者既存的日常经验是一致的，比如音量的旋转按钮，超右旋转是声音加大，朝左是减小，现在将调节器改成两个按键，那就不能将加大声音的按键放至左侧，减小声音的按键放右侧，因为这跟使用既有的经验传承是不匹配的。上面所说的红灯可右转造成的困扰也是一样不符合匹配原则的，人们日常的认识里就是红灯代表车辆静止的，现在改成可右转行使，必然出现认知的冲突。</p>
+<p>违反可视性和匹配原则的设计，<strong>从认知心理学上来讲，主要是将原来可以通过“系统1”思考(即直觉的快思考)的问题，强迫使用者使用“系统2”思考(即推理性的慢思考)来完成，“系统2”的思考明显是更消耗人类的能量的，所以才会导致使用起来时感到不适。</strong> 使用者本来也不应该将自己的精力浪费在原来不需要浪费的地方，精力的分散将导致其真正要耗费思考和决策的地方变得低效。为使用者减少不必要的精力浪费，是设计的必尽义务。设计者的思考是具有杠杆作用的，设计者多花一分精力思考，能节省使用者十分的精力。</p>
+<p>告诫自己：多观察日常中不合理的设计，反思自己曾做出的设计，到底是方便了使用者，还是增加了麻烦？</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://sharecore.net/2014/08/02/浅谈服务化架构/" data-id="ci7k7fi75000pg3rr01km3y7p" class="article-share-link">Share</a>
+      <a data-url="http://sharecore.net/2016/06/13/设计的思考/" data-id="cipdycuun002n62sp4jbwt106" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/服务化/">服务化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/架构/">架构</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/常识/">常识</a></li></ul>
 
     </footer>
   </div>
@@ -301,7 +209,7 @@
   
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 </section>
@@ -314,7 +222,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang/">Golang</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/历史/">历史</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础知识/">基础知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/复杂性/">复杂性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常识/">常识</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术常识/">技术常识</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/春秋/">春秋</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务化/">服务化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/架构/">架构</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模式匹配/">模式匹配</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang/">Golang</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/历史/">历史</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础知识/">基础知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/复杂性/">复杂性</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/学习/">学习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常识/">常识</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a><span class="tag-list-count">19</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术常识/">技术常识</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/春秋/">春秋</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务化/">服务化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/架构/">架构</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模式匹配/">模式匹配</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -323,7 +231,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -335,23 +243,23 @@
       <ul>
         
           <li>
-            <a href="/2014/08/24/模式匹配初析/">模式匹配初析</a>
+            <a href="/2016/06/13/不平则鸣/">不平则鸣</a>
           </li>
         
           <li>
-            <a href="/2014/08/10/字符编码常识及问题解析/">字符编码常识及问题解析</a>
+            <a href="/2016/06/13/人言无可畏/">人言无可畏</a>
           </li>
         
           <li>
-            <a href="/2014/08/02/浅谈服务化架构/">浅谈服务化架构</a>
+            <a href="/2016/06/13/设计的思考/">设计的思考</a>
           </li>
         
           <li>
-            <a href="/2014/07/27/面对喷子明哲保身/">面对喷子明哲保身</a>
+            <a href="/2016/06/13/解决问题的思路/">解决问题的思路</a>
           </li>
         
           <li>
-            <a href="/2014/07/20/技术的进化/">技术的进化</a>
+            <a href="/2016/06/13/I-O模型基本介绍/">I/O模型基本介绍</a>
           </li>
         
       </ul>
@@ -366,7 +274,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 J.H<br>
+      &copy; 2016 J.H<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
