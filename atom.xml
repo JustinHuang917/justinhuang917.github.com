@@ -1,26 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>ShareCore</title>
-  <subtitle>J.H</subtitle>
+  <subtitle>Justin.H</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://sharecore.net/"/>
-  <updated>2016-06-13T11:49:50.000Z</updated>
+  <updated>2016-06-17T13:12:52.000Z</updated>
   <id>http://sharecore.net/</id>
   
   <author>
-    <name>J.H</name>
+    <name>Justin.H</name>
     
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>勿增實體</title>
+    <link href="http://sharecore.net/2016/06/17/%E5%8B%BF%E5%A2%9E%E5%AF%A6%E9%AB%94/"/>
+    <id>http://sharecore.net/2016/06/17/勿增實體/</id>
+    <published>2016-06-17T13:11:30.000Z</published>
+    <updated>2016-06-17T13:12:52.000Z</updated>
+    
+    <content type="html">&lt;p&gt;&lt;em&gt;奧卡姆剃刀原則：如無必要，勿增實體。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;近來思考解決方案，系統設計，在腦海里反思最多的就是這條原則。這一原則，初看來是一句廢話，每個人都知道說，要簡單，不要複雜。很多時候，去跟一個沒經驗的毛頭小子談論，他也會跟你說，簡單就好簡單就好，甚至還會搬出喬布斯來給你說教。而，事實是這些把成天把簡單掛在嘴上的人，大多數是沒經歷過深刻的思考，只為了給自己的思維懶惰找一個藉口而已。&lt;/p&gt;
+&lt;p&gt;世界是複雜的，但當然並非是某個特定的實體或者活動是複雜的，而是這些表面上簡單的活動或實體，每一個都有滿足其運行需要的特定要求，把這些簡單的活動和實體聯合在一起，結果就會是複雜和令人困惑的：整體大於各部分的總和。而那些看著單個活動、實體，看不到它們相互之間交合，閉著眼說“簡單就好”的完全是掩耳盜鈴，自欺欺人。&lt;/p&gt;
+&lt;p&gt;既然事實如此複雜，那是不是奧卡姆剃刀是一條無用的原則呢？當然不是。在我看來，這條原則的理解上，太多人講注意力放在了“必要”上，而沒看到“實體”。“必要”是一個抽象的意願性描述詞，大多數的時候，因為能契合當下的心理，所以容易吸引多數人的注意，這是自然的。但是深刻思考的人，會將注意力放在“實體”一詞上，會去想什麼是“實體”？“實體”在當下的情況下，是一個什麼樣的定義？缺乏基礎的概念定義，一般是我們爭論和錯誤的罪首。&lt;/p&gt;
+&lt;p&gt;如何定義實體，其實就是如何定義事物的邊界，包括兩點：事物運行的特定需求、事物產生的必然效果。一個準確的實體定義，應包括一個盡量小的特定需求集，同時產生一個可以量化的效果。這就好比如計算機程序，如果我們需要能確認這個程序是健壯的，最佳的辦法就是能將他定義成一個最小的輸入條件下滿足一個準確而可量化的結果輸出。&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;em&gt;奧卡姆剃刀原則：如無必要，勿增實體。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;近來思考解決方案，系統設計，在腦海里反思最多的就是這條原則。這一原則，初看來是一句廢話，每個人都知道說，要簡單，不要複雜。很多時候，去跟一個沒經驗的毛頭小子談論，他也會跟你說，簡單就好簡單就好，甚至還會搬
+    
+    </summary>
+    
+    
+      <category term="常识" scheme="http://sharecore.net/tags/%E5%B8%B8%E8%AF%86/"/>
+    
+  </entry>
+  
+  <entry>
     <title>不平则鸣</title>
     <link href="http://sharecore.net/2016/06/13/%E4%B8%8D%E5%B9%B3%E5%88%99%E9%B8%A3/"/>
     <id>http://sharecore.net/2016/06/13/不平则鸣/</id>
     <published>2016-06-13T11:49:35.000Z</published>
-    <updated>2016-06-13T11:49:50.000Z</updated>
+    <updated>2016-06-16T14:31:54.000Z</updated>
     
     <content type="html">&lt;p&gt;今日读到韩愈的《送孟东野序》一文，为其“不平则鸣”的思想所吸引。源于儒家之传统，向来是习惯遵守仁道，遇不平而忍气吞声的，而韩公作为儒家大师还能有如此不平而鸣之气概，可见其思想的出类拔苹，不与时同。文章开头：大凡物不得其平则鸣…人之于言也亦然，有不得已者而后言。其歌也有思，其哭也有怀，凡出乎口而为声者，其皆有弗平者乎。 说的就是，人遇到不平，必然通过言语表达出来，或将不平写到他得歌与诗里。&lt;/p&gt;
 &lt;p&gt;我在《人言无可畏》一文里说的，人都是需要表达的，只是人际关系的道义约束，让人变得不敢言说，将心中的不平与不惑抑制于内心，只待有一个无言语代价的时机，以一种或恶或假或无意义的方式表达出来。但是韩公告诫说，不要做这样的人，他告诉我们，遇到不平，必然用言语作出回响，这是万物必然之理，好比如平静的水面，静立的草木本也无声，但是风吹过他们后，他们必然报以应有的声音作为回应。&lt;/p&gt;
@@ -953,40 +979,6 @@ Z轴扩展 —— 关注服务和数据的优先级划分，如分地域划分
       <category term="常识" scheme="http://sharecore.net/tags/%E5%B8%B8%E8%AF%86/"/>
     
       <category term="读书" scheme="http://sharecore.net/tags/%E8%AF%BB%E4%B9%A6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MapReduce的变体:HashFold介绍</title>
-    <link href="http://sharecore.net/2014/03/17/MapReduce%E7%9A%84%E5%8F%98%E4%BD%93-HashFold%E4%BB%8B%E7%BB%8D/"/>
-    <id>http://sharecore.net/2014/03/17/MapReduce的变体-HashFold介绍/</id>
-    <published>2014-03-16T16:09:01.000Z</published>
-    <updated>2015-03-16T16:33:26.000Z</updated>
-    
-    <content type="html">&lt;p&gt;说到MapReduce计算模型大家应该都清楚。今天我们来看一下MapReduce一个变体：HasFold。&lt;/p&gt;
-&lt;p&gt;这种模型将MapReduce中一些没有细化的部分，如Map后数据如何排序再进行Reduce等，通过Hash表这一数据结构的性质做了清晰的描述。&lt;/p&gt;
-&lt;p&gt;HashFold模型的大概过程大概是这样的：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Map过程在接收原始数据之后，将数据生成key-value对。&lt;/li&gt;
-&lt;li&gt;对于key重复的value，会将两个重复的value传给Fold过程，Fold过程会返回一个新值。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;下面是MapReduce中典型示例：计算文件中的单词个数的实现（Go）&lt;/p&gt;
-&lt;figure class=&quot;highlight go&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;29&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;30&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;31&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;32&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;33&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;34&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;35&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;36&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;37&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;38&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;39&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;40&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;41&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;42&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;43&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;44&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;45&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;46&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;47&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;48&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;49&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;50&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;51&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;52&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;53&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;54&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;55&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;56&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;package&lt;/span&gt; main&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;import&lt;/span&gt; (&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;string&quot;&gt;&quot;fmt&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;string&quot;&gt;&quot;io/ioutil&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;string&quot;&gt;&quot;regexp&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;string&quot;&gt;&quot;strings&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;type&lt;/span&gt; Pair &lt;span class=&quot;keyword&quot;&gt;struct&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	key   &lt;span class=&quot;typename&quot;&gt;string&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	count &lt;span class=&quot;typename&quot;&gt;int&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;func&lt;/span&gt; main() &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	fname := &lt;span class=&quot;string&quot;&gt;&quot;README&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	hash := Start(fname)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; k, v := &lt;span class=&quot;keyword&quot;&gt;range&lt;/span&gt; hash &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		fmt.Printf(&lt;span class=&quot;string&quot;&gt;&quot;word:%s,count:%d\n&quot;&lt;/span&gt;, k, v)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;func&lt;/span&gt; Start(fname &lt;span class=&quot;typename&quot;&gt;string&lt;/span&gt;) &lt;span class=&quot;keyword&quot;&gt;map&lt;/span&gt;[&lt;span class=&quot;typename&quot;&gt;string&lt;/span&gt;]&lt;span class=&quot;typename&quot;&gt;int&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	hash := &lt;span class=&quot;built_in&quot;&gt;make&lt;/span&gt;(&lt;span class=&quot;keyword&quot;&gt;map&lt;/span&gt;[&lt;span class=&quot;typename&quot;&gt;string&lt;/span&gt;]&lt;span class=&quot;typename&quot;&gt;int&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	bytes, _ := ioutil.ReadFile(fname)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	source := &lt;span class=&quot;typename&quot;&gt;string&lt;/span&gt;(bytes)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	pairs := Map(source)&lt;span class=&quot;comment&quot;&gt;//调用Map分割输入&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; _, p := &lt;span class=&quot;keyword&quot;&gt;range&lt;/span&gt; pairs &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; _, ok := hash[p.key]; !ok &amp;#123;&lt;span class=&quot;comment&quot;&gt;//判断重复&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;			hash[p.key] = p.count&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&amp;#125; &lt;span class=&quot;keyword&quot;&gt;else&lt;/span&gt; &amp;#123;&lt;span class=&quot;comment&quot;&gt;//如果重复，调用Fold函数&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;			hash[p.key] = Fold(hash[p.key], p.count)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; hash&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;func&lt;/span&gt; Map(source &lt;span class=&quot;typename&quot;&gt;string&lt;/span&gt;) []Pair &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	pairs := &lt;span class=&quot;built_in&quot;&gt;make&lt;/span&gt;([]Pair, &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	arr := strings.Split(source, &lt;span class=&quot;string&quot;&gt;&quot;\n&quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	re := regexp.MustCompile(&lt;span class=&quot;string&quot;&gt;&quot;[\\pP‘’“”]&quot;&lt;/span&gt;) &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; _, line := &lt;span class=&quot;keyword&quot;&gt;range&lt;/span&gt; arr &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		newLine := re.ReplaceAllString(line, &lt;span class=&quot;string&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;span class=&quot;comment&quot;&gt;//替换标点符号&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; _, word := &lt;span class=&quot;keyword&quot;&gt;range&lt;/span&gt; strings.Split(newLine, &lt;span class=&quot;string&quot;&gt;&quot; &quot;&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;			&lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; word != &lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;				k := strings.ToLower(word)&lt;span class=&quot;comment&quot;&gt;//转换为小写&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;				pairs = &lt;span class=&quot;built_in&quot;&gt;append&lt;/span&gt;(pairs, *&amp;amp;Pair&amp;#123;key: k, count: &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;&amp;#125;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;			&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; pairs&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;func&lt;/span&gt; Fold(v1, v2 &lt;span class=&quot;typename&quot;&gt;int&lt;/span&gt;) &lt;span class=&quot;typename&quot;&gt;int&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; v1 + v2&lt;span class=&quot;comment&quot;&gt;//次数相加&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;说到MapReduce计算模型大家应该都清楚。今天我们来看一下MapReduce一个变体：HasFold。&lt;/p&gt;
-&lt;p&gt;这种模型将MapReduce中一些没有细化的部分，如Map后数据如何排序再进行Reduce等，通过Hash表这一数据结构的性质做了清晰的描述。&lt;/p&gt;
-
-    
-    </summary>
-    
-    
-      <category term="技术" scheme="http://sharecore.net/tags/%E6%8A%80%E6%9C%AF/"/>
-    
-      <category term="技术常识" scheme="http://sharecore.net/tags/%E6%8A%80%E6%9C%AF%E5%B8%B8%E8%AF%86/"/>
-    
-      <category term="算法" scheme="http://sharecore.net/tags/%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
