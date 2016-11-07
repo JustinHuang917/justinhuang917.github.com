@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://sharecore.net/"/>
-  <updated>2016-11-02T01:20:13.000Z</updated>
+  <updated>2016-11-02T01:20:32.000Z</updated>
   <id>http://sharecore.net/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://sharecore.net/2016/11/01/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%BF%9B%E9%98%B61-%E5%9F%BA%E7%A1%80/"/>
     <id>http://sharecore.net/2016/11/01/分布式锁进阶1-基础/</id>
     <published>2016-11-01T15:42:14.000Z</published>
-    <updated>2016-11-02T01:20:13.000Z</updated>
+    <updated>2016-11-02T01:20:32.000Z</updated>
     
     <content type="html">&lt;p&gt;锁在并发编程领域很为常见，当有资源竞争时就会有锁，在单进程的程序里，由于编程语言一般均提供了相应的原语，只需要简单的一个函数调用或声明，及可实现线程的互斥访问和操作。比如：&lt;/p&gt;
 &lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;lock(obj)&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  doSomthing();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
