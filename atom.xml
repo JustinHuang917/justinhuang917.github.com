@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://sharecore.net/"/>
-  <updated>2017-03-09T07:43:57.000Z</updated>
+  <updated>2017-03-09T11:57:06.000Z</updated>
   <id>http://sharecore.net/</id>
   
   <author>
@@ -17,10 +17,10 @@
   
   <entry>
     <title>RPC服务追踪的原理与实践</title>
-    <link href="http://sharecore.net/2016/12/09/RPC%E6%9C%8D%E5%8A%A1%E8%BF%BD%E8%B8%AA%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/"/>
-    <id>http://sharecore.net/2016/12/09/RPC服务追踪的原理与实践/</id>
-    <published>2016-12-09T02:00:00.000Z</published>
-    <updated>2017-03-09T07:43:57.000Z</updated>
+    <link href="http://sharecore.net/2017/03/09/RPC%E6%9C%8D%E5%8A%A1%E8%BF%BD%E8%B8%AA%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/"/>
+    <id>http://sharecore.net/2017/03/09/RPC服务追踪的原理与实践/</id>
+    <published>2017-03-09T02:00:00.000Z</published>
+    <updated>2017-03-09T11:57:06.000Z</updated>
     
     <content type="html">&lt;p&gt;在分布式服务化架构下，由于分布式服务间存在相互依赖，彼此协同来完成各类业务场景。下图是一个典型的业务场景，从前端发起一个请求，到最后的业务完成，需要经过很多环节，这些环节可能都是分布式服务的方式提供，部署在不同的服务器上进行。而在这种复杂的分布式服务场景下，为了定位问题、性能瓶颈查询、异常日志跟踪等，如果没有服务追踪和分析工具的帮助，都是非常困难的。&lt;br&gt;&lt;img src=&quot;/images/trace/trace.png&quot; style=&quot;width:500px&quot;&gt;&lt;br&gt;说到分布式追踪，当然不得不提Google为其基于日志的分布式跟踪系统Dapper发表的[论文]，在这边论文里，Google介绍了他们在分布式追踪领域的经验，总体来看其核心概念有三个：&lt;br&gt;&lt;strong&gt;1. TraceID：用来标识每一条业务请求链的唯一ID，TraceID需要在整个调用链路上传递&lt;/strong&gt;&lt;br&gt;&lt;strong&gt;2. Span：请求链中的每一个环节为一个Span，每一个Span有一个SpanId来标识，前后Span间形成父子关系&lt;/strong&gt;&lt;br&gt;&lt;strong&gt;3. Annotation：业务自定义的埋点信息，可以是sql、用户ID等关键信息&lt;/strong&gt;&lt;br&gt;&lt;img src=&quot;/images/trace/span.png&quot; style=&quot;width:500px&quot;&gt;&lt;br&gt;&lt;em&gt;图：5个span在Dapper跟踪树中的关联关系(图来自google论文)&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Google论文出来后，业界出现了很多基于其思想实现的开源框架，如Twitter的zipkin，其中zipkin是严格按照来Dapper论文来设计的，他提供了完整的跟踪记录收集、存储功能，以及查询API与界面。其存储支持多种数据库：MySql、ElasticSearch、Cassandra、Redis等等，收集API支持HTTP和Thrift。&lt;br&gt;&lt;img src=&quot;/images/trace/zipkin.png&quot; style=&quot;width:500px&quot;&gt;&lt;br&gt;但作为服务跟踪中最难处理的一环，即跟踪埋点，zipkin并没有提供，需要使用方自己实现。业界也有Brave这样的开源项目可以使用，但是评估过后，发现Brave的实现过于复杂，依赖组件也过多，并且其实现的组件更多是支持HTTP服务的调用，对于我们的Thrift RPC服务不能支持，所以没有使用Brave，改为自己实现。自己实现服务埋点和追踪有几个问题需要解决：&lt;/p&gt;
