@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://sharecore.net/"/>
-  <updated>2017-05-07T14:57:11.000Z</updated>
+  <updated>2017-05-08T01:19:28.000Z</updated>
   <id>http://sharecore.net/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://sharecore.net/2017/05/07/GC%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/"/>
     <id>http://sharecore.net/2017/05/07/GC知识笔记/</id>
     <published>2017-05-07T14:27:29.000Z</published>
-    <updated>2017-05-07T14:57:11.000Z</updated>
+    <updated>2017-05-08T01:19:28.000Z</updated>
     
     <content type="html">&lt;p&gt;&lt;img src=&quot;/images/JVM_GC.jpg&quot; style=&quot;width:1000px&quot;&gt;&lt;/p&gt;
 &lt;h3 id=&quot;对象存活性&quot;&gt;对象存活性&lt;/h3&gt;&lt;h4 id=&quot;引用计数法&quot;&gt;引用计数法&lt;/h4&gt;&lt;ul&gt;
@@ -98,11 +98,9 @@
 &lt;/ul&gt;
 &lt;h4 id=&quot;ParNew收集器&quot;&gt;ParNew收集器&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;Serial收集器的多线程版本&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;当老生代使用CMS时，新生代只能使用Parnew或Serial&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Parallel Scavenge收集器&lt;/li&gt;
+&lt;li&gt;当老生代使用CMS时，新生代只能使用Parnew或Serial&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
+&lt;h4 id=&quot;Parallel_Scavenge收集器&quot;&gt;Parallel Scavenge收集器&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;复制算法，多线程并行&lt;/li&gt;
 &lt;li&gt;新生代使用&lt;/li&gt;
 &lt;li&gt;关注吞吐量可控(吞吐量优先)&lt;br&gt;   -XX:MacGCPauseMillis：配置GC最大暂停时间&lt;br&gt;   -XX:GCTimeRatio：配置GC时间占比&lt;/li&gt;
@@ -111,20 +109,23 @@
 &lt;li&gt;单线程，使用标记-整理算法&lt;/li&gt;
 &lt;li&gt;与Parallel Scavenge搭配使用(默认)&lt;/li&gt;
 &lt;li&gt;作为CMS的后备选择，在并发收集失败(Concurrent Mode Failure)时使用&lt;/li&gt;
+&lt;li&gt;-XX:+UseParallelGC:Parallel Scavenge+Serial Old (Server模式下默认)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h4 id=&quot;Parallel_Old收集器&quot;&gt;Parallel Old收集器&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;Parallel Scavenge的老生代版本&lt;/li&gt;
 &lt;li&gt;多线程，使用标记-整理算法&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;-XX:+UseParallelOldGC: Parallel Scavenge+Parallel Old&lt;/p&gt;
-&lt;h4 id=&quot;CMS收集器&quot;&gt;CMS收集器&lt;/h4&gt;&lt;/li&gt;
+&lt;li&gt;-XX:+UseParallelOldGC: Parallel Scavenge+Parallel Old&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;CMS收集器&quot;&gt;CMS收集器&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;以获取最短停顿时间为目标的收集器&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;标记-清除算法&lt;/p&gt;
-&lt;ol&gt;
+&lt;li&gt;标记-清除算法&lt;ol&gt;
 &lt;li&gt;初始标记，Stop the world，只标识GC Roots能直接关联的对象&lt;/li&gt;
 &lt;li&gt;并发标记：GC Roots Tracing标记，无须Stop the world，耗时长&lt;/li&gt;
 &lt;li&gt;重新标记：Stop the world，修正并发标记期间程序继续运行而导致的标记变动&lt;/li&gt;
-&lt;li&gt;并发清除：并发清理过程中产生的垃圾不能在当次GC时被清理(浮动垃圾)&lt;br&gt;-XX:UseConcMarkSweepGC:ParNew+CMS+Serial Old（备选方案)&lt;/li&gt;
+&lt;li&gt;并发清除：并发清理过程中产生的垃圾不能在当次GC时被清理(浮动垃圾)&lt;/li&gt;
 &lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;-XX:UseConcMarkSweepGC:ParNew+CMS+Serial Old（备选方案)&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;问题&lt;/p&gt;
 &lt;ol&gt;
@@ -133,7 +134,9 @@
 &lt;li&gt;如果CMS回收后内存无法满足应用要求，会引发“Concurrent Mode Failure”，需要触发后备预案(Serial Old)&lt;/li&gt;
 &lt;li&gt;标记-清除算法产生的内存碎片问题&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h4 id=&quot;G1收集器&quot;&gt;G1收集器&lt;/h4&gt;&lt;/li&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;G1收集器&quot;&gt;G1收集器&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;&lt;p&gt;特点&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;并行与并发&lt;/li&gt;
