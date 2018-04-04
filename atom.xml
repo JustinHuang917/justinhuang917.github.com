@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://sharecore.net/"/>
-  <updated>2017-05-08T01:19:28.000Z</updated>
+  <updated>2018-04-04T09:04:44.313Z</updated>
   <id>http://sharecore.net/</id>
   
   <author>
@@ -14,6 +14,72 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Jarvis异步任务平台介绍</title>
+    <link href="http://sharecore.net/2018/04/02/Jarvis%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/"/>
+    <id>http://sharecore.net/2018/04/02/Jarvis异步任务平台介绍/</id>
+    <published>2018-04-02T12:10:19.000Z</published>
+    <updated>2018-04-04T09:04:44.313Z</updated>
+    
+    <content type="html">&lt;h1 id=&quot;概述&quot;&gt;概述&lt;/h1&gt;&lt;p&gt;异步任务是日常开发过程中经常要面对的开发场景，比如系统间数据同步、批量数据加工或验证类资源消耗性任务、大批量数据Excel\CSV文件生成、定时消息通知等等，对于这些场景开发，有很多方式可以实现，如数据库的定时Job、Linux Crontab、Quartz等，但这些方式只是实现了任务的定时触发，对于任务的管理监控、资源调度、复用和可扩展等功能，均不能很好的满足。&lt;/p&gt;
+&lt;p&gt;Jarvis异步任务平台(Jarvis-Task)是一个基于分布式的定时任务调度方案，它基于主从架构，致力于解决以下问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;循环任务与用户提交形任务定时调度&lt;/li&gt;
+&lt;li&gt;任务执行资源的弹性可扩展&lt;/li&gt;
+&lt;li&gt;可扩展与可并行执行的任务执行框架&lt;/li&gt;
+&lt;li&gt;Job配置管理与执行监控&lt;/li&gt;
+&lt;li&gt;Built-in常用任务&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;简介&quot;&gt;简介&lt;/h1&gt;&lt;p&gt;1、基本概念：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Job：&lt;/strong&gt;Job是指一个完整的业务逻辑处理作业，一个Job由一个或多个不同的执行单元(Task)组成。Jarvis-Task平台负责Job级别的分布式调度，每个Job的Task之间的调度为单机进程内进行，可进行串行和并行调度。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;JobInstance：&lt;/strong&gt;JobInstance是指Job执行的每一个执行实例，可以理解为Job执行的输入参数，一个Job可以有多个JobInstance，并可以在不同的Job节点中执行。JobInstance分为单次执行实例和循环执行实例，单次执行实例适用于用户提交形的任务，循环执行实例适合于常见的定时循环任务。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;分片&lt;/strong&gt;：一个分片是指一个将一个执行实例按一定的维度分成多个更小的执行单元(Sharding)，每个Sharding可以在调度到不同的执行节点上，达到了在多个节点上并行执行一个执行实例的效果，提升任务执行的效率。如一个JobInstance需要处理1000笔数据，有两个执行节点，采取分片的方式，可以分成两个分片，并行执行，每个节点上执行500笔。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;节点：&lt;/strong&gt;即一个执行单元，每个执行单元可以承载多个Job的执行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;/images/jarvis-task/1.png&quot; alt=&quot;概念说明&quot;&gt;&lt;/p&gt;
+&lt;p&gt;2、架构说明&lt;/p&gt;
+&lt;p&gt;Jarvis-Task采用主从架构(Master-Slave)，Master主要负责Job的配置与分发、JobInstance的收集与分发，Job执行结果的收集与监控、Job分片的分发管理等。Slave为实际的Job执行节点，它主要负责Job的定时触发、JobInstance探测与执行、执行结果上报等。&lt;strong&gt;Master与Slave均采用多节点设计，两者之间基于Jarvis RPC进行通信与服务发现管理。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;如下图所示：&lt;br&gt;&lt;img src=&quot;/images/jarvis-task/2.png&quot; alt=&quot;架构图&quot;&gt;&lt;/p&gt;
+&lt;p&gt;3、分布式调度&lt;/p&gt;
+&lt;p&gt;Jarvis-Task的Job执行不由Master统一触发，而由各个Job执行节点(Slave)按配置定时触发，以降低了Job调度的复杂性，提高了调度的可靠性，并同时保证了Master的无状态，使Master也可以灵活扩容，保证高可用。&lt;strong&gt;Job调度的最小单位是一个JobInstance分片或一个JobInstance&lt;/strong&gt;，各个Job执行节点采取竞争的方式从Matser获取响应的JobInstance或分片。&lt;/p&gt;
+&lt;p&gt;4、Job Task调度:&lt;/p&gt;
+&lt;p&gt;一个Task是Job在一个Job节点上最小的逻辑执行单元，一个Job可以按业务需要拆分为多个Task，按照一定的要求组合成一个完整的执行过程。通过配置，Task之间可以串行或并行进行调度，并提供了前置任务检查的配置，即可以达到多个并行的Task按照一定的前置执行要求进行调度。比如某个Job有A、B、C、D四个个不同的Task，其中A、B、C可以并行执行，但是D需要等待C执行完成才能执行，通过配置任务的前置任务即可满足调度要求。&lt;/p&gt;
+&lt;p&gt;5、分片管理:&lt;/p&gt;
+&lt;p&gt;Javis-Task并不是提供自动的Job数据分片功能，而是按照当前配置以及当前Job的活动执行节点个数，均衡地生成分片参数，&lt;strong&gt;在Task的业务逻辑开发过程中，可以获取到当前分配的分片参数，在Task的逻辑里自行实现分片参数与真实业务数据间的关系。&lt;/strong&gt;举例来说：一个Task需要从数据库的某一个表里读取数据进行处理，通过配置，按id进行将数据分为3个分片，分别为0-10w、10w-20w、大于20w，当任务执行是，平台会按照当前可用的Job节点数将3个分片以分片参数的方式分配到相应的节点上，每个节点按照分配到的相应分片参数，获取对应区间范围的参数进行处理，简单来说，Task里获取数据的语句可以用以下方式表示：&lt;/p&gt;
+&lt;figure class=&quot;highlight sql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;operator&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;select&lt;/span&gt; * &lt;span class=&quot;keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;table&lt;/span&gt; &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;where&lt;/span&gt; id&amp;gt;&amp;#123;minShardingValue&amp;#125; &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;and&lt;/span&gt; (id&amp;lt;&amp;#123;maxShardingValue&amp;#125; &lt;span class=&quot;keyword&quot;&gt;or&lt;/span&gt; &amp;#123;maxShardingValue&amp;#125; &lt;span class=&quot;keyword&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;literal&quot;&gt;null&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;--其中minShardingValue、maxShardingValue为平台分配的分片参数。&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h1 id=&quot;开发入门&quot;&gt;开发入门&lt;/h1&gt;&lt;p&gt;1、引入依赖&lt;/p&gt;
+&lt;figure class=&quot;highlight xml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;title&quot;&gt;dependency&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;title&quot;&gt;groupId&lt;/span&gt;&amp;gt;&lt;/span&gt;com.tencent.oa.fm&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;title&quot;&gt;groupId&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;title&quot;&gt;artifactId&lt;/span&gt;&amp;gt;&lt;/span&gt;jarvis-task-slave&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;title&quot;&gt;artifactId&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;title&quot;&gt;version&lt;/span&gt;&amp;gt;&lt;/span&gt;1.0-SNAPSHOT&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;title&quot;&gt;version&lt;/span&gt;&amp;gt;&lt;/span&gt;            &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;title&quot;&gt;dependency&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;2、开发一个简单Task&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;class&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;DemoTask&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;AbstractTaskBase&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;annotation&quot;&gt;@Override&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;actualExecute&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(TaskContext taskContext)&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;throws&lt;/span&gt; JobInvokeException &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    	&lt;span class=&quot;comment&quot;&gt;//从当前执行实例里获取执行参数&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    	String batchId=taskContext.getJobInstanceParamResolver().resolve(&lt;span class=&quot;string&quot;&gt;&quot;batchId&quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt;(taskContext.getSharding()!=&lt;span class=&quot;keyword&quot;&gt;null&lt;/span&gt;)&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        	&lt;span class=&quot;comment&quot;&gt;//按分片参数处理数据&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        	&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; min=taskContext.getSharding().getBeginShardingValue();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; max=taskContext.getSharding().getBeginShardingValue();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        	List&amp;lt;Data&amp;gt; data=repo.qeury(&lt;span class=&quot;string&quot;&gt;&quot;select * from table where batchId=? and id&amp;gt;? and id&amp;lt;?&quot;&lt;/span&gt;,batchId,min,max);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        	Object result= processData(data);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        	&lt;span class=&quot;comment&quot;&gt;//将结果写回上下文，下一步Task可以获取到&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          taskContext.put(&lt;span class=&quot;string&quot;&gt;&quot;result&quot;&lt;/span&gt;,result);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;span class=&quot;keyword&quot;&gt;else&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        	List&amp;lt;Data&amp;gt; data=repo.qeury(&lt;span class=&quot;string&quot;&gt;&quot;select * from table where batchId=?&quot;&lt;/span&gt;,batchId);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          Object result= processData(data);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          taskContext.put(&lt;span class=&quot;string&quot;&gt;&quot;result&quot;&lt;/span&gt;,result);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;3、配置JobTask&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;Job JobName=&quot;DemoJob&quot;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;lt;Task TaskName=&quot;ProcessData&quot; Description=&quot;数据加工处理&quot;  ExecuteType=&quot;Sync&quot; &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    TaskType=&quot;com.demo.DemoTask&quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;lt;/Task&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;/Job&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;一个复杂一点JobTask配置例子：&lt;br&gt;Task2在Task1执行完后串行执行、 Task3、Task4和Task1可以并行执行，但是Task3需要Task1执行成功后才可以执行&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;Job JobName=&quot;DemoJob&quot;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;lt;Task TaskName=&quot;Task1&quot; Description=&quot;数据处理1&quot;  ExecuteType=&quot;Asyn&quot; TaskType=&quot;com.demo.DemoTask1&quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;lt;Task TaskName=&quot;Task2&quot; Description=&quot;数据处理2&quot; TaskType=&quot;com.demo.DemoTask1&quot;/&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;lt;/Task&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;lt;Task TaskName=&quot;Task3&quot; Description=&quot;数据处理3&quot;  ExecuteType=&quot;Asyn&quot; TaskType=&quot;com.demo.DemoTask3&quot; PreConstraint=&quot;ProcessData1&quot;/&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;lt;Task TaskName=&quot;Task4&quot; Description=&quot;数据处理4&quot;  ExecuteType=&quot;Asyn&quot; TaskType=&quot;com.demo.DemoTask3&quot;/&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;/Job&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;4、在管理端配置Job和分配节点&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/jarvis-task/3.png&quot; alt=&quot;配置Job&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/jarvis-task/4.png&quot; alt=&quot;配置Job&quot;&gt;&lt;/p&gt;
+&lt;p&gt;5、Built-in常用任务介绍&lt;/p&gt;
+&lt;p&gt;为了提供快速的任务开发以及标准功能复用，平台内置实现了多种Task,如数据库调用、HTTP调用、Jarvis RPC调用、消息发送、Excel\CSV文件生成等常用功能，使得这些任务代码不需要再重新开发，只需要进行配置即可完成相应的业务功能，显著提高了开发效率。需要特别告知的是，&lt;strong&gt;Jarvis-Task还提供了一个较为完整用于数据处理的ETL任务库，&lt;/strong&gt;封装了常见的ETL功能，关于这个ETL库的介绍，将在后续详细说明。&lt;/p&gt;
+&lt;h1 id=&quot;将来规划&quot;&gt;将来规划&lt;/h1&gt;&lt;p&gt;1、Job隔离：由于同一个Slave节点上需要执行多个Job，意味着不同Job的代码需要部署在一个节点上，Job间代码依赖的差异，容易导致冲突，从而需要一套代码隔离运行的机制。将来可以考虑采用Docker或模块化加载的方式来实现隔离，目前建议按相应的业务模块部署节点，即尽量将同一个业务模块的Job部署为一个节点，减少依赖差异带来的问题。&lt;/p&gt;
+&lt;p&gt;2、执行失败转移：目前的设计，当一个JobInstance或一个分片执行失败后，考虑到数据一致性的问题，并不会自动将该JobInstance置位可继续执行。将来需要有一定的机制对执行失败进行分级处理，对非影响业务数据一致性的错误，要能实现自动的错误转移。&lt;/p&gt;
+&lt;p&gt;3、对于用户提交形的JobInstance，考虑实现自动触发执行，而非目前轮询的方式，以减少由轮询带来的执行时间消耗，实现类似消息队列的方式。&lt;/p&gt;
+&lt;p&gt;3、完善日志分析功能，依赖于Jarvis的日志分析平台建设进度，更透明化地将Job日志进行分析，发现Job执行过程中的问题。&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;概述&quot;&gt;概述&lt;/h1&gt;&lt;p&gt;异步任务是日常开发过程中经常要面对的开发场景，比如系统间数据同步、批量数据加工或验证类资源消耗性任务、大批量数据Excel\CSV文件生成、定时消息通知等等，对于这些场景开发，有很多方式可以实现，如数据库的定时Job、Linux Cro
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>JVM GC知识笔记</title>
