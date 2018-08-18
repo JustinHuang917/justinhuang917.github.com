@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>过载保护算法浅析 - Justin写字的地方</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="justin huang" />
+  <meta name="description" content="何为过载保护？所谓“过载”，即需求超过了负载能力;而“保护”则是指当“过载”发生了，采取必要的措施保护自己不受“伤害”。在计算机领域，尤其是" />
+
+  <meta name="keywords" content="Justin, JustinHuang, ShareCore" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.43" />
+
+
+<link rel="canonical" href="http://sharecore.net/post/%E8%BF%87%E8%BD%BD%E4%BF%9D%E6%8A%A4%E7%AE%97%E6%B3%95%E6%B5%85%E6%9E%90/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="过载保护算法浅析" />
+<meta property="og:description" content="何为过载保护？所谓“过载”，即需求超过了负载能力;而“保护”则是指当“过载”发生了，采取必要的措施保护自己不受“伤害”。在计算机领域，尤其是" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sharecore.net/post/%E8%BF%87%E8%BD%BD%E4%BF%9D%E6%8A%A4%E7%AE%97%E6%B3%95%E6%B5%85%E6%9E%90/" />
+
+
+
+<meta property="article:published_time" content="2014-06-21T00:01:40&#43;00:00"/>
+
+<meta property="article:modified_time" content="2014-06-21T00:01:40&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="过载保护算法浅析">
+<meta itemprop="description" content="何为过载保护？所谓“过载”，即需求超过了负载能力;而“保护”则是指当“过载”发生了，采取必要的措施保护自己不受“伤害”。在计算机领域，尤其是">
+
+
+<meta itemprop="datePublished" content="2014-06-21T00:01:40&#43;00:00" />
+<meta itemprop="dateModified" content="2014-06-21T00:01:40&#43;00:00" />
+<meta itemprop="wordCount" content="1898">
+
+
+
+<meta itemprop="keywords" content="技术,架构,算法," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="过载保护算法浅析"/>
+<meta name="twitter:description" content="何为过载保护？所谓“过载”，即需求超过了负载能力;而“保护”则是指当“过载”发生了，采取必要的措施保护自己不受“伤害”。在计算机领域，尤其是"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Justin&#39;s Notes</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Justin&#39;s Notes</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">过载保护算法浅析</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2014-06-21 </span>
+        
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <p>何为<strong>过载保护</strong>？所谓“过载”，即需求超过了负载能力;而“保护”则是指当“过载”发生了，采取必要的措施保护自己不受“伤害”。在计算机领域，尤其是分布式系统领域，“过载保护”是一个重要的概念。一个不具备“过载保护”功能的系统，是非常危险和脆弱的，很可能由于瞬间的压力激增，引起“<strong>雪崩效应</strong>”，导致系统的各个部分都同时崩溃，停止服务。这就好像在没有保险丝的保护下，电压突然变高，导致所有的电器都会被损坏一样，“过载保护”功能是系统的“保险丝”。</p>
+
+<p>去年开始，写了一个RPC服务框架，用以承接各个业务系统在其上进行各类业务服务接口的开发与部署，供远端调用。之于此类的框架，“过载保护”就是一个必须具备的功能特性，用以保护底层提供服务的业务系统不受“恶意”调用或突发性调用的破坏。而在整个实现整个功能的过程中，我发现实现“过载保护”算法是一个很有趣也比较有挑战的活。今天就稍微介绍一下这方面的算法吧。</p>
+
+<p>可能跟大多数人一样，拿到这个算法需求很容易想到一个简单而又有点粗暴的算法：设置一个单位时间（如10s）内的最大访问量，并维护一个单位时间里的计数器，当访问请求到达时，先判断单位控制时间是否已经超时，如果已经超时，重置计数器为0;否则，将计数器加1,并判断计数器的值是否超过最大访问量设置，如超过，则拒绝访问。</p>
+
+<p>具体的伪代码如下：（当然，具体的代码实现还有考虑并发的情况）</p>
+
+<pre><code class="language-java">long timeStamp=getNowTime();
+int reqCount=0;
+const int maxReqCount=10000;//时间周期内最大请求数
+const long effectiveDuration=10;//时间控制周期
+
+bool grant(){
+    long now=getNowTime();
+    if (now &lt;timeStamp+effectiveDuration){//在时间控制范围内
+        reqCount++;
+        return reqCount&gt;maxReqCount;//当前时间范围内超过最大请求控制数
+    }else{
+        timeStamp=now;//超时后重置
+        reqCount=0;
+        return true;
+    }
+}
+</code></pre>
+
+<p>该算法实现确实是实现了“单位时间里最大访问量控制”这一需求，但是，仔细研究下，发现它在两个单位时间的临界值上的处理是有缺陷的。如：设需要控制的最大请求数为1w, 在第一个单位时间的最后一秒里达到的请求数为1w,接下来第二个单位时间内的第一秒里达到请求数也是1w,由于超时重置发生在两个单位时间之间，所以这2w个请求都将通过控制，也就是说在2s里处理2w个请求，与我们设置的10s里1w个请求的需求相违背。</p>
+
+<p>换句话说，这个算法，对请求的控制不够平滑。那是不是还有更平滑的算法呢？有，<strong>漏桶算法（Leaky Bucket）</strong>就是其一。</p>
+
+<p><img src="/images/Leaky_bucket.JPG"/></p>
+
+<p>（图来自wikipedia）</p>
+
+<p>如上图所示，我们假设系统是一个漏桶，当请求到达时，就是往漏桶里“加水”，而当请求被处理掉，就是水从漏桶的底部漏出。水漏出的速度是固定的，当“加水”太快，桶就会溢出，也就是“拒绝请求”。从而使得桶里的水的体积不可能超出桶的容量。</p>
+
+<p>上面的分析可以看出，该算法存在三个变量：桶的容量capacity，水漏出的速度rate，以及当前的水量water。</p>
+
+<p>算法伪代码如下：</p>
+
+<pre><code class="language-java">long timeStamp=getNowTime();        
+int capacity;        // 桶的容量
+int rate ;          //水漏出的速度
+int water;          //当前水量
+
+bool grant() {
+  //先执行漏水，因为rate是固定的，所以可以认为“时间间隔*rate”即为漏出的水量
+  long  now = getNowTime();
+  water = max(0, water- (now - timeStamp)*rate);
+  timeStamp = now;
+
+  if (water &lt; capacity) { // 水还未满，加水
+    water ++;
+    return true;
+  } else {
+    return false;//水满，拒绝加水
+  }
+}
+</code></pre>
+
+<p>以上算法，我们可以通过调整capacity的值，来控制系统处理的最大请求数。而上文我们提到的时间边界处理的不够平滑问题，也可以很好的解决了，因为在每次进桶前都将执行“漏水”的操作，时间的切片不再是一个固定的值。</p>
+
+<p>如果你现在正在维基百科上查看“漏桶算法”的篇章，你会发现有一个与“漏桶算法”相关联的算法叫<strong>令牌桶(Tocken Bucket)</strong>算法。令牌桶算法的原理是系统会以一个恒定的速度往桶里放入令牌，而如果请求需要被处理，则需要先从桶里获取一个令牌，当桶里没有令牌可取时，则拒绝服务。从原理上看，令牌桶算法和漏桶算法是相反的，一个“进水”，一个是“漏水”。</p>
+
+<p>令牌桶算法伪代码如下，跟漏桶算法很相似：</p>
+
+<pre><code class="language-java">long timeStamp=getNowTime();        
+int capacity;              // 桶的容量
+int rate ;              //令牌放入速度
+int tokens;            //当前水量
+
+bool grant() {
+  //先执行添加令牌的操作
+  long  now = getNowTime();
+  tokens = max(capacity, tokens+ (now - timeStamp)*rate);
+  timeStamp = now;
+  //令牌已用完，拒绝访问
+  if(tokens&lt;1){
+    return false;
+  }else{//还有令牌，领取令牌
+    tokens--;
+    retun true;
+  }
+}
+</code></pre>
+
+<p>以上是关于漏桶算法和令牌桶算法的基本介绍，你趋向于用哪个呢？我现在用的是“漏桶”，没有什么原因，因为我首先看到的它，然后才看到“令牌桶”。但当然，实现这两个算法后，离真正的过载保护还有许多工程上的问题需要解决，比如当系统是多个节点组成的集群来提供服务时，我们需要统一的存储（一般用Redis之类的内存级存储较为合适）来维护当前桶的状态。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">justin huang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2014-06-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+          
+          <a href="/tags/%E6%9E%B6%E6%9E%84/">架构</a>
+          
+          <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/%E5%80%BC%E5%BE%97%E5%80%9F%E9%89%B4%E7%9A%84google%E6%B5%8B%E8%AF%95%E7%BB%8F%E9%AA%8C/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">值得借鉴的Google测试经验</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/%E7%A8%8B%E5%BA%8F%E5%91%98%E6%8C%81%E7%BB%AD%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%81%93/">
+            <span class="next-text nav-default">程序员持续学习之道</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+  <a href="http://sharecore.net/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2013 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">justin huang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

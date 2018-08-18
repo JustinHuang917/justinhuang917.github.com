@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>模式匹配初析 - Justin写字的地方</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="justin huang" />
+  <meta name="description" content="前几天看到篇C#6.0的draft spec，发现C#6.0里将惊现模式匹配。如是便在做了翻宣讲说“模式匹配”是一个很好用的特性，但是不知道跟" />
+
+  <meta name="keywords" content="Justin, JustinHuang, ShareCore" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.43" />
+
+
+<link rel="canonical" href="http://sharecore.net/post/%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D%E5%88%9D%E6%9E%90/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="模式匹配初析" />
+<meta property="og:description" content="前几天看到篇C#6.0的draft spec，发现C#6.0里将惊现模式匹配。如是便在做了翻宣讲说“模式匹配”是一个很好用的特性，但是不知道跟" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sharecore.net/post/%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D%E5%88%9D%E6%9E%90/" />
+
+
+
+<meta property="article:published_time" content="2014-08-24T12:58:29&#43;00:00"/>
+
+<meta property="article:modified_time" content="2014-08-24T12:58:29&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="模式匹配初析">
+<meta itemprop="description" content="前几天看到篇C#6.0的draft spec，发现C#6.0里将惊现模式匹配。如是便在做了翻宣讲说“模式匹配”是一个很好用的特性，但是不知道跟">
+
+
+<meta itemprop="datePublished" content="2014-08-24T12:58:29&#43;00:00" />
+<meta itemprop="dateModified" content="2014-08-24T12:58:29&#43;00:00" />
+<meta itemprop="wordCount" content="2325">
+
+
+
+<meta itemprop="keywords" content="技术,基础知识,模式匹配," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="模式匹配初析"/>
+<meta name="twitter:description" content="前几天看到篇C#6.0的draft spec，发现C#6.0里将惊现模式匹配。如是便在做了翻宣讲说“模式匹配”是一个很好用的特性，但是不知道跟"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Justin&#39;s Notes</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Justin&#39;s Notes</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">模式匹配初析</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2014-08-24 </span>
+        
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <p>前几天看到篇C#6.0的draft spec，发现C#6.0里将惊现模式匹配。如是便在做了翻宣讲说“模式匹配”是一个很好用的特性，但是不知道跟C#的结合会怎么样。而同时却又发现周边了解“模式匹配”的人好少，于是诞生了写一篇文章稍微介绍下这一功能特性的想法。</p>
+
+<p>如果说模式匹配这一概念有人不知道，但是正则表达式应该绝大多数的程序员都知道的了。而简言之，模式匹配就是更强大的正则表达式，或者说正则表达式是模式匹配这一概念在字符串处理上的一个应用。有了正则表达式为例，我们可以为模式匹配定义一个更为通用的定义：</p>
+
+<pre><code>模式匹配是判断输入的数据（信息）是否与特定的结构相匹配，并按模式从中取得数据（信息）。
+</code></pre>
+
+<p>如下以正则表达式为例，从输入数据value里按pattern提取数据digits的模式匹配过程。</p>
+
+<pre><code class="language-javascript">var value=&quot;abc123&quot;;
+var pattern=/\d/g;//定义模式
+var digits=value.match(pattern);//[&quot;1&quot;,&quot;2&quot;,&quot;3&quot;]
+
+</code></pre>
+
+<p>那更广泛意义上的模式匹配是什么呢？其实很简单，就是输入/提取数据（信息）的范围不再局限为字符串了，甚至可以是编程语言支持的所有数据结构。第一次接触模式匹配这一概念，是前几年学习erlang的时候，下面就主要以erlang为例，来对模式匹配稍作介绍。</p>
+
+<p>先上点erlang里的”甜点”为例来说明：</p>
+
+<p>(erlang基础知识：大写字母开头的声明为变量，比如下面例子里的P，H,T;小写字母的声明是原子,比如abc)</p>
+
+<pre><code>模式{abc，P}与输入数据项{abc,123}匹配，并在匹配的同时，发生绑定P-&gt;123
+
+模式[H|T]与输入数据项[1,2,3,4]匹配，并在匹配的同时，发生绑定H-&gt;1,T-&gt;[2,3,4]
+</code></pre>
+
+<p>第一个例子匹配的过程如下：</p>
+
+<p>1.先进行类型匹配：模式和数据项都是一个元组（“{}”），匹配通过。</p>
+
+<p>2.模式元组的第一个元素为常量，进行匹配：模式和数据项都是“abc”,匹配通过。</p>
+
+<p>3.模式元组的第二个元素是一个变量P，同时后面不再有任何元素，结束匹配，并将P绑定到数据项第一个元素后的所有元素。</p>
+
+<p>第二个例子匹配过程如下：</p>
+
+<p>1.先进行类型匹配，模式和数据项都是一个列表（“[]”），匹配通过。</p>
+
+<p>2.模式”[H|T]”表示的是一个“首尾”匹配，用“|”分开两个变量（H，T），H表示的首元素匹配，T表示尾部（除首元素外的所有元素）匹配。匹配是通过的,并绑定H和T的值为首元素和尾元素。</p>
+
+<p>再来一个高级点的例子：使用模式匹配来处理消息的接收：</p>
+
+<p>(erlang基础知识：erlang的调用是基于CSP的，各个actor之间通过消息通讯带完成调用;receive原语是erlang提供的消息接收机制，可监听和接收来自其它actor发送来的消息;”！”标识符用于向对应的actor发送消息)。</p>
+
+<pre><code class="language-erlang">loop(Dict) -\&gt;
+  receive  %消息接收的原语，获取调用方的消息
+	  {store, Key, Value} -&gt; %匹配数据存储的消息，&quot;store&quot;
+	      loop(dict:store(Key, Value, Dict)); %真实的存储
+	  {From, {get, Key}} -&gt; %匹配数据获取的消息, From匹配消息来源，
+	      From ! dict:fetch(Key, Dict), %向查询请求消息来源发送查询结果消息
+	      loop(Dict) %尾递归：持续监听新的消息 
+end.
+
+Pid = spawn(loop) %启动一个进程(actor)，Pid为进程号
+
+Pid!{store ,key1,&quot;123&quot;} %向进程发送一个键值对存储消息
+
+Pid!{get,key1} %发送一个查询消息，获取&quot;key1&quot;对应的值
+</code></pre>
+
+<p>上面展示例子模式匹配在erlang中进行消息匹配的使用，需要注意的一点是，这里的匹配是从上到下来进行的，即会先进行“store”的匹配，匹配失败的话才进行“get”匹配。消息匹配是erlang里的一项杀手锏特性，它能大大减少在消息处理的代码量，代码只要专注于实际算法的实现即可，将相应消息的解析和内容提取，交给模式匹配来完成。</p>
+
+<p>从本质上来讲，模式匹配体现的是一个解构的过程和手段，解构是日常编程过程中一个非常常见的场景，比如编译器将程序代码解析为一个抽象语法树（AST）就是一个解构的过程，再比如，将XML/JSON进行反序列化为程序对象也是一例。对于许多语言，并未提供强大的模式匹配特性，但是为了提供可扩展的解构功能，一般都会采取一些设计模式来解决。比如面向对象编程里，将解析操作抽离出独立的模块，采取基于基类的虚方法/抽象方法扩展的方式，然后结合想对应的规则配置，来完成有区别性的模式解构。但是，这样的方式，稍显笨重，代码量也更多，与模式匹配相比，不在一个复杂度等级之上。</p>
+
+<p>去年我用golang写了一个web框架，其中的路由解析过程就采取了类似的方式（代码位置：<a href="https://github.com/JustinHuang917/gof">https://github.com/JustinHuang917/gof</a>）。通过如以下路由规则配置，匹配不同的URL模式，从URL中提取相应的参数：</p>
+
+<pre><code class="language-xml">&quot;RouteRules&quot;:[
+	  {
+	      &quot;/Order/{id:[0-9]+}&quot;:
+	          {&quot;controller&quot;:&quot;Order&quot;,&quot;action&quot;:&quot;Order&quot;,&quot;id&quot;:&quot;0&quot;}
+	  },
+	  {
+	      &quot;/{controller}/{action}&quot;:
+	          {&quot;controller&quot;:&quot;Home&quot;,&quot;action&quot;:&quot;Index&quot;}
+	  }
+  ]
+</code></pre>
+
+<p>这个看似简单功能，我花了200多行代码才得以完成，使用的还是堪称语法最为精简的Golang，而如果使用Java/C#来完成，代码量肯定还要增加不少。而如果语言本身具有强大的模式匹配的话，实现代码将会变得非常精简。而这一次C#6.0声称引入模式匹配，希望是面向对象语言领域的一次有益尝试。</p>
+
+<p>同时，我也希望我喜欢的Golang在模式匹配上迈开尝试的脚步，在现有的goroutine+channel的组合上应用模式匹配，将是一件非常有效率的实践。现在Golang提供”select..case…“机制只能识别不同channel返回的消息，而不能识别实际消息的内容，这一点来说，与erlang相比，降低了CSP的编程效率。</p>
+
+<p>总结：</p>
+
+<p>模式匹配是来自函数式编程领域的高效的编程功能特性，它能成倍增加“解构”代码的编写效率，明显降低代码复杂度。同时，尽管大多数的编程语言，尚未提供这一功能，但是实际代码编写过程中，我们可以借鉴其基于模式声明的思想，抽离出相应的模式匹配模块，在保证可扩展性的同时，控制数据（信息）匹配带来的代码复杂度。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">justin huang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2014-08-24</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+          
+          <a href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a>
+          
+          <a href="/tags/%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D/">模式匹配</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/%E5%A4%A9%E5%86%B7%E8%AE%80%E5%8F%B2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">天冷讀史</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E5%B8%B8%E8%AF%86%E5%8F%8A%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90/">
+            <span class="next-text nav-default">字符编码常识及问题解析</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+  <a href="http://sharecore.net/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2013 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">justin huang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Justin写字的地方</title>
+    <link>http://sharecore.net/post/</link>
+    <description>Recent content in Posts on Justin写字的地方</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 28 May 2018 10:32:42 +0800</lastBuildDate>
+    
+	<atom:link href="http://sharecore.net/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>《曾国藩的正面与侧面》笔记</title>
+      <link>http://sharecore.net/post/%E6%9B%BE%E5%9B%BD%E8%97%A9%E7%9A%84%E6%AD%A3%E9%9D%A2%E4%B8%8E%E4%BE%A7%E9%9D%A2%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 28 May 2018 10:32:42 +0800</pubDate>
+      
+      <guid>http://sharecore.net/post/%E6%9B%BE%E5%9B%BD%E8%97%A9%E7%9A%84%E6%AD%A3%E9%9D%A2%E4%B8%8E%E4%BE%A7%E9%9D%A2%E7%AC%94%E8%AE%B0/</guid>
+      <description>应该是两年前读的张宏杰《曾国藩的正面与侧面》一书，当时正处于焦虑之中。而通过读此书，对曾国藩的了解，让我在艰难与困苦之中找到了一点人生的希望</description>
+    </item>
+    
+    <item>
+      <title>Jarvis异步任务平台介绍</title>
+      <link>http://sharecore.net/post/jarvis%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Mon, 02 Apr 2018 20:10:19 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/jarvis%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/</guid>
+      <description>#概述 异步任务是日常开发过程中经常要面对的开发场景，比如系统间数据同步、批量数据加工或验证类资源消耗性任务、大批量数据Excel\CSV文件</description>
+    </item>
+    
+    <item>
+      <title>JVM GC知识笔记</title>
+      <link>http://sharecore.net/post/gc%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 07 May 2017 22:27:29 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/gc%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/</guid>
+      <description>###对象存活性 ####引用计数法 算法:每个对象有一个引用计数器，每一次对象被引用，计数器+1，引用失效时，计数器-1，计数器为0的对象即未</description>
+    </item>
+    
+    <item>
+      <title>分布式锁进阶1-基础</title>
+      <link>http://sharecore.net/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%BF%9B%E9%98%B61-%E5%9F%BA%E7%A1%80/</link>
+      <pubDate>Tue, 01 Nov 2016 23:42:14 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%BF%9B%E9%98%B61-%E5%9F%BA%E7%A1%80/</guid>
+      <description>锁在并发编程领域很为常见，当有资源竞争时就会有锁，在单进程的程序里，由于编程语言一般均提供了相应的原语，只需要简单的一个函数调用或声明，及可</description>
+    </item>
+    
+    <item>
+      <title>懷才不遇？</title>
+      <link>http://sharecore.net/post/%E6%87%B7%E6%89%8D%E4%B8%8D%E9%81%87/</link>
+      <pubDate>Sat, 16 Jul 2016 20:49:11 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E6%87%B7%E6%89%8D%E4%B8%8D%E9%81%87/</guid>
+      <description>今天突然想想清楚一個問題：懷才不遇是一個偽命題嗎？ 古往今來，自恃有才，卻又無法獲得表現的機會，或者無法得到賞識之人，均喜歡怨念自己是懷才不遇</description>
+    </item>
+    
+    <item>
+      <title>讀張五常談思考方法</title>
+      <link>http://sharecore.net/post/%E8%AE%80%E5%BC%B5%E4%BA%94%E5%B8%B8%E8%AB%87%E6%80%9D%E8%80%83%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Mon, 27 Jun 2016 00:03:28 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E8%AE%80%E5%BC%B5%E4%BA%94%E5%B8%B8%E8%AB%87%E6%80%9D%E8%80%83%E6%96%B9%E6%B3%95/</guid>
+      <description>今日讀到經濟學家張五常關於他思考問題方式的文章，有所獲，作記錄。 關於“偷思” 向來覺得，思考關於思考(元思考)能力，是決定聰明與否的一個重要因</description>
+    </item>
+    
+    <item>
+      <title>超越辯論的價值</title>
+      <link>http://sharecore.net/post/%E8%B6%85%E8%B6%8A%E8%BE%AF%E8%AB%96%E7%9A%84%E5%83%B9%E5%80%BC/</link>
+      <pubDate>Wed, 22 Jun 2016 01:12:39 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E8%B6%85%E8%B6%8A%E8%BE%AF%E8%AB%96%E7%9A%84%E5%83%B9%E5%80%BC/</guid>
+      <description>我不在乎是否能辯贏你，只在乎我能從你那獲取到什麼信息。 日常生活中、工作中、網絡上，總是會碰到各種意見不同者，你跟他說歷史，他跟你說現狀，你跟</description>
+    </item>
+    
+    <item>
+      <title>電子閱讀的問題反思</title>
+      <link>http://sharecore.net/post/%E9%9B%BB%E5%AD%90%E9%96%B1%E8%AE%80%E7%9A%84%E5%95%8F%E9%A1%8C%E5%8F%8D%E6%80%9D/</link>
+      <pubDate>Mon, 20 Jun 2016 21:01:28 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E9%9B%BB%E5%AD%90%E9%96%B1%E8%AE%80%E7%9A%84%E5%95%8F%E9%A1%8C%E5%8F%8D%E6%80%9D/</guid>
+      <description>去年開始，借助Kindle開始閱讀電子書。不得不說，它幫我解決了兩大讀書問題：一是收藏和攜帶書籍的問題，我不用再為家裏書籍堆積如山而發愁，也</description>
+    </item>
+    
+    <item>
+      <title>讀點王陽明</title>
+      <link>http://sharecore.net/post/%E8%AE%80%E9%BB%9E%E7%8E%8B%E9%99%BD%E6%98%8E/</link>
+      <pubDate>Mon, 20 Jun 2016 01:12:13 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E8%AE%80%E9%BB%9E%E7%8E%8B%E9%99%BD%E6%98%8E/</guid>
+      <description>下午翻書，讀錢穆老先生的一本小書《陽明學述要》，尚未讀完，只先初步了解了王陽明生前一番經歷。對於陽明心學，只是在術語的字面上，所知一二，如所</description>
+    </item>
+    
+    <item>
+      <title>文字之殤</title>
+      <link>http://sharecore.net/post/%E6%96%87%E5%AD%97%E4%B9%8B%E6%AE%A4/</link>
+      <pubDate>Fri, 17 Jun 2016 21:22:07 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E6%96%87%E5%AD%97%E4%B9%8B%E6%AE%A4/</guid>
+      <description>今日讀《破解古文字的故事》，讀完了羅塞塔文字之謎解開的過程。對文字的發展演化形成了一點看法。我一直堅持再用繁體字寫作、寫微博、發朋友圈，在一</description>
+    </item>
+    
+    <item>
+      <title>勿增實體</title>
+      <link>http://sharecore.net/post/%E5%8B%BF%E5%A2%9E%E5%AF%A6%E9%AB%94/</link>
+      <pubDate>Fri, 17 Jun 2016 21:11:30 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E5%8B%BF%E5%A2%9E%E5%AF%A6%E9%AB%94/</guid>
+      <description>奧卡姆剃刀原則：如無必要，勿增實體。 近來思考解決方案，系統設計，在腦海里反思最多的就是這條原則。這一原則，初看來是一句廢話，每個人都知道說，</description>
+    </item>
+    
+    <item>
+      <title>不平则鸣</title>
+      <link>http://sharecore.net/post/%E4%B8%8D%E5%B9%B3%E5%88%99%E9%B8%A3/</link>
+      <pubDate>Mon, 13 Jun 2016 19:49:35 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E4%B8%8D%E5%B9%B3%E5%88%99%E9%B8%A3/</guid>
+      <description>今日读到韩愈的《送孟东野序》一文，为其“不平则鸣”的思想所吸引。源于儒家之传统，向来是习惯遵守仁道，遇不平而忍气吞声的，而韩公作为儒家大师还</description>
+    </item>
+    
+    <item>
+      <title>人言无可畏</title>
+      <link>http://sharecore.net/post/%E4%BA%BA%E8%A8%80%E6%97%A0%E5%8F%AF%E7%95%8F/</link>
+      <pubDate>Mon, 13 Jun 2016 19:48:11 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E4%BA%BA%E8%A8%80%E6%97%A0%E5%8F%AF%E7%95%8F/</guid>
+      <description>去年，天津爆炸的悲剧上演，看着鲜活的生命逝去，悲悯之心当然是不能避免的，这是作为善良之辈的常情使然。只是每一次悲惨的事故，最终却会演化成社会</description>
+    </item>
+    
+    <item>
+      <title>设计的思考</title>
+      <link>http://sharecore.net/post/%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%80%9D%E8%80%83/</link>
+      <pubDate>Mon, 13 Jun 2016 19:44:38 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%80%9D%E8%80%83/</guid>
+      <description>今天去一个商场找厕所，发现一个很奇葩的设计，厕所的门口前面有一个大概十米的走廊，从走廊的这一头，抬头可以看到走廊另一头女厕所 的标记，可是男厕</description>
+    </item>
+    
+    <item>
+      <title>解决问题的思路</title>
+      <link>http://sharecore.net/post/%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E7%9A%84%E6%80%9D%E8%B7%AF/</link>
+      <pubDate>Mon, 13 Jun 2016 19:42:21 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E7%9A%84%E6%80%9D%E8%B7%AF/</guid>
+      <description>作为一个技术负责人，帮人解决技术难题是一份不能脱责的工作，平常20%的工作时间是在帮人解决问题。解决问题时也常碰到恼火的情况， 而让人恼火的原</description>
+    </item>
+    
+    <item>
+      <title>I/O模型基本介绍</title>
+      <link>http://sharecore.net/post/i-o%E6%A8%A1%E5%9E%8B%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Mon, 13 Jun 2016 19:24:36 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/i-o%E6%A8%A1%E5%9E%8B%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/</guid>
+      <description>作为后台开发，高并发和高性能问题，是最常需要面对的。而解决高并发和高性能问题，选择合适的I/O模型是必由之路。本文将对各种I/O模型作基本介</description>
+    </item>
+    
+    <item>
+      <title>天冷讀史</title>
+      <link>http://sharecore.net/post/%E5%A4%A9%E5%86%B7%E8%AE%80%E5%8F%B2/</link>
+      <pubDate>Sun, 24 Jan 2016 21:29:18 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E5%A4%A9%E5%86%B7%E8%AE%80%E5%8F%B2/</guid>
+      <description>今日的天氣真是冷到了極致，沒有取暖措施，又習慣了暖冬的深圳人，非常不適應，朋友圈都是一片抱怨。我也只好躲在家裡，休息與讀書。心理有個想法，想</description>
+    </item>
+    
+    <item>
+      <title>模式匹配初析</title>
+      <link>http://sharecore.net/post/%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D%E5%88%9D%E6%9E%90/</link>
+      <pubDate>Sun, 24 Aug 2014 12:58:29 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D%E5%88%9D%E6%9E%90/</guid>
+      <description>前几天看到篇C#6.0的draft spec，发现C#6.0里将惊现模式匹配。如是便在做了翻宣讲说“模式匹配”是一个很好用的特性，但是不知道跟</description>
+    </item>
+    
+    <item>
+      <title>字符编码常识及问题解析</title>
+      <link>http://sharecore.net/post/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E5%B8%B8%E8%AF%86%E5%8F%8A%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Sun, 10 Aug 2014 23:53:04 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E5%B8%B8%E8%AF%86%E5%8F%8A%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90/</guid>
+      <description>在面试的笔试题里出了一道开放性的题：请简述Unicode与UTF-8之间的关系。一道看似简单的题，能给出满意答案的却寥寥无几，确实挺失望的。</description>
+    </item>
+    
+    <item>
+      <title>浅谈服务化架构</title>
+      <link>http://sharecore.net/post/%E6%B5%85%E8%B0%88%E6%9C%8D%E5%8A%A1%E5%8C%96%E6%9E%B6%E6%9E%84/</link>
+      <pubDate>Sat, 02 Aug 2014 23:54:42 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E6%B5%85%E8%B0%88%E6%9C%8D%E5%8A%A1%E5%8C%96%E6%9E%B6%E6%9E%84/</guid>
+      <description>这两年来，在服务化架构设计上的实践比较多，在此对关于服务化设计一些经验稍作总结，知识经验水平有限，如有欠缺和不准确的地方，还请指出修正！ 我在</description>
+    </item>
+    
+    <item>
+      <title>面对喷子明哲保身</title>
+      <link>http://sharecore.net/post/%E9%9D%A2%E5%AF%B9%E5%96%B7%E5%AD%90%E6%98%8E%E5%93%B2%E4%BF%9D%E8%BA%AB/</link>
+      <pubDate>Sun, 27 Jul 2014 23:57:23 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E9%9D%A2%E5%AF%B9%E5%96%B7%E5%AD%90%E6%98%8E%E5%93%B2%E4%BF%9D%E8%BA%AB/</guid>
+      <description>本打算本周继续写关于技术的话题，但是今天碰到一件闲事，让我改了想法！我得写一篇“教化”的文字，你们暂且读读，个人牢骚，慎重评论！ 先从今天这件</description>
+    </item>
+    
+    <item>
+      <title>技术的进化</title>
+      <link>http://sharecore.net/post/%E6%8A%80%E6%9C%AF%E7%9A%84%E8%BF%9B%E5%8C%96/</link>
+      <pubDate>Sun, 20 Jul 2014 23:58:29 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E6%8A%80%E6%9C%AF%E7%9A%84%E8%BF%9B%E5%8C%96/</guid>
+      <description>前几日，吴军博士在微博上转发了王石为其新书《文明之光》写的序言。在序言里，王石提到了达尔文进化论在社会与技术的适应性问题。王石在他短短几句话</description>
+    </item>
+    
+    <item>
+      <title>不确定性与马尔科夫链</title>
+      <link>http://sharecore.net/post/%E4%B8%8D%E7%A1%AE%E5%AE%9A%E6%80%A7%E4%B8%8E%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E9%93%BE/</link>
+      <pubDate>Sun, 13 Jul 2014 23:59:25 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E4%B8%8D%E7%A1%AE%E5%AE%9A%E6%80%A7%E4%B8%8E%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E9%93%BE/</guid>
+      <description>这个月玩公司的世界杯竞猜游戏，期间经历了各种跌宕起伏，有过竞猜游戏币被清零的记录（后来贷款翻身），也有过“一夜暴富”荣登榜首的时候（多亏了乌</description>
+    </item>
+    
+    <item>
+      <title>可扩展架构设计的三个维度</title>
+      <link>http://sharecore.net/post/%E5%8F%AF%E6%89%A9%E5%B1%95%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E7%9A%84%E4%B8%89%E4%B8%AA%E7%BB%B4%E5%BA%A6/</link>
+      <pubDate>Sat, 05 Jul 2014 00:00:01 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E5%8F%AF%E6%89%A9%E5%B1%95%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E7%9A%84%E4%B8%89%E4%B8%AA%E7%BB%B4%E5%BA%A6/</guid>
+      <description>业界对于可扩展的系统架构设计有一个朴素的理念,就是：通过加机器就可以解决容量和可用性问题。 这一理念在“云计算”概念疯狂流行的今天，得到了广泛</description>
+    </item>
+    
+    <item>
+      <title>值得借鉴的Google测试经验</title>
+      <link>http://sharecore.net/post/%E5%80%BC%E5%BE%97%E5%80%9F%E9%89%B4%E7%9A%84google%E6%B5%8B%E8%AF%95%E7%BB%8F%E9%AA%8C/</link>
+      <pubDate>Sun, 29 Jun 2014 00:01:03 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E5%80%BC%E5%BE%97%E5%80%9F%E9%89%B4%E7%9A%84google%E6%B5%8B%E8%AF%95%E7%BB%8F%E9%AA%8C/</guid>
+      <description>近来读了《Google软件测试之道》一书，以下是我从书里得来的两点经验： 一.紧密结合开发过程与测试 测试之难，保证产品开发质量之难，每个公司每</description>
+    </item>
+    
+    <item>
+      <title>过载保护算法浅析</title>
+      <link>http://sharecore.net/post/%E8%BF%87%E8%BD%BD%E4%BF%9D%E6%8A%A4%E7%AE%97%E6%B3%95%E6%B5%85%E6%9E%90/</link>
+      <pubDate>Sat, 21 Jun 2014 00:01:40 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E8%BF%87%E8%BD%BD%E4%BF%9D%E6%8A%A4%E7%AE%97%E6%B3%95%E6%B5%85%E6%9E%90/</guid>
+      <description>何为过载保护？所谓“过载”，即需求超过了负载能力;而“保护”则是指当“过载”发生了，采取必要的措施保护自己不受“伤害”。在计算机领域，尤其是</description>
+    </item>
+    
+    <item>
+      <title>程序员持续学习之道</title>
+      <link>http://sharecore.net/post/%E7%A8%8B%E5%BA%8F%E5%91%98%E6%8C%81%E7%BB%AD%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%81%93/</link>
+      <pubDate>Sun, 15 Jun 2014 00:02:25 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E7%A8%8B%E5%BA%8F%E5%91%98%E6%8C%81%E7%BB%AD%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%81%93/</guid>
+      <description>我其实是一个悲观主义者，从开始成为一名程序员的那一天开始，我就对自己的职业充满着担忧。早期，我担忧的是我刚进入这一行，落后身边从事这一行多年</description>
+    </item>
+    
+    <item>
+      <title>粗略估算</title>
+      <link>http://sharecore.net/post/%E7%B2%97%E7%95%A5%E4%BC%B0%E7%AE%97/</link>
+      <pubDate>Sun, 08 Jun 2014 00:03:08 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E7%B2%97%E7%95%A5%E4%BC%B0%E7%AE%97/</guid>
+      <description>今天我们以两道可能看起来有点“惨无人道”的题目开始 1.一个长方体的卡车车厢能装下多少个高尔夫球？ 2.密西西比河一天流出多少水？ 第一个题目据说</description>
+    </item>
+    
+    <item>
+      <title>程序员的良心</title>
+      <link>http://sharecore.net/post/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%89%AF%E5%BF%83/</link>
+      <pubDate>Sat, 31 May 2014 00:04:20 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%89%AF%E5%BF%83/</guid>
+      <description>前几日，深圳暴雨，官方说是“xx年一遇”。当大家听到“xx年一遇”这一说时，你肯定猜到了后果就是城市成了一片汪洋，整个城市陷入瘫痪，所有的房</description>
+    </item>
+    
+    <item>
+      <title>武曌皇帝之路</title>
+      <link>http://sharecore.net/post/%E6%AD%A6%E6%9B%8C%E7%9A%87%E5%B8%9D%E4%B9%8B%E8%B7%AF/</link>
+      <pubDate>Sat, 17 May 2014 00:05:00 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E6%AD%A6%E6%9B%8C%E7%9A%87%E5%B8%9D%E4%B9%8B%E8%B7%AF/</guid>
+      <description>这周有两个妹子反馈说，上次写的齐桓公的故事，很精彩，她们第一次完整看完了一篇历史文字，甚感欣慰！其中一个妹子还希望我能讲讲她们女人中的“神”</description>
+    </item>
+    
+    <item>
+      <title>如何阅读一本书</title>
+      <link>http://sharecore.net/post/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB%E4%B8%80%E6%9C%AC%E4%B9%A6/</link>
+      <pubDate>Sat, 10 May 2014 00:05:32 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB%E4%B8%80%E6%9C%AC%E4%B9%A6/</guid>
+      <description>我好读书，读的很繁杂，从计算机技术到历史到国学和哲学，系统方法论等都是我爱好读的。 但平时工作忙，尽管每天都坚持挤出一到两个小时的读书时间（牺</description>
+    </item>
+    
+    <item>
+      <title>MapReduce的变体:HashFold介绍</title>
+      <link>http://sharecore.net/post/mapreduce%E7%9A%84%E5%8F%98%E4%BD%93-hashfold%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Mon, 17 Mar 2014 00:09:01 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/mapreduce%E7%9A%84%E5%8F%98%E4%BD%93-hashfold%E4%BB%8B%E7%BB%8D/</guid>
+      <description>说到MapReduce计算模型大家应该都清楚。今天我们来看一下MapReduce一个变体：HasFold。 这种模型将MapReduce中一些</description>
+    </item>
+    
+    <item>
+      <title>防御性编程小例</title>
+      <link>http://sharecore.net/post/%E9%98%B2%E5%BE%A1%E6%80%A7%E7%BC%96%E7%A8%8B%E5%B0%8F%E4%BE%8B/</link>
+      <pubDate>Mon, 13 Jan 2014 00:06:36 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E9%98%B2%E5%BE%A1%E6%80%A7%E7%BC%96%E7%A8%8B%E5%B0%8F%E4%BE%8B/</guid>
+      <description>今天面试一个人时，突然想起一个话题：防御性编程 。我们先看一个小程序，这也是以前出过的一道简单面试题：写一个函数，可以将一个小写字母转换为大写</description>
+    </item>
+    
+    <item>
+      <title>对Go的Slice进行Append的一个坑</title>
+      <link>http://sharecore.net/post/%E5%AF%B9go%E7%9A%84slice%E8%BF%9B%E8%A1%8Cappend%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%91/</link>
+      <pubDate>Thu, 09 Jan 2014 00:10:45 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E5%AF%B9go%E7%9A%84slice%E8%BF%9B%E8%A1%8Cappend%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%91/</guid>
+      <description>今天我们说说Go为数不多的一个“坑”。这个“坑”的代码是这样的： func main() { arr1 := [5]int{1, 2, 3, 4, 5} slice1 := arr1[1:2] slice1 = append(slice1, 6, 7, 8) fmt.Println(&amp;quot;slice1:&amp;quot;, slice1) fmt.Println(&amp;quot;arr1:&amp;quot;, arr1) arr2 := [5]int{1, 2, 3, 4, 5} slice2 := arr2[1:3] slice2 = append(slice2, 6, 7,</description>
+    </item>
+    
+    <item>
+      <title>Golang的Slice机制解析</title>
+      <link>http://sharecore.net/post/golang%E7%9A%84slice%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Sun, 29 Sep 2013 00:12:52 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/golang%E7%9A%84slice%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/</guid>
+      <description>Rob Pike写了篇关于Go的数组与切片的文章：Arrays, slices (and strings): The mechanics of &amp;lsquo;append&amp;rsquo; ，介绍了slice的实现和一些常见的操作。其部分内容与我这篇文章是重</description>
+    </item>
+    
+    <item>
+      <title>Linux文件系统十问</title>
+      <link>http://sharecore.net/post/linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%8D%81%E9%97%AE/</link>
+      <pubDate>Sun, 25 Aug 2013 00:32:10 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%8D%81%E9%97%AE/</guid>
+      <description>今天读到这篇文章:Linux文件系统十问，你知道吗？，作了个总结笔记： 1、机械磁盘随机读写时速度非常慢，操作系统是采用什么技巧来提高随机读写</description>
+    </item>
+    
+    <item>
+      <title>怎么写Go的基准测试</title>
+      <link>http://sharecore.net/post/%E6%80%8E%E4%B9%88%E5%86%99go%E7%9A%84%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/</link>
+      <pubDate>Thu, 04 Jul 2013 00:38:31 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E6%80%8E%E4%B9%88%E5%86%99go%E7%9A%84%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/</guid>
+      <description>Dave Cheney在他的blog写了一篇关于Go的基准测试编写的基本介绍(链接)。我以此为内容，整理输出内容。 对自己编写package编写基准测</description>
+    </item>
+    
+    <item>
+      <title>春秋五霸之首——齐桓公的故事</title>
+      <link>http://sharecore.net/post/%E6%98%A5%E7%A7%8B%E4%BA%94%E9%9C%B8%E4%B9%8B%E9%A6%96%E9%BD%90%E6%A1%93%E5%85%AC%E7%9A%84%E6%95%85%E4%BA%8B/</link>
+      <pubDate>Sat, 29 Jun 2013 00:07:47 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/%E6%98%A5%E7%A7%8B%E4%BA%94%E9%9C%B8%E4%B9%8B%E9%A6%96%E9%BD%90%E6%A1%93%E5%85%AC%E7%9A%84%E6%95%85%E4%BA%8B/</guid>
+      <description>昨晚重新翻阅了《史记·齐太公世家》，今天就跟大家重新说说春秋五霸之首齐桓公姜小白的故事吧。 在说齐桓公这位“明君”的故事前，我们得先说点“恶心</description>
+    </item>
+    
+    <item>
+      <title>Go并发编程模式进阶</title>
+      <link>http://sharecore.net/post/go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6/</link>
+      <pubDate>Mon, 10 Jun 2013 00:09:57 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6/</guid>
+      <description>&lt;p&gt;前段时间Google的&lt;a href=&#34;http://profiles.google.com/ajmani&#34;&gt;Sameer Ajmani&lt;/a&gt;在Google I/O上做了关于Go的并发模式的介绍。Slides&lt;a href=&#34;http://talks.golang.org/2013/advconc.slide&#34;&gt;在此&lt;/a&gt;,youtube视频&lt;a href=&#34;http://www.youtube.com/watch?feature=player_embedded&amp;amp;v=QDDwwePbDtw&#34;&gt;在此&lt;/a&gt;(注：上述链接均需翻墙)。&lt;/p&gt;
+
+&lt;p&gt;本篇的前提是对goroutine+channel的并发编程模式有基本的了解，建议能读懂下面这个经典ping-pong程序为好。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package main
+
+import (
+	&amp;quot;fmt&amp;quot;
+	&amp;quot;time&amp;quot;
+)
+//定义一个结构
+type Ball struct{ hits int }
+
+func main() {
+	//创建一个可传输Ball的channel
+	table := make(chan *Ball)
+	//分别启动ping/pong的goroutine 
+	go Player(&amp;quot;Ping&amp;quot;, table)
+	go Player(&amp;quot;Pong&amp;quot;, table)
+	//一个Ball进入channel，游戏开始
+	table &amp;lt;- new(Ball)
+	//“主”程序暂停1s,等待ping/pong的goroutine执行
+	time.Sleep(1 * time.Second)
+	//从channel取出Ball，游戏开始
+	&amp;lt;-table
+	//可通过引发异常，显示调用栈的详细信息
+	//panic(&amp;quot;show me the stacks&amp;quot;)
+}
+
+func Player(name string, table chan *Ball) {
+	for {
+	    //channel取出Ball，并hits++
+	    ball := &amp;lt;-table
+	    ball.hits++
+	    fmt.Println(name, ball.hits)
+	    //暂停1ms
+	    time.Sleep(1 * time.Millisecond)
+	    //将Ball放回channel
+	    table &amp;lt;- ball
+	}
+} 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ping-pong程序的执行过程，可以用下图来表示。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://sharecore.net/images/advgoroutine/pingpong.png&#34; alt=&#34;ping-pong程序执行过程&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;接下来主要说说Go的并发编程里的一些“文艺”使用:如何通信?如何周期性处理事件？如何取消执行？这些高级用法的支持，除了依赖我们上面看到的goroutine+channel外，还要依赖于Go的一个statement：select+case。它可以用来管理和监听多个channel,从而起到“多路复用”的效果。他的基本语法如下。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;select {
+	case xc &amp;lt;- x:
+		// 向channel(xc)发送一个对象(x)
+	case y := &amp;lt;-yc:
+		// 从channel(yc)获取一个对象并赋值到变量(y)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下面我们以一个能持续从RSS获取资源项的例子来说明select的使用。
+假设我们已经拥有下面这个接口所定义的功能：从一个RSS url获取资源项目(一次调用，获取一次,这个接口的模拟实现，见附1。)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Fetcher interface {
+	Fetch() (items []Item, next time.Time, err error)//能从某个rss url获取它的资源项，并能同时返回下一次获取的时间next。
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;`我们用下面这个接口来表示我们希望达到的功能：能从rss url上循环获取资源项，形成资源流的形式；循环获取功能，可以中止。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Subscription interface {
+	Updates() &amp;lt;-chan Item//用channel来存放资源，即可实现流的显示
+	Close() error//关闭获取
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;先看一个这项功能的简单实现，熟悉多线程编程的，应该觉得很眼熟。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+type NavieSub struct {
+	closed  bool
+	err     error
+	updates chan Item
+	fetcher Fetcher
+}
+
+func (s *NavieSub) Close() error {
+	s.closed = true//设置关闭标识为true
+	return s.err
+}
+func (s *NavieSub) Updates() &amp;lt;-chan Item {
+	return s.updates//返回已经获取的资源项
+}
+func (s *NavieSub) loop() {//循环获取的方法实现
+	for {
+	    if s.closed {//判断关闭标识
+	        close(s.updates)//close是内置函数
+	        return
+	    }
+	    items, next, err := s.fetcher.Fetch()//执行一次获取
+	    if err != nil {
+	        s.err = err
+	        time.Sleep(10 * time.Second)
+	        continue//出错时暂停10秒后再开始下次循环
+	    }
+	    for _, item := range items {//将获取的资源项写入，用于返回
+	        s.updates &amp;lt;- item
+	    }
+	    if now := time.Now(); next.After(now) {//暂停到下次获取时间时，再开始下一次获取
+	        time.Sleep(next.Sub(now))
+	    }
+	}
+}
+
+func main() {
+	fetcher := &amp;amp;FakeFether{channel: &amp;quot;sharecore.info&amp;quot;}
+	s := &amp;amp;NavieSub{
+	    fetcher: fetcher,
+	    updates: make(chan Item),
+	}
+	
+	go s.loop()//启动一个例程执行loop方法（与启动一个线程类似）
+	
+	time.AfterFunc(3*time.Second, func() {
+	    fmt.Println(&amp;quot;closed&amp;quot;, s.Close())
+	})
+	
+	for item := range s.Updates() {
+	    fmt.Println(item.Channel, item.Title)
+	}
+} 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;`那以上的简单实现，会有什么问题呢？&lt;/p&gt;
+
+&lt;p&gt;首先，&lt;strong&gt;明显发现s.err和s.closed的访问是非同步的。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;s.closed = true //设置关闭标识为true
+
+if s.closed {//判断关闭标识
+	        close(s.updates) //close是内置函数
+	        return
+	    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;`然后，我们看到s.updates的定义如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;s := &amp;amp;NavieSub{
+	    fetcher: fetcher,
+	    updates: make(chan Item),//定义为没有buffer的channel，一个channel中同时只能有一个元素
+	}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;`根据上面的定义，s.updates一次只能有一个item进入，当它没有其他goroutine从它里面取出元素时，下面这行代码会&lt;strong&gt;发生堵塞&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;s.updates &amp;lt;- item
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;`那以上问题我们有什么办法来避免呢？&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Linux Container的安装与使用介绍</title>
+      <link>http://sharecore.net/post/container%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Sun, 17 Mar 2013 00:36:33 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/container%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/</guid>
+      <description>今天想在机器上搭建一个我用Go写的玩的一个分布式文件小系统，可我只有一台Laptop和一台Desktop，两台都装的Ubuntu 12.04。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://sharecore.net/post/rpc%E6%9C%8D%E5%8A%A1%E8%BF%BD%E8%B8%AA%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://sharecore.net/post/rpc%E6%9C%8D%E5%8A%A1%E8%BF%BD%E8%B8%AA%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/</guid>
+      <description>RPC服务追踪的原理与实践 title: &amp;ldquo;RPC服务追踪的原理与实践&amp;rdquo; date: 2017-03-09 10:00:00 tags: - 技术 - 架构 在分布式服务化架构下，由于分布式服务间</description>
+    </item>
+    
+  </channel>
+</rss>

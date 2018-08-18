@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>JVM GC知识笔记 - Justin写字的地方</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="justin huang" />
+  <meta name="description" content="###对象存活性 ####引用计数法 算法:每个对象有一个引用计数器，每一次对象被引用，计数器&#43;1，引用失效时，计数器-1，计数器为0的对象即未" />
+
+  <meta name="keywords" content="Justin, JustinHuang, ShareCore" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.43" />
+
+
+<link rel="canonical" href="http://sharecore.net/post/gc%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="JVM GC知识笔记" />
+<meta property="og:description" content="###对象存活性 ####引用计数法 算法:每个对象有一个引用计数器，每一次对象被引用，计数器&#43;1，引用失效时，计数器-1，计数器为0的对象即未" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sharecore.net/post/gc%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/" />
+
+
+
+<meta property="article:published_time" content="2017-05-07T22:27:29&#43;00:00"/>
+
+<meta property="article:modified_time" content="2017-05-07T22:27:29&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="JVM GC知识笔记">
+<meta itemprop="description" content="###对象存活性 ####引用计数法 算法:每个对象有一个引用计数器，每一次对象被引用，计数器&#43;1，引用失效时，计数器-1，计数器为0的对象即未">
+
+
+<meta itemprop="datePublished" content="2017-05-07T22:27:29&#43;00:00" />
+<meta itemprop="dateModified" content="2017-05-07T22:27:29&#43;00:00" />
+<meta itemprop="wordCount" content="2645">
+
+
+
+<meta itemprop="keywords" content="技术," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JVM GC知识笔记"/>
+<meta name="twitter:description" content="###对象存活性 ####引用计数法 算法:每个对象有一个引用计数器，每一次对象被引用，计数器&#43;1，引用失效时，计数器-1，计数器为0的对象即未"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Justin&#39;s Notes</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Justin&#39;s Notes</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">JVM GC知识笔记</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-05-07 </span>
+        
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#标记-清除算法-mark-sweep">标记-清除算法(Mark-Sweep)</a></li>
+<li><a href="#复制算法">复制算法</a></li>
+<li><a href="#标记-整理算法">标记-整理算法</a></li>
+<li><a href="#算法实现">算法实现</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p><img src="/images/JVM_GC.jpg" style="width:1000px"/></p>
+
+<p>###对象存活性</p>
+
+<p>####引用计数法</p>
+
+<ul>
+<li>算法:每个对象有一个引用计数器，每一次对象被引用，计数器+1，引用失效时，计数器-1，计数器为0的对象即未被引用，可以回收</li>
+<li>问题：循环依赖问题，循环依赖的对象计数器都不为0</li>
+</ul>
+
+<p><code>objA.instance=objB; objB.instance=objA;</code></p>
+
+<p>####可达性分析算法(常用)
+  - 算法：以一系列称为“GC Roots”对象作为起始点，从这些节点开始往下搜索，形成引用链，当一个对象到GC Roots对象不存在引用链(连通)时，即认为该对象不可达，可以回收
+  - GC Roots包括:
+      1. 栈帧的本地变量表中引用的对象
+      2. 方法区中静态属性引用的对象
+      3. 方法区中常量引用的对象
+      4. 本地方法中JNI(Native方法)引用的对象</p>
+
+<p>####引用
+ - <strong>强引用</strong>(new Object()):不会被回收
+ - <strong>软引用</strong>(SoftRefrence): 抛出内存异常之前回收，回收后内存不足才会继续抛出内存移除异常
+ - <strong>弱引用</strong>(WeakRefrence):GC工作时，无论内存是否足够，都会被回收
+ - <strong>虚引用</strong>(PhantomRefrence):无任何引用效果，也无法获取实例，唯一作用是在这个对象呗GC回收时获取一个事件通知</p>
+
+<p>####finalize方法
+  - 是否需要执行finalize？
+    1. 判断对象有覆盖finalize方法
+    2. JVM尚未调用过finalize() ，即finalize方法只会被调用一次
+    3. finalize方法非回收时立即执行，而是回收时先标记是否执行，如需执行，入队列F-Queue，稍后执行</p>
+
+<p>####方法区回收（永久代）
+- 废弃常量
+- 无用的类
+  1. 所有对象实例都被回收
+  2. 加载该类的Classloader被回收
+  3. 该类对应的java.land.Class对象没有被任何地方引用</p>
+
+<p>###内存回收算法</p>
+
+<h4 id="标记-清除算法-mark-sweep">标记-清除算法(Mark-Sweep)</h4>
+
+<ul>
+<li>算法:首先标记所有要回收的对象，在标记完成后统一回收所有被标记的对象</li>
+<li>问题:
+
+<ul>
+<li>效率问题：标记和清除的两个规程效率都不高</li>
+<li>内存碎片问题：标记和清除会产生大量不连续的内存碎片</li>
+</ul></li>
+</ul>
+
+<h4 id="复制算法">复制算法</h4>
+
+<ul>
+<li>算法:将可用内存按容量划分大小相等的两块，每次只使用其中一块，当这一块内存用完了，就将存活的对象复制到另一块去，然后将第一块的内存空间一次性清理掉</li>
+<li>代价：可用内存缩小为实际内存的一半</li>
+<li>解决了效率和复制问题，主流JVM都使用该算法来回收新生代(Eden区+Survivor区)</li>
+<li>由于新生代对象存活率低，所以Eden区和Survivor区的大小不是1:1，可以Eden区更大，同时，为了Survivor区的回收效率，可以维护两个Survivor区</li>
+</ul>
+
+<h4 id="标记-整理算法">标记-整理算法</h4>
+
+<ul>
+<li>算法:首先标记所有要回收的对象，然后让所有存活的对象向内存的一端移动，将存活端边界外的对象全部清理</li>
+<li>适合老年代的对象回收（对象存活率高）</li>
+</ul>
+
+<h4 id="算法实现">算法实现</h4>
+
+<p><strong>Stopword问题</strong>：在进行可达性分析时，需要将jvm中所有线程都停止下来，以使分析过程中，引用关系还在发生变化
+  - OopMap
+    1. 类加载时，会对象内什么偏移量上是什么对象类型计算出来
+    2. JIT编译时会记录栈和寄存器哪些位置是引用
+    3. 以上信息只在特定位置(安全点)记录，已缩小保存OopMap的内存消耗
+    4. 程序执行并非在所有地方都可以停顿下来GC，只有在到达安全点时才停止</p>
+
+<p>###内存收集器</p>
+
+<p>####Serial收集器
+  - 单线程
+  - 新生代：复制算法，Stop the world
+  - 老生代:标记-整理算法，Stop the world
+  - 适合Client模式</p>
+
+<p>####ParNew收集器
+  - Serial收集器的多线程版本
+  - 当老生代使用CMS时，新生代只能使用Parnew或Serial</p>
+
+<p>####Parallel Scavenge收集器
+  - 复制算法，多线程并行
+  - 新生代使用
+  - 关注吞吐量可控(吞吐量优先)
+    -XX:MacGCPauseMillis：配置GC最大暂停时间
+    -XX:GCTimeRatio：配置GC时间占比</p>
+
+<p>####Serial Old收集器
+  - 单线程，使用标记-整理算法
+  - 与Parallel Scavenge搭配使用(默认)
+  - 作为CMS的后备选择，在并发收集失败(Concurrent Mode Failure)时使用
+  - -XX:+UseParallelGC:Parallel Scavenge+Serial Old (Server模式下默认)</p>
+
+<p>####Parallel Old收集器
+  - Parallel Scavenge的老生代版本
+  - 多线程，使用标记-整理算法
+  - -XX:+UseParallelOldGC: Parallel Scavenge+Parallel Old</p>
+
+<p>####CMS收集器
+  - 以获取最短停顿时间为目标的收集器
+  - 标记-清除算法
+    1. 初始标记，Stop the world，只标识GC Roots能直接关联的对象
+    2. 并发标记：GC Roots Tracing标记，无须Stop the world，耗时长
+    3. 重新标记：Stop the world，修正并发标记期间程序继续运行而导致的标记变动
+    4. 并发清除：并发清理过程中产生的垃圾不能在当次GC时被清理(浮动垃圾)
+  - -XX:UseConcMarkSweepGC:ParNew+CMS+Serial Old（备选方案)</p>
+
+<ul>
+<li>问题
+
+<ol>
+<li>CPU消耗</li>
+<li>浮动垃圾问题可能导致来不及释放，需要当老年代未被完全填满时就进行收集(jdk1.5默认68%，jdk1.6默认92%)</li>
+<li>如果CMS回收后内存无法满足应用要求，会引发“Concurrent Mode Failure”，需要触发后备预案(Serial Old)</li>
+<li>标记-清除算法产生的内存碎片问题</li>
+</ol></li>
+</ul>
+
+<p>####G1收集器
+  - 特点
+   1. 并行与并发
+   2. 空间整合
+    - 基于标记-整理算法，从两个region来看基于复制算法
+    - 分区分代收集：将java堆分为多个大小相等的Region，分代是在分区基础上的，新生代、老生代对应多个Region(不需要连续，代之间再是物理隔离)
+   3. 可预测的停顿：G1跟踪每个region垃圾回收后的价值大小，维护一个优先列表，每次跟进允许的收集时间，优先回收价值最大的region(Garbage-First名称的来由)</p>
+
+<ul>
+<li>回收步骤
+
+<ol>
+<li>初始标记(与CMS类似)</li>
+<li>并发标记(与CMS类似)</li>
+<li>最终标记(与CMS类似)</li>
+<li>筛选回收：按成本和回收价值排序，根据用户期望的GC停顿时间来制定和执行回收计划</li>
+</ol></li>
+</ul>
+
+<p>###内存分配和回收策略
+ - 对象优先在Eden分配对象：
+ - 大对象直接进入老年代：应该避免临时大对象的产生，以避免对象在Eden区和两个Servivor区之间发生大量的内存复制，-XX:PretenureSizeThreshold:设置大于这个值得对象直接进入老年代
+ - 长期存活的对象进入老年代
+  1. 对象经过一次Minor GC(Eden区回收)后依然存活，并能被Survivor区容纳，则进入Survivor，此时对象的年龄为1，每次Minor GC年龄加1，当超过一定年龄(默认15，-XX:MaxTenuringThreshold控制)则进入老年代
+  2. 并不是永远要等到对象年龄达到MaxTenuringThreshold才进入老年代，当Survivor空间中相同年龄对象大小的综合大于Survivor空间的一般，年龄大于或等于改年龄的对象就可以进入老年代</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">justin huang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2017-05-07</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/jarvis%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Jarvis异步任务平台介绍</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%BF%9B%E9%98%B61-%E5%9F%BA%E7%A1%80/">
+            <span class="next-text nav-default">分布式锁进阶1-基础</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+  <a href="http://sharecore.net/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2013 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">justin huang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

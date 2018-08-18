@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Linux文件系统十问 - Justin写字的地方</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="justin huang" />
+  <meta name="description" content="今天读到这篇文章:Linux文件系统十问，你知道吗？，作了个总结笔记： 1、机械磁盘随机读写时速度非常慢，操作系统是采用什么技巧来提高随机读写" />
+
+  <meta name="keywords" content="Justin, JustinHuang, ShareCore" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.43" />
+
+
+<link rel="canonical" href="http://sharecore.net/post/linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%8D%81%E9%97%AE/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Linux文件系统十问" />
+<meta property="og:description" content="今天读到这篇文章:Linux文件系统十问，你知道吗？，作了个总结笔记： 1、机械磁盘随机读写时速度非常慢，操作系统是采用什么技巧来提高随机读写" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sharecore.net/post/linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%8D%81%E9%97%AE/" />
+
+
+
+<meta property="article:published_time" content="2013-08-25T00:32:10&#43;00:00"/>
+
+<meta property="article:modified_time" content="2013-08-25T00:32:10&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Linux文件系统十问">
+<meta itemprop="description" content="今天读到这篇文章:Linux文件系统十问，你知道吗？，作了个总结笔记： 1、机械磁盘随机读写时速度非常慢，操作系统是采用什么技巧来提高随机读写">
+
+
+<meta itemprop="datePublished" content="2013-08-25T00:32:10&#43;00:00" />
+<meta itemprop="dateModified" content="2013-08-25T00:32:10&#43;00:00" />
+<meta itemprop="wordCount" content="1000">
+
+
+
+<meta itemprop="keywords" content="技术,Linux,技术常识," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Linux文件系统十问"/>
+<meta name="twitter:description" content="今天读到这篇文章:Linux文件系统十问，你知道吗？，作了个总结笔记： 1、机械磁盘随机读写时速度非常慢，操作系统是采用什么技巧来提高随机读写"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Justin&#39;s Notes</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Justin&#39;s Notes</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Linux文件系统十问</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2013-08-25 </span>
+        
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <p>今天读到<a href="http://djt.qq.com/article/view/620">这篇文章:Linux文件系统十问，你知道吗？</a>，作了个总结笔记：</p>
+
+<p><strong>1、机械磁盘随机读写时速度非常慢，操作系统是采用什么技巧来提高随机读写的性能的？</strong></p>
+
+<p>磁盘读写时间=寻道时间（找磁道）+盘面旋转时间（找扇区）+读／写时间，而旋转时间和读／写时间是常量，所以需要尽量缩短寻道时间。操作系统在分区时，按柱面的区域分区而不是盘面的区域分区，以缩短在同一个分区里连续读的寻道时间。</p>
+
+<p><strong>2、touch一个新的空文件占用磁盘空间吗？ 占用的话占用多少？</strong></p>
+
+<p>一个新的空文件会占用磁盘空间，占的大小为一个inode的size.inode的详细介绍可查看: <a href="http://www.ruanyifeng.com/blog/2011/12/inode.html">理解inode</a></p>
+
+<p><strong>3、新建一个空目录占用磁盘空间吗？占用多少？和新建一个文件相比，哪个占用的更大？</strong></p>
+
+<p>新建的空目录会占用磁盘空间，新目录会占用一个inode，同时分配一个block size（如4.0k）。
+可如下方式查看空目录的大小。</p>
+
+<pre><code class="language-sh">justinhuang@ubuntu:\~/temp/temp$ du -h
+4.0K    .
+</code></pre>
+
+<p>新建的文件，如果是空文件，不占用block。</p>
+
+<pre><code class="language-sh">justinhuang@ubuntu:\~/temp/temp$ &gt;1
+justinhuang@ubuntu:\~/temp/temp$ &gt;2
+justinhuang@ubuntu:\~/temp/temp$ ll
+总用量 8
+drwxrwxr-x  2 justinhuang justinhuang 4096  8月 25 16:14 ./
+drwxrwxr-x 15 justinhuang justinhuang 4096  8月 25 15:08 ../
+-rw-rw-r--  1 justinhuang justinhuang    0  8月 25 16:14 1
+-rw-rw-r--  1 justinhuang justinhuang    0  8月 25 16:14 2
+justinhuang@ubuntu:\~/temp/temp$ du -h
+4.0K    .
+</code></pre>
+
+<p><strong>4、你知道文件名是记录在磁盘的什么地方吗？</strong></p>
+
+<p>文件名的记录存在目录的block中，所以当空文件过多后（多于一个block大小），会使重新分配的目录的block。使目录占用空间变大。</p>
+
+<p><strong>5、文件名最长多长？受什么制约？</strong></p>
+
+<p>Lunux文件名最长限制为255byte</p>
+
+<p><strong>6、文件名太长了会影响系统性能吗？为什么会产生影响？</strong></p>
+
+<p>文件名太长会导致文件名读取时花费更多的磁盘IO。</p>
+
+<p><strong>7、一个目录下最多能建立多少个文件？</strong></p>
+
+<p>受目录下inode的数量限制，但是文件太多，OS需要读取的block也增多。导致性能问题。</p>
+
+<p><strong>8、新建一个内容大小1k的文件，实际会占用多大的磁盘空间？</strong>
+一个block size(一般为4.0k)+一个inode size(一般为256byte)。</p>
+
+<pre><code class="language-sh">justinhuang@ubuntu:\~/temp/temp$ echo &quot;&quot; &gt;1
+justinhuang@ubuntu:\~/temp/temp$ ll
+总用量 12
+drwxrwxr-x  2 justinhuang justinhuang 4096  8月 25 16:23 ./
+drwxrwxr-x 15 justinhuang justinhuang 4096  8月 25 15:08 ../
+-rw-rw-r--  1 justinhuang justinhuang    1  8月 25 16:23 1
+justinhuang@ubuntu:\~/temp/temp$ du -h
+8.0K    .
+</code></pre>
+
+<p><strong>9、向操作系统发起读取文件2Byte的命令，操作系统实际会读取多少呢？</strong></p>
+
+<p>文件系统在向磁盘发起IO请求的时候，也是以block size为单位。所以会读取一个block size。这也是程序的局部性原理的应用</p>
+
+<p><strong>10、我们使用文件时要怎么样来能提高磁盘IO速度？</strong></p>
+
+<p>新建文件时，可以告诉OS你新建的文件大概需要的空间大小，以使OS尽量为文件分配连续的block，缩短寻道时间，提高读写性能。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">justin huang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2013-08-25</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+          
+          <a href="/tags/linux/">Linux</a>
+          
+          <a href="/tags/%E6%8A%80%E6%9C%AF%E5%B8%B8%E8%AF%86/">技术常识</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/golang%E7%9A%84slice%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Golang的Slice机制解析</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/%E6%80%8E%E4%B9%88%E5%86%99go%E7%9A%84%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/">
+            <span class="next-text nav-default">怎么写Go的基准测试</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+  <a href="http://sharecore.net/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2013 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">justin huang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

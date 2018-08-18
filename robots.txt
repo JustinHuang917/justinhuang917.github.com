@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: http://sharecore.net/sitemap.xml

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>值得借鉴的Google测试经验 - Justin写字的地方</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="justin huang" />
+  <meta name="description" content="近来读了《Google软件测试之道》一书，以下是我从书里得来的两点经验： 一.紧密结合开发过程与测试 测试之难，保证产品开发质量之难，每个公司每" />
+
+  <meta name="keywords" content="Justin, JustinHuang, ShareCore" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.43" />
+
+
+<link rel="canonical" href="http://sharecore.net/post/%E5%80%BC%E5%BE%97%E5%80%9F%E9%89%B4%E7%9A%84google%E6%B5%8B%E8%AF%95%E7%BB%8F%E9%AA%8C/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="值得借鉴的Google测试经验" />
+<meta property="og:description" content="近来读了《Google软件测试之道》一书，以下是我从书里得来的两点经验： 一.紧密结合开发过程与测试 测试之难，保证产品开发质量之难，每个公司每" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sharecore.net/post/%E5%80%BC%E5%BE%97%E5%80%9F%E9%89%B4%E7%9A%84google%E6%B5%8B%E8%AF%95%E7%BB%8F%E9%AA%8C/" />
+
+
+
+<meta property="article:published_time" content="2014-06-29T00:01:03&#43;00:00"/>
+
+<meta property="article:modified_time" content="2014-06-29T00:01:03&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="值得借鉴的Google测试经验">
+<meta itemprop="description" content="近来读了《Google软件测试之道》一书，以下是我从书里得来的两点经验： 一.紧密结合开发过程与测试 测试之难，保证产品开发质量之难，每个公司每">
+
+
+<meta itemprop="datePublished" content="2014-06-29T00:01:03&#43;00:00" />
+<meta itemprop="dateModified" content="2014-06-29T00:01:03&#43;00:00" />
+<meta itemprop="wordCount" content="1998">
+
+
+
+<meta itemprop="keywords" content="技术,测试," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="值得借鉴的Google测试经验"/>
+<meta name="twitter:description" content="近来读了《Google软件测试之道》一书，以下是我从书里得来的两点经验： 一.紧密结合开发过程与测试 测试之难，保证产品开发质量之难，每个公司每"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Justin&#39;s Notes</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Justin&#39;s Notes</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">值得借鉴的Google测试经验</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2014-06-29 </span>
+        
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <p>近来读了《Google软件测试之道》一书，以下是我从书里得来的两点经验：</p>
+
+<p><strong>一.紧密结合开发过程与测试</strong></p>
+
+<p>测试之难，保证产品开发质量之难，每个公司每个团队，都会碰到各自的的问题和困难。但最为常见的抱怨（尤其是在互联网行业）是：<strong>开发人员不重视测试，测试人员人手不足，开发迭代又快，测不过来</strong>。不少团队还喜欢争论开发测试比是1：1还是1：5或者5：1的问题,经常搬出微软这些传统软件巨头的开发测试比是多少多少来为自己辩护。其实，靠堆积人海战术的测试，是不适合在线型的快速的产品交付模式的。Google在这条路上就是另辟新径。</p>
+
+<p>Google的“新径”说到底其实也很简单，就是将开发过程和测试混合在一起，密不可分，他们认为测试是开发过程中必不可少的部分，当开发过程和测试一起携手联姻时，即是质量达成之时。</p>
+
+<p>Google的测试主管Patrick说道：
+<strong><em>一个团队能编写出高质量的产品的唯一途径是全体人员共同对质量负责，包括产品经理，开发人员，测试人员等所有人。达到此目的最好方式是使测试人员有能力将测试变成代码库的一个实际功能，而测试功能的地位和应该与真是客户看到的任何其它功能同等重要。</em></strong></p>
+
+<p>Google将工程师团队分成以下三种角色：</p>
+
+<p><strong>1. 软件开发工程师(SWE，software engineer)</strong></p>
+
+<p>SWE就是传统上的开发角色，他们的职责就是实现用户使用功能的代码。但是除此之外，<strong>SWE还需要编写测试代码，包括进行测试驱动的设计，单元测试，参与构建各种大小规模的测试等</strong>。简单来说，SWE所有时间都是花在了代码编写上，包括功能代码以及对这些功能代码进行测试用的测试代码。</p>
+
+<p><strong>2. 软件测试开发工程师(SET,software engineer in test)</strong></p>
+
+<p><strong>SET应该是Google能促进开发过程与测试紧密合起来的最关键角色</strong>。SET的工作重心在于提供可测试性和通用性测试的基础框架上。传统的测试由于这一角色的缺乏，导致产品的可测试性难以保证，最后沦为开发人员由于编写测试代码困难，不愿意去写测试代码，而测试人员由于模块化测试困难，导致不能尽早介入到开发流程中去，而只能在产品交互后做停留在表面的集成测试。</p>
+
+<p>而SET这一角色的存在，很好的解决了这一个问题。SET会提供各种mock/fake框架，SWE在编写代码时，可以利用这些框架与外部依赖解耦，使得产品的单元测试和测试的自动执行变得相当容易。同时，集成测试也可以更早地进行，提高了测试人员的效率。</p>
+
+<p><strong>3.测试工程师(TE,test engineer)</strong></p>
+
+<p><strong>TE更多地代表的是用户利益，他们需要把用户放在第一位来思考</strong>。 TE需要组织整体的质量实践，分析和解释测试执行结果，驱动测试执行，构建端到端的自动化测试。他们早期会通过关注bug数，以<strong>确认开发人员在测试方面是做得到位</strong>。当bug数减少后，他们在以用户使用的场景，来进行<strong>探索性的测试</strong>。</p>
+
+<p>以上三个角色的紧密配合，完成了开发过程与测试的“联姻”。而这个负责“牵红线的月老”，我想就是SET这个角色。SET是产品可测试性的保证。同时，可测试性不只是将开发过程和测试紧密结合的基础，同时还是检验代码质量和架构是否优良的最好工具。我一直信奉下面这个公式：<strong><em>可测试性=低耦合=优秀的代码=良好的架构</em></strong></p>
+
+<p><strong>二.版本发布的“爬，走，跑”模式</strong></p>
+
+<p>熟悉google产品的，应该经常能看到google许多发布的版本后面都带着beta的标签，如我现在是用的chrome版本就是“33.0.1750.29 beta”。许多产品在线运营了多年，beta的标签也没有去掉，这个标签是在警示用户，产品仍处于改良之中。对于最终用户，只有产品达到99.99%的可用性，才会将beta的标签去掉。</p>
+
+<p>一般一个产品在发布给用户之前，一般要经历金丝雀版本，开发版本，测试版本，beta或正式发布版本。</p>
+
+<p><strong>金丝雀版本</strong>:即每日构建版本，用来排除一些明显问题的版本。这是一个极不稳定的版本，可能随时崩溃。一般只有产品的工程师（开发或测试人员）才会安装使用金丝雀版本。</p>
+
+<p><strong>开发版本</strong>：这个是开发人员日常使用的版本，一般是每周发布一个。该版本具有一定的功能并通过了一系列的测试。所有这个产品下的工程师都被要求去安装这个版本，并在日常工作中真正使用它。这其实体现“Eating your own dog food”的软件开发“黄金法则”。</p>
+
+<p><strong>测试版本</strong>：这是一个通过了持续测试的版本,一般是一个月里最佳版本。一般可以被挑选为内部尝鲜，当做整个公司的“dog food”。如果该版本能持续表现良好，可作为beta测试的候选版本。</p>
+
+<p><strong>beta或发布版本</strong>：这个版本由非常稳定的测试版本演变而来，并经历了内部使用和通过所有质量考核的一个版本，也是对外发布的第一个版本。</p>
+
+<p>这种“爬，走，跑”的模式，能给产品提供一个测试验证的良好机会，并尽快得到使用过程中的反馈。</p>
+
+<p>以上两点，就是《Google软件测试之道》一书能带来的两点经验，书的其它大部分内容是许多Google内部人士的访谈，我认为这部分都“太Google”了，价值不是太大，也是此书的问题所在。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">justin huang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2014-06-29</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+          
+          <a href="/tags/%E6%B5%8B%E8%AF%95/">测试</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/%E5%8F%AF%E6%89%A9%E5%B1%95%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E7%9A%84%E4%B8%89%E4%B8%AA%E7%BB%B4%E5%BA%A6/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">可扩展架构设计的三个维度</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/%E8%BF%87%E8%BD%BD%E4%BF%9D%E6%8A%A4%E7%AE%97%E6%B3%95%E6%B5%85%E6%9E%90/">
+            <span class="next-text nav-default">过载保护算法浅析</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+  <a href="http://sharecore.net/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2013 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">justin huang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
