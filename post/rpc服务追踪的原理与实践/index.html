@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title> - Justin写字的地方</title>
+  <title>RPC服务追踪的原理与实践 - Justin写字的地方</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -17,7 +17,7 @@
 
 
 <meta name="author" content="justin huang" />
-  <meta name="description" content="RPC服务追踪的原理与实践 title: &amp;ldquo;RPC服务追踪的原理与实践&amp;rdquo; date: 2017-03-09 10:00:00 tags: - 技术 - 架构 在分布式服务化架构下，由于分布式服务间" />
+  <meta name="description" content="在分布式服务化架构下，由于分布式服务间存在相互依赖，彼此协同来完成各类业务场景。下图是一个典型的业务场景，从前端发起一个请求，到最后的业务完" />
 
   <meta name="keywords" content="Justin, JustinHuang, ShareCore" />
 
@@ -49,13 +49,16 @@
 
 
 
-<meta property="og:title" content="" />
-<meta property="og:description" content="RPC服务追踪的原理与实践 title: &ldquo;RPC服务追踪的原理与实践&rdquo; date: 2017-03-09 10:00:00 tags: - 技术 - 架构 在分布式服务化架构下，由于分布式服务间" />
+<meta property="og:title" content="RPC服务追踪的原理与实践" />
+<meta property="og:description" content="在分布式服务化架构下，由于分布式服务间存在相互依赖，彼此协同来完成各类业务场景。下图是一个典型的业务场景，从前端发起一个请求，到最后的业务完" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://sharecore.net/post/rpc%E6%9C%8D%E5%8A%A1%E8%BF%BD%E8%B8%AA%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/" />
 
 
 
+<meta property="article:published_time" content="2017-03-09T10:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2017-03-09T10:00:00&#43;00:00"/>
 
 
 
@@ -67,21 +70,20 @@
 
 
 
+<meta itemprop="name" content="RPC服务追踪的原理与实践">
+<meta itemprop="description" content="在分布式服务化架构下，由于分布式服务间存在相互依赖，彼此协同来完成各类业务场景。下图是一个典型的业务场景，从前端发起一个请求，到最后的业务完">
 
 
-<meta itemprop="name" content="">
-<meta itemprop="description" content="RPC服务追踪的原理与实践 title: &ldquo;RPC服务追踪的原理与实践&rdquo; date: 2017-03-09 10:00:00 tags: - 技术 - 架构 在分布式服务化架构下，由于分布式服务间">
+<meta itemprop="datePublished" content="2017-03-09T10:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2017-03-09T10:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3887">
 
 
 
-<meta itemprop="wordCount" content="3938">
-
-
-
-<meta itemprop="keywords" content="" />
+<meta itemprop="keywords" content="技术,架构," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content=""/>
-<meta name="twitter:description" content="RPC服务追踪的原理与实践 title: &ldquo;RPC服务追踪的原理与实践&rdquo; date: 2017-03-09 10:00:00 tags: - 技术 - 架构 在分布式服务化架构下，由于分布式服务间"/>
+<meta name="twitter:title" content="RPC服务追踪的原理与实践"/>
+<meta name="twitter:description" content="在分布式服务化架构下，由于分布式服务间存在相互依赖，彼此协同来完成各类业务场景。下图是一个典型的业务场景，从前端发起一个请求，到最后的业务完"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -140,10 +142,10 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title"></h1>
+      <h1 class="post-title">RPC服务追踪的原理与实践</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 0001-01-01 </span>
+        <span class="post-time"> 2017-03-09 </span>
         
         
         
@@ -156,15 +158,7 @@
   <h2 class="post-toc-title">文章目录</h2>
   
   <div class="post-toc-content always-active">
-    <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#rpc服务追踪的原理与实践">RPC服务追踪的原理与实践</a></li>
-<li><a href="#架构">- 架构</a></li>
-</ul></li>
-</ul>
-</nav>
+    
   </div>
 </div>
 
@@ -173,24 +167,16 @@
 
     
     <div class="post-content">
-      
+      <p>在分布式服务化架构下，由于分布式服务间存在相互依赖，彼此协同来完成各类业务场景。下图是一个典型的业务场景，从前端发起一个请求，到最后的业务完成，需要经过很多环节，这些环节可能都是分布式服务的方式提供，部署在不同的服务器上进行。而在这种复杂的分布式服务场景下，为了定位问题、性能瓶颈查询、异常日志跟踪等，如果没有服务追踪和分析工具的帮助，都是非常困难的。
+<img src="/images/trace/trace.png" style="width:500px"/></p>
 
-<h2 id="rpc服务追踪的原理与实践">RPC服务追踪的原理与实践</h2>
+<p>说到分布式追踪，当然不得不提Google为其基于日志的分布式跟踪系统Dapper发表的[论文]，在这边论文里，Google介绍了他们在分布式追踪领域的经验，总体来看其核心概念有三个：</p>
 
-<p>title: &ldquo;RPC服务追踪的原理与实践&rdquo;
-date: 2017-03-09 10:00:00
-tags:
-- 技术</p>
-
-<h2 id="架构">- 架构</h2>
-
-<p>在分布式服务化架构下，由于分布式服务间存在相互依赖，彼此协同来完成各类业务场景。下图是一个典型的业务场景，从前端发起一个请求，到最后的业务完成，需要经过很多环节，这些环节可能都是分布式服务的方式提供，部署在不同的服务器上进行。而在这种复杂的分布式服务场景下，为了定位问题、性能瓶颈查询、异常日志跟踪等，如果没有服务追踪和分析工具的帮助，都是非常困难的。
-<img src="/images/trace/trace.png" style="width:500px"/>
-说到分布式追踪，当然不得不提Google为其基于日志的分布式跟踪系统Dapper发表的[论文]，在这边论文里，Google介绍了他们在分布式追踪领域的经验，总体来看其核心概念有三个：
-<strong>1. TraceID：用来标识每一条业务请求链的唯一ID，TraceID需要在整个调用链路上传递</strong>
+<p><strong>1. TraceID：用来标识每一条业务请求链的唯一ID，TraceID需要在整个调用链路上传递</strong>
 <strong>2. Span：请求链中的每一个环节为一个Span，每一个Span有一个SpanId来标识，前后Span间形成父子关系</strong>
-<strong>3. Annotation：业务自定义的埋点信息，可以是sql、用户ID等关键信息</strong>
-<img src="/images/trace/span.png" style="width:500px"/>
+<strong>3. Annotation：业务自定义的埋点信息，可以是sql、用户ID等关键信息</strong></p>
+
+<p><img src="/images/trace/span.png" style="width:500px"/>
 <em>图：5个span在Dapper跟踪树中的关联关系(图来自google论文)</em></p>
 
 <p>Google论文出来后，业界出现了很多基于其思想实现的开源框架，如Twitter的zipkin，其中zipkin是严格按照来Dapper论文来设计的，他提供了完整的跟踪记录收集、存储功能，以及查询API与界面。其存储支持多种数据库：MySql、ElasticSearch、Cassandra、Redis等等，收集API支持HTTP和Thrift。
@@ -284,7 +270,7 @@ tags:
   </p>
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
-    <span class="item-content">0001-01-01</span>
+    <span class="item-content">2017-03-09</span>
   </p>
   
   
@@ -294,17 +280,28 @@ tags:
     
 
     <footer class="post-footer">
-      
+      <div class="post-tags">
+          
+          <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+          
+          <a href="/tags/%E6%9E%B6%E6%9E%84/">架构</a>
+          
+        </div>
 
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/container%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/">
+          <a class="prev" href="/post/gc%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/">
             <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Linux Container的安装与使用介绍</span>
+            <span class="prev-text nav-default">JVM GC知识笔记</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
         
+          <a class="next" href="/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%BF%9B%E9%98%B61-%E5%9F%BA%E7%A1%80/">
+            <span class="next-text nav-default">分布式锁进阶1-基础</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
       </nav>
     </footer>
   </article>
