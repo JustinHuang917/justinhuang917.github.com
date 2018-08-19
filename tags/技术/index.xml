@@ -17,7 +17,7 @@
       <pubDate>Sun, 07 May 2017 22:27:29 +0000</pubDate>
       
       <guid>http://sharecore.net/post/gc%E7%9F%A5%E8%AF%86%E7%AC%94%E8%AE%B0/</guid>
-      <description>###对象存活性 ####引用计数法 算法:每个对象有一个引用计数器，每一次对象被引用，计数器+1，引用失效时，计数器-1，计数器为0的对象即未</description>
+      <description>对象存活性 引用计数法 算法:每个对象有一个引用计数器，每一次对象被引用，计数器+1，引用失效时，计数器-1，计数器为0的对象即未被引用，可以回</description>
     </item>
     
     <item>
