@@ -2,48 +2,48 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Golang on Justin写字的地方</title>
-    <link>http://localhost:1313/tags/golang/</link>
+    <link>http://sharecore.net/tags/golang/</link>
     <description>Recent content in Golang on Justin写字的地方</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Thu, 09 Jan 2014 00:10:45 +0000</lastBuildDate>
     
-	<atom:link href="http://localhost:1313/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://sharecore.net/tags/golang/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>对Go的Slice进行Append的一个坑</title>
-      <link>http://localhost:1313/post/%E5%AF%B9go%E7%9A%84slice%E8%BF%9B%E8%A1%8Cappend%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%91/</link>
+      <link>http://sharecore.net/post/%E5%AF%B9go%E7%9A%84slice%E8%BF%9B%E8%A1%8Cappend%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%91/</link>
       <pubDate>Thu, 09 Jan 2014 00:10:45 +0000</pubDate>
       
-      <guid>http://localhost:1313/post/%E5%AF%B9go%E7%9A%84slice%E8%BF%9B%E8%A1%8Cappend%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%91/</guid>
+      <guid>http://sharecore.net/post/%E5%AF%B9go%E7%9A%84slice%E8%BF%9B%E8%A1%8Cappend%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%91/</guid>
       <description>今天我们说说Go为数不多的一个“坑”。这个“坑”的代码是这样的： func main() { arr1 := [5]int{1, 2, 3, 4, 5} slice1 := arr1[1:2] slice1 = append(slice1, 6, 7, 8) fmt.Println(&amp;quot;slice1:&amp;quot;, slice1) fmt.Println(&amp;quot;arr1:&amp;quot;, arr1) arr2 := [5]int{1, 2, 3, 4, 5} slice2 := arr2[1:3] slice2 = append(slice2, 6, 7,</description>
     </item>
     
     <item>
       <title>Golang的Slice机制解析</title>
-      <link>http://localhost:1313/post/golang%E7%9A%84slice%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/</link>
+      <link>http://sharecore.net/post/golang%E7%9A%84slice%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/</link>
       <pubDate>Sun, 29 Sep 2013 00:12:52 +0000</pubDate>
       
-      <guid>http://localhost:1313/post/golang%E7%9A%84slice%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/</guid>
+      <guid>http://sharecore.net/post/golang%E7%9A%84slice%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/</guid>
       <description>Rob Pike写了篇关于Go的数组与切片的文章：Arrays, slices (and strings): The mechanics of &amp;lsquo;append&amp;rsquo; ，介绍了slice的实现和一些常见的操作。其部分内容与我这篇文章是重</description>
     </item>
     
     <item>
       <title>怎么写Go的基准测试</title>
-      <link>http://localhost:1313/post/%E6%80%8E%E4%B9%88%E5%86%99go%E7%9A%84%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/</link>
+      <link>http://sharecore.net/post/%E6%80%8E%E4%B9%88%E5%86%99go%E7%9A%84%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/</link>
       <pubDate>Thu, 04 Jul 2013 00:38:31 +0000</pubDate>
       
-      <guid>http://localhost:1313/post/%E6%80%8E%E4%B9%88%E5%86%99go%E7%9A%84%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/</guid>
+      <guid>http://sharecore.net/post/%E6%80%8E%E4%B9%88%E5%86%99go%E7%9A%84%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/</guid>
       <description>Dave Cheney在他的blog写了一篇关于Go的基准测试编写的基本介绍(链接)。我以此为内容，整理输出内容。 对自己编写package编写基准测</description>
     </item>
     
     <item>
       <title>Go并发编程模式进阶</title>
-      <link>http://localhost:1313/post/go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6/</link>
+      <link>http://sharecore.net/post/go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6/</link>
       <pubDate>Mon, 10 Jun 2013 00:09:57 +0000</pubDate>
       
-      <guid>http://localhost:1313/post/go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6/</guid>
+      <guid>http://sharecore.net/post/go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F%E8%BF%9B%E9%98%B6/</guid>
       <description>&lt;p&gt;前段时间Google的&lt;a href=&#34;http://profiles.google.com/ajmani&#34;&gt;Sameer Ajmani&lt;/a&gt;在Google I/O上做了关于Go的并发模式的介绍。Slides&lt;a href=&#34;http://talks.golang.org/2013/advconc.slide&#34;&gt;在此&lt;/a&gt;,youtube视频&lt;a href=&#34;http://www.youtube.com/watch?feature=player_embedded&amp;amp;v=QDDwwePbDtw&#34;&gt;在此&lt;/a&gt;(注：上述链接均需翻墙)。&lt;/p&gt;
 
 &lt;p&gt;本篇的前提是对goroutine+channel的并发编程模式有基本的了解，建议能读懂下面这个经典ping-pong程序为好。&lt;/p&gt;
@@ -89,7 +89,7 @@ func Player(name string, table chan *Ball) {
 
 &lt;p&gt;ping-pong程序的执行过程，可以用下图来表示。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/advgoroutine/pingpong.png&#34; alt=&#34;ping-pong程序执行过程&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://sharecore.net/images/advgoroutine/pingpong.png&#34; alt=&#34;ping-pong程序执行过程&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;接下来主要说说Go的并发编程里的一些“文艺”使用:如何通信?如何周期性处理事件？如何取消执行？这些高级用法的支持，除了依赖我们上面看到的goroutine+channel外，还要依赖于Go的一个statement：select+case。它可以用来管理和监听多个channel,从而起到“多路复用”的效果。他的基本语法如下。&lt;/p&gt;
 
