@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>应用密码学概要 - Justin写字的地方</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="justin huang" />
+  <meta name="description" content="#异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&amp;rdquo;⊕&amp;" />
+
+  <meta name="keywords" content="Justin, JustinHuang, ShareCore" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.43" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E6%A6%82%E8%A6%81/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="应用密码学概要" />
+<meta property="og:description" content="#异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&rdquo;⊕&" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E6%A6%82%E8%A6%81/" />
+
+
+
+<meta property="article:published_time" content="2018-09-22T15:28:14&#43;08:00"/>
+
+<meta property="article:modified_time" content="2018-09-22T15:28:14&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="应用密码学概要">
+<meta itemprop="description" content="#异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&rdquo;⊕&">
+
+
+<meta itemprop="datePublished" content="2018-09-22T15:28:14&#43;08:00" />
+<meta itemprop="dateModified" content="2018-09-22T15:28:14&#43;08:00" />
+<meta itemprop="wordCount" content="2287">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="应用密码学概要"/>
+<meta name="twitter:description" content="#异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&rdquo;⊕&"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Justin&#39;s Notes</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Justin&#39;s Notes</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">应用密码学概要</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-09-22 </span>
+        
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <p>#异或(XOR)</p>
+
+<p>文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&rdquo;⊕&rdquo;来表示。常见操作定义如下：</p>
+
+<pre><code>    1⊕1=0
+    1⊕0=1
+    0⊕0=0
+    0⊕1=1
+</code></pre>
+
+<p>除了以上定义，异或操作还具有如下属性：</p>
+
+<ol>
+<li>顺序无关性：A⊕(B⊕C)=(A⊕B)⊕C</li>
+<li>可交换：A⊕B=B⊕A</li>
+<li>任何输入与自身异或，输出为0：A⊕A=0</li>
+<li>任何输入与0异或，其结果为其本身：1⊕0=1,0⊕0=0</li>
+</ol>
+
+<p>而基于以上四个属性，我们可以推导地五条重要的属性：a⊕b⊕a=b</p>
+
+<pre><code>A⊕B⊕A=A⊕A⊕B(属性1)
+		=0⊕B(属性3)
+			=B(属性4)
+</code></pre>
+
+<p>以上定义，除对“0”和“1”的异或操作满足外，可以推广到任何多个位的操作。如对两个数字或两个字符串进行按位异或操作，也均满足以上定义。</p>
+
+<pre><code class="language-python">#定义字符串按位异或的操作
+def sxor(a,b)
+	return ''.join(chr(ord(a) ^ ord(b)) for a,b in zip(s1,s2))
+
+val=sxor('aa','bb')=&gt; val:'\x03\x03' 
+sxor(val,'aa')=&gt;'bb'
+sxor(val,'bb')=&gt;'aa'  
+</code></pre>
+
+<p>#一次性密码本(One-Time Pad)</p>
+
+<p>基于以上关于异或的朴素定义，我们可以得到一个“坚不可摧”的加密方式，即：一次性密码本加密。</p>
+
+<p><img src="./images/crypto/OTP.png" alt="OTP" /></p>
+
+<p>如上图所示，其中P代表明文(plaintext),C代表密文(ciphertext),K代表密钥(Key)。先通过对明文进行按位异或，将得到密文，完成加密。密文用相同的密钥进行按位异或，将得到明文信息，完成解密的操作。
+从安全性上来看，攻击者知道密文C的情况下，可以证明其再没有K的信息时，他将不能获取任何关于明文的信息，但前提是：</p>
+
+<ul>
+<li>密钥K必须完全随机</li>
+</ul>
+
+<p>如果，密钥K不是完全随机产生，则无法证明其安全性。因为密钥不真随机的情况下，明文P与密文C可能存在一定的函数关系，而非完全独立，即使破解函数关系依旧非常困难，但是却不是可证明安全的。</p>
+
+<ul>
+<li><p>密钥K不能复用</p>
+
+<p>另外一个前提是密钥不能复用。假设攻击者获取了两份明文P1、P2经用同一密钥K加密而得到的密文C1和C2，攻击者只需要将两份密钥进行异或操作，即可得到明文的的异或结果。推导如下：</p></li>
+</ul>
+
+<pre><code>	C1⊕C2=(P1⊕K)⊕(P2⊕K)
+		    =P1⊕K⊕P2⊕K
+			    =P1⊕P2⊕K⊕K) 
+			    =P1⊕P2
+</code></pre>
+
+<p>尽管得到的是P1、P2的异或结果，要独立分离出P1和P2的准确结果依旧困难，但要注意的是，两个明文的异或结果依旧会泄漏一些信息。如下面两张图片A、B进行异或，得到的结果几乎泄漏了所有信息。</p>
+
+<p><img src="./images/crypto/reuse_key.png" alt="OTP" /></p>
+
+<p>密钥序列不能重用，这意味着每个明文的位都必须有一个密钥位与其对应，即密钥长度与明文长度要一样，这一点在工程实践上是没有意义的，这也是一次性密码本(OTP)在实际中很少使用的原因。</p>
+
+<p>#DES与AES</p>
+
+<p>前文说到一次性密码本，它需要一个与明文长度一样长的随机生成的密钥来完成加密和解密，这种要求对工程实践上难度较大，接下来我们介绍两个可以用固定长度密钥对明文分组进行加密的算法。</p>
+
+<p>##DES</p>
+
+<p>DES是一种用56位密钥对64位长的明文分组进行加密的方式。</p>
+
+<p><img src="./images/crypto/DES.png" alt="OTP" /></p>
+
+<p>DES是一种对称加密，加密和解密都使用相同的密钥。它采取迭代算法来进行加密，每一次加密过程都包含16轮操作，而每一轮的操作完全相同。只是每一轮的操作会使用不同的子密钥进行，子密钥由主密钥推导而来，上一轮的输出为下一轮的输入，整个迭代加密结构被称为Feistel网络，Feistel网络结构如下：</p>
+
+<p><img src="./images/crypto/DES_PROCESS.png" alt="OTP" /></p>
+
+<p>（图参考自《深入浅出密码学》P55）</p>
+
+<p>64bit的明文再完成初始转换后，会被分割成L0与R0左右两部分，每部分长度为32bit，右半部分与生存的子密钥作为参数传入f函数，f函数的输出与左部分异或后作为下一轮的右半部分，而右半部分将直接复制到下一轮的左半部分。即：</p>
+
+<pre><code> R1=f(R0,K1)⊕L0
+ L1=L0
+</code></pre>
+
+<p>可见DES的每一轮只对输入内容的左半部分加密，右半部分只是简单复制到下一轮。</p>
+
+<p>###初始置换：</p>
+
+<p>关于初始转换，本身对加密安全性没有任何影响，其只是对输入内容进行按位的位置变变换，如将第1位放置30位，30位放到20位等，逆转换即为复位。为什么要这么做？目前没有得到可解释的理由。</p>
+
+<p>###f函数：</p>
+
+<p>由上面流程可知，DES中，f函数在安全性上扮演着非常重要的角色。f函数包括以下几步处理：</p>
+
+<ol>
+<li><p>位扩充</p>
+
+<p>位扩充是指将32位的输入扩展为48位，使用查表的方式进行扩充，也称为E-盒转换。具体转换方式如下图所示。
+<img src="./images/crypto/DES_E.png" alt="OTP" /></p></li>
+</ol>
+
+<p>需要注意的是，E-盒为算法内的静态定义，每一次加密过程都用该E-盒的定义进行扩充。从上图的扩充过程可知，32个输入位经过扩充后变为48位，其中正好有16个位出现了两次，如图中1号位、4号位、5号位等。但是E-盒保证了任意一个输入位都不会再同一个6位的输出分组中出现两次，如1号位出现在第一个6位分组和最后一个6位分组，4号位出现在第一个6位分组和第二个6位分组，这样做可以保证一半的输入位会影响两个不同的输出位置，而为什么是6位分组位单位？与第三步的S-盒替换有关。</p>
+
+<ol>
+<li><p>与子密钥K进行异或操作，这一步很简单，输入和子密钥长度都是48，按位异或即可。</p></li>
+
+<li><p>S-盒替换</p>
+
+<p>经过前面两步，输入已经转换为48位，而最终的输出需要转换为32位，这是通过S-盒转换来完成的，它通过查表的方式将6位的输入映射为4位的输出。DES中定义了8个S-盒，每个S-盒包含2^6=64个4位的值（十进制：0-15），这64个值分为4行*16列的表格进行存储。按以下方式读取S-盒：</p>
+
+<ul>
+<li>第一个6位分组读S-盒1、依次，第8个分组读S-盒8</li>
+<li>每个6位分组的最高位盒最低位决定要读的行，中间四个位决定要读取的列</li>
+</ul></li>
+</ol>
+
+<p>如下图，第五个6位分组的读取方式：</p>
+
+<p><img src="./images/crypto/DES_S.png" alt="OTP" /></p>
+
+<p>S-盒转换给DES算法带来了唯一的非线性转换，即满足：S(A)⊕S(B)!=S(A⊕B)，它是DES加密过程中最重要的部分。</p>
+
+<p>###子密钥生成</p>
+
+<p>#AES</p>
+
+<p>#分组加密及其模式与安全性探讨</p>
+
+<p>#流加密</p>
+
+<p>#公钥加密</p>
+
+<p>#Hash函数</p>
+
+<p>#消息验证(MAC)</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">justin huang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-09-22</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/%E7%AE%80%E5%8D%95%E4%B8%A4%E5%B1%82%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AE%9E%E7%8E%B0/">
+            <span class="next-text nav-default">简单两层神经网络的实现</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/justinhuang917" class="iconfont icon-github" title="github"></a>
+      <a href="http://weibo.com/justinhuang917" class="iconfont icon-weibo" title="weibo"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2013 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">justin huang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-37230829-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
