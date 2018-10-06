@@ -17,7 +17,7 @@
       <pubDate>Sat, 22 Sep 2018 15:28:14 +0800</pubDate>
       
       <guid>http://localhost:1313/post/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E6%A6%82%E8%A6%81/</guid>
-      <description>异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&amp;rdquo;⊕&amp;r</description>
+      <description>异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回1。常用符号&amp;rdquo;⊕&amp;r</description>
     </item>
     
     <item>
