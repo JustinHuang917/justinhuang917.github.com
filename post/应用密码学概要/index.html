@@ -17,7 +17,7 @@
 
 
 <meta name="author" content="justin huang" />
-  <meta name="description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回1。常用符号&amp;rdquo;⊕&amp;r" />
+  <meta name="description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&amp;rdquo;⊕&amp;r" />
 
   <meta name="keywords" content="Justin, JustinHuang, ShareCore" />
 
@@ -50,7 +50,7 @@
 
 
 <meta property="og:title" content="应用密码学概要" />
-<meta property="og:description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回1。常用符号&rdquo;⊕&r" />
+<meta property="og:description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&rdquo;⊕&r" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://localhost:1313/post/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E6%A6%82%E8%A6%81/" />
 
@@ -71,19 +71,19 @@
 
 
 <meta itemprop="name" content="应用密码学概要">
-<meta itemprop="description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回1。常用符号&rdquo;⊕&r">
+<meta itemprop="description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&rdquo;⊕&r">
 
 
 <meta itemprop="datePublished" content="2018-09-22T15:28:14&#43;08:00" />
 <meta itemprop="dateModified" content="2018-09-22T15:28:14&#43;08:00" />
-<meta itemprop="wordCount" content="3776">
+<meta itemprop="wordCount" content="5974">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="应用密码学概要"/>
-<meta name="twitter:description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回1。常用符号&rdquo;⊕&r"/>
+<meta name="twitter:description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&rdquo;⊕&r"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -168,15 +168,26 @@
 <ul>
 <li><a href="#初始置换">初始置换：</a></li>
 <li><a href="#f函数">f函数：</a></li>
-<li><a href="#子密钥生成">子密钥生成</a></li>
+<li><a href="#子密钥编排">子密钥编排</a></li>
+</ul></li>
+<li><a href="#aes">AES</a>
+<ul>
+<li><a href="#密钥加法层">密钥加法层</a></li>
+<li><a href="#字节代换层">字节代换层</a></li>
+<li><a href="#扩散层">扩散层</a>
+<ul>
+<li><a href="#shiftrows操作">ShiftRows操作</a></li>
+<li><a href="#mixcolumns操作">MixColumns操作</a></li>
+</ul></li>
+<li><a href="#子密钥编排-1">子密钥编排</a></li>
 <li><a href="#解密">解密</a>
 <ul>
-<li><a href="#密钥编排可逆性">密钥编排可逆性</a></li>
-<li><a href="#feistel网络的可逆性">Feistel网络的可逆性</a></li>
+<li><a href="#密钥加法层逆向">密钥加法层逆向</a></li>
+<li><a href="#字节代换层逆向">字节代换层逆向</a></li>
+<li><a href="#shiftrows层逆向">ShiftRows层逆向</a></li>
+<li><a href="#mixcolumns层逆向">MixColumns层逆向</a></li>
 </ul></li>
-<li><a href="#des的安全性">DES的安全性</a></li>
 </ul></li>
-<li><a href="#aes">AES</a></li>
 </ul></li>
 <li><a href="#分组加密及其模式与安全性探讨">分组加密及其模式与安全性探讨</a></li>
 <li><a href="#流加密">流加密</a></li>
@@ -198,7 +209,7 @@
 
 <h1 id="异或-xor">异或(XOR)</h1>
 
-<p>文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回1。常用符号&rdquo;⊕&rdquo;来表示。常见操作定义如下：</p>
+<p>文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&rdquo;⊕&rdquo;来表示。常见操作定义如下：</p>
 
 <pre><code>    1⊕1=0
     1⊕0=1
@@ -280,7 +291,7 @@ sxor(val,'bb')=&gt;'aa'
 
 <p><img src="/images/crypto/DES_PROCESS.png" alt="OTP" /></p>
 
-<p>64bit的明文在完成初始转换后，会被分割成L0与R0左右两部分，每部分长度为32bit，右半部分与生成的子密钥作为参数传入f函数，f函数的输出与左部分异或后作为下一轮的右半部分，而右半部分将直接复制到下一轮的左半部分。即：</p>
+<p>64位的明文在完成初始转换后，会被分割成L0与R0左右两部分，每部分长度为32位，右半部分与生成的子密钥作为参数传入f函数，f函数的输出与左部分异或后作为下一轮的右半部分，而右半部分将直接复制到下一轮的左半部分。即：</p>
 
 <pre><code> R1=f(R0,K1)⊕L0
  L1=L0
@@ -324,21 +335,21 @@ sxor(val,'bb')=&gt;'aa'
 
 <p><strong>S-盒转换给DES算法带来了唯一的非线性转换，即满足：S(A)⊕S(B)!=S(A⊕B)，它是DES加密过程中最重要的部分。</strong></p>
 
-<h3 id="子密钥生成">子密钥生成</h3>
+<h3 id="子密钥编排">子密钥编排</h3>
 
-<p>DES的输入主密钥是64bit的固定长度，而其中每第8个位为前面7个位的奇校验位，设置奇偶校验位除了能在密钥传输过程中用于检验密钥传输错误外，校验位的存在并没有增加密钥空间，对于增强加密安全性没有帮助。而密钥完整性校验，可以由更高级的办法进行，所以可以认为校验位的设置是一个比较过时的设计。</p>
+<p>DES的输入主密钥是64位的固定长度，而其中每第8个位为前面7个位的奇校验位，设置奇偶校验位除了能在密钥传输过程中用于检验密钥传输错误外，校验位的存在并没有增加密钥空间，对于增强加密安全性没有帮助。而密钥完整性校验，可以由更高级的办法进行，所以可以认为校验位的设置是一个比较过时的设计。</p>
 
-<p>由于8位校验码的存在，所以DES其实是一个56bit的主密钥加密，56bit的主密钥在每一轮的加密过程中均会生成子密钥ki，而每一轮子密钥ki的长度固定是48bit。子密钥生成算法如下图所示：</p>
+<p>由于8位校验码的存在，所以DES其实是一个56位的主密钥加密，56位的主密钥在每一轮的加密过程中均会生成子密钥ki，而每一轮子密钥ki的长度固定是48位。子密钥生成算法如下图所示：</p>
 
 <p><img src="/images/crypto/DES_KEY_GEN.png" alt="DES_KEY_GEN" /></p>
 
-<p>子密钥生成的算法里值得注意的是移位计算，移位计算会在左右两半部分同时进行，16轮密钥移动的位数正好为28bit(左、右两半部分的长度)，由此可得到移位前和16轮移位后的密钥后，结果是一样的。这为后续解密过程生成字密钥提供了可逆支持。</p>
+<p>子密钥生成的算法里值得注意的是移位计算，移位计算会在左右两半部分同时进行，16轮密钥移动的位数正好为28位(左、右两半部分的长度)，由此可得到移位前和16轮移位后的密钥后，结果是一样的。这为后续解密过程生成字密钥提供了可逆支持。</p>
 
-<h3 id="解密">解密</h3>
+<p>###解密</p>
 
 <p>DES的解密的重点是，<strong>解密算法与加密算法完全一致</strong>，这主要由密钥编排与Feistel网络的可逆性决定的。下面分别探讨密钥编排与Feistel网络的可逆性问题。</p>
 
-<h4 id="密钥编排可逆性">密钥编排可逆性</h4>
+<p>####密钥编排可逆性</p>
 
 <p>由上面子密钥的移位计算我们得到了移位前和16轮移位后的密钥完全一致，即C0=D16,D0=D16。而第16轮的，密钥由（C16,D16）进行PC-2转换得来。即：</p>
 
@@ -367,7 +378,7 @@ sxor(val,'bb')=&gt;'aa'
 
 <p>同理可计算k1、k2&hellip;k14,只是向右移位的位数有所差异，第一轮不移位，第2、9、16轮右移一位，其他轮右移两位。</p>
 
-<h4 id="feistel网络的可逆性">Feistel网络的可逆性</h4>
+<p>####Feistel网络的可逆性</p>
 
 <p>Feistel网络的一个重要特性是<strong>第一轮解密的结果是第16轮加密的逆，并可一次类推，第二轮的解密结果是第15轮加密的逆，直至最后一轮解密结果即为明文。</strong> 通过对比DES加密的第一轮和最后一轮</p>
 
@@ -410,18 +421,116 @@ DR0=L16=R15
 
 <p>即：<strong>第i轮的解密结果，为第(16-i)轮的加密的逆</strong>，由此可知：最后一轮的解密结果即为(R0,L0),(R0,L0)进行左右变化和逆初始转换后即得到明文。</p>
 
-<h3 id="des的安全性">DES的安全性</h3>
+<p>###DES的安全性</p>
 
 <p>说到DES的安全性，我们得先看看DES算法历史。</p>
 
 <p><img src="/images/crypto/DES_HISTORY.png" alt="DES_HISTORY" />
 (来源：<a href="https://zh.wikipedia.org/wiki/%E8%B3%87%E6%96%99%E5%8A%A0%E5%AF%86%E6%A8%99%E6%BA%96">wiki</a>)</p>
 
-<p>由上述历史中可知，IBM和NSA共同设计了DES，但是对于密钥长度问题众说纷纭，到底是谁，为什么选择了56bit的密钥没有定论。而<strong>56bit位的密钥长度正是DES被认为不安全的主要原因</strong>，也就是说DES的不安全性不在其算法设计上，而在于其密钥长度过短，暴力破解的代价较小。</p>
+<p>由上述历史中可知，IBM和NSA共同设计了DES，但是对于密钥长度问题众说纷纭，到底是谁，为什么选择了56位的密钥没有定论。而<strong>56位位的密钥长度正是DES被认为不安全的主要原因</strong>，也就是说DES的不安全性不在其算法设计上，而在于其密钥长度过短，暴力破解的代价较小。</p>
 
 <h2 id="aes">AES</h2>
 
-<p>TBD</p>
+<p>从上述关于DES历史的引用中可以看出，DES的算法是IBM和NSA采取对外保密的方式进行设计的，许多关于算法设计上的选择原由，一直到后面才公开。而AES采取了完全相反的方式。1997年，NIST(美国国家标准与技术研究院)向社会公开征集新的高级密码标准(AES),并经过多轮评估竞选者提交的方案，最终于2001年确认宣布两位比利时密码学家设计的Rijndael方案成为新的高级密码标准。</p>
+
+<p>AES在方案征集前确认了一下必须满足的要求：</p>
+
+<ul>
+<li>分组加密，分组块大小固定为128位（关于分组加密的更多内容，见后文）。</li>
+<li>支持三种密钥长度:128位、192位、256位。</li>
+<li>不同于DES可以在硬件上可以高效实现，在软件上实现也应该可以高效。</li>
+</ul>
+
+<p>Rijndael基本满足以上要求，主要区别是Rijndael的分组大小和密钥长度都可以为128、192和256，而AES只要求分组大小为128。即：
+<img src="/images/crypto/AES.png" alt="AES" /></p>
+
+<p>AES(Rijndael，下文所提AES均为Rijndael加密算法)算法加密过程如下图所示：</p>
+
+<p><img src="/images/crypto/AES_PROCESS.png" alt="AES_PROCESS" /></p>
+
+<p>与DES一样，AES也采取多轮加密的方式，但是AES的加密轮数不是固定的，与密钥长度相关，<strong>128位长的密钥加密轮数是10轮，192位的密钥加密轮数是12轮，256位的密钥加密轮数是14轮</strong>。但是AES不具有Feistel网络结构，即加密解密的算法是不一样的，其中每一步都必须可以求逆运算来解密。同时AES每轮爹地啊，会加密整个分组(128位),而DES只加密分组的一半，即32位。</p>
+
+<p>AES的每一轮需要经过字节代换层、扩散层(ShiftRows&amp;MixColumns)、密钥加法层三层操作，但最后一层不会进行MixColumns的操作，在第一轮开始前需要也需要进行一次密钥加法层的操作。</p>
+
+<h3 id="密钥加法层">密钥加法层</h3>
+
+<p>AES的密钥加法层很简单，子密钥生成器每一轮都会根据主密钥编排生成一个128位的子密钥。<strong>子密钥与当前状态的数据进行异或即为密钥加法层的输出。</strong>由此可见，无论前文的DES，还是AES，密钥在加密算法中都只与加密内容进行异或运算，并不会有其他复杂的算法。</p>
+
+<h3 id="字节代换层">字节代换层</h3>
+
+<p>与DES类似，<strong>AES在字节代换层，提供了非线性变换的S-盒子替换，提供了AES加密过程的唯一非线性元素。</strong>但AES的S-盒是一个双向映射，这是解密操作所需要的。AES的S-盒是一个256位*8位的固定项对应表，AES每8位进行查表后替换。S-盒如下图所示：</p>
+
+<p><img src="/images/crypto/AES_S.png" alt="AES_S" /></p>
+
+<p>查表举例:
+<img src="/images/crypto/AES_S_replace.png" alt="AES_S_replace" /></p>
+
+<h3 id="扩散层">扩散层</h3>
+
+<p>在加密过程中设置扩散层是位了将一个明文位变化的影响扩散到多个密文的位置，以达到隐藏明文统计属性的目的。在AES中的扩散层主要两个操作:ShitRows(行移位)、MixColumns(列混淆)，这两个操作均为线性操作，即满足:OP(A)+OP(B)=OP(A+B)。</p>
+
+<h4 id="shiftrows操作">ShiftRows操作</h4>
+
+<p>在进行ShiftRows操作之前，需要将进行操作的输入分组划分为一个矩阵4*4的矩阵，矩阵中每个元素长度为一个字节(8bit，即128=4*4*8)，然后对矩阵的每一行进行位移。具体算法如下所示：</p>
+
+<p><img src="/images/crypto/ShiftRows.png" alt="ShiftRows" /></p>
+
+<h4 id="mixcolumns操作">MixColumns操作</h4>
+
+<p>MixColumn操作采取对ShiftRows后的矩阵的与一个固定矩阵进行相乘(矩阵相乘)后得到。</p>
+
+<p><img src="/images/crypto/MixColumns.png" alt="MixColumns" /></p>
+
+<h3 id="子密钥编排-1">子密钥编排</h3>
+
+<p>AES的子密钥编排，以原始主密钥(长度为128位、192位或156位)为输入，输出固定长度为128位，子密钥的个数等于加密轮数加1，因为在第一轮加密前需要进行一次密钥加法层的操作。即：<strong>128位的主密钥，加密轮数是10轮，共生成11个子密钥，192位的主密钥，加密轮数是12轮，共生成13个子密钥，256位的主密钥，加密轮数是14轮，共生成15个子密钥。</strong></p>
+
+<p>以128位主密钥生成为例，流程如下：</p>
+
+<p><img src="/images/crypto/AES_KEY_GEN.png" alt="AES_KEY_GEN" /></p>
+
+<p>128位主密钥的AES需要11个子密钥，用元素长度为44的32位的数组来存储，表示为W0&hellip;W43，数组中的每一个元素经过如图中所示计算过程来生成，最终每4个元素组成一个子密钥，子密钥长度也正好为128位。即：</p>
+
+<pre><code>K0=(W0,W1,W2,W3)
+K1=(W4,W5,W6,W7)
+...
+K10=(W40,W41,W42,W43)
+</code></pre>
+
+<p>与之类似，192位主密钥的AES需要的13个字密钥用W0&hellip;W51的52个元素来存储，256位主密钥的AES需要的15个字密钥用W0&hellip;W59的60个元素来存储，也是每4个元素组成一个128位的子密钥。</p>
+
+<p><strong>由上述可知，不同的主密钥长度，只是影响了加密轮数，而每一轮参与加密的子密钥长度是一致的，都是128位。</strong></p>
+
+<p>从实现上来并不约束是一次性将所有元素全部计算好，还是每一轮计算4个元素来组成子密钥，因为这是可行的，因为每一轮子密钥只后向依赖前一轮子密钥的4个元素。</p>
+
+<h3 id="解密">解密</h3>
+
+<p>前文说到，由于AES不是Feistel网络，因此所有层里的操作必须支持完全逆操作。即字节代换层、ShiftRows层和MixColumns层都必须支持逆操作，同时子密钥编排也需要支持逆操作。</p>
+
+<h4 id="密钥加法层逆向">密钥加法层逆向</h4>
+
+<p>由于密钥加法层只是将输入内容与子密钥进行异或，所以求逆运算只要将计算后的内容再与该轮子密钥进行一次异或，即可得原来的输入。
+因为P⊕K⊕K=A。</p>
+
+<h4 id="字节代换层逆向">字节代换层逆向</h4>
+
+<p>字节代换层的逆计算也很简单，因为字节代换层使用S-盒支持反向查找。反向S-盒如下表：</p>
+
+<p><img src="/images/crypto/AES_S_REVERSE.png" alt="AES_S_REVERSE" /></p>
+
+<p><img src="/images/crypto/AES_S_REPLACE_REVERS.png" alt="AES_S_REPLACE_REVERS" /></p>
+
+<h4 id="shiftrows层逆向">ShiftRows层逆向</h4>
+
+<p>因为ShiftRows只是简单的向右移位，所逆运算只要相反地左移相应的位即可。
+<img src="/images/crypto/ShiftRow_REVERSE.png" alt="ShiftRow_REVERSE" /></p>
+
+<h4 id="mixcolumns层逆向">MixColumns层逆向</h4>
+
+<p>MixColumns操作是将输入矩阵与一个固定矩阵进行相乘而得到，而根据矩阵运算法则，将结果乘以该固定矩阵的逆矩阵即可还原得到输入内容。</p>
+
+<p><img src="/images/crypto/MixColumn_REVERSE.png" alt="MixColumn_REVERSE" /></p>
 
 <h1 id="分组加密及其模式与安全性探讨">分组加密及其模式与安全性探讨</h1>
 
