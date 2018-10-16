@@ -76,7 +76,7 @@
 
 <meta itemprop="datePublished" content="2018-09-22T15:28:14&#43;08:00" />
 <meta itemprop="dateModified" content="2018-09-22T15:28:14&#43;08:00" />
-<meta itemprop="wordCount" content="5964">
+<meta itemprop="wordCount" content="6160">
 
 
 
@@ -192,6 +192,7 @@
 <li><a href="#shiftrows层逆向">ShiftRows层逆向</a></li>
 <li><a href="#mixcolumns层逆向">MixColumns层逆向</a></li>
 </ul></li>
+<li><a href="#子密钥编排的可逆性">子密钥编排的可逆性</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#分组加密及其模式与安全性探讨">分组加密及其模式与安全性探讨</a></li>
@@ -536,6 +537,10 @@ K10=(W40,W41,W42,W43)
 <p>MixColumns操作是将输入矩阵与一个固定矩阵进行相乘而得到，而根据矩阵运算法则，将结果乘以该固定矩阵的逆矩阵即可还原得到输入内容。</p>
 
 <p><img src="/images/crypto/MixColumn_REVERSE.png" alt="MixColumn_REVERSE" /></p>
+
+<h3 id="子密钥编排的可逆性">子密钥编排的可逆性</h3>
+
+<p>前文说到，AES的每一步计算都是可以进行逆计算的，在每一轮的逆计算过程中，都需要使用与对应轮的子密钥参与解密，只是顺序相反，即第一轮解密需要最后一轮加密的密钥，依次，最后一轮解密需要第一轮加密的密钥。由此可知，只需要在解密前重新按密钥编排算法将所有轮次的子密钥计算得到，在解密时获取相应轮次的密钥即可。只是由于需要先计算好所有轮次的子密钥，而不能像加密那样动态地计算子密钥。</p>
 
 <h1 id="分组加密及其模式与安全性探讨">分组加密及其模式与安全性探讨</h1>
 
