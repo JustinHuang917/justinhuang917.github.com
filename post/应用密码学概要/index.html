@@ -17,7 +17,7 @@
 
 
 <meta name="author" content="justin huang" />
-  <meta name="description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&amp;rdquo;⊕&amp;r" />
+  <meta name="description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回1。常用符号&amp;rdquo;⊕&amp;r" />
 
   <meta name="keywords" content="Justin, JustinHuang, ShareCore" />
 
@@ -29,7 +29,7 @@
 <meta name="generator" content="Hugo 0.43" />
 
 
-<link rel="canonical" href="http://localhost:1313/post/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E6%A6%82%E8%A6%81/" />
+<link rel="canonical" href="http://sharecore.net/post/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E6%A6%82%E8%A6%81/" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -50,9 +50,9 @@
 
 
 <meta property="og:title" content="应用密码学概要" />
-<meta property="og:description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&rdquo;⊕&r" />
+<meta property="og:description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回1。常用符号&rdquo;⊕&r" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:1313/post/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E6%A6%82%E8%A6%81/" />
+<meta property="og:url" content="http://sharecore.net/post/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E6%A6%82%E8%A6%81/" />
 
 
 
@@ -71,7 +71,7 @@
 
 
 <meta itemprop="name" content="应用密码学概要">
-<meta itemprop="description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&rdquo;⊕&r">
+<meta itemprop="description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回1。常用符号&rdquo;⊕&r">
 
 
 <meta itemprop="datePublished" content="2018-09-22T15:28:14&#43;08:00" />
@@ -83,7 +83,7 @@
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="应用密码学概要"/>
-<meta name="twitter:description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&rdquo;⊕&r"/>
+<meta name="twitter:description" content="异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回1。常用符号&rdquo;⊕&r"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -215,7 +215,7 @@
 
 <h1 id="异或-xor">异或(XOR)</h1>
 
-<p>文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&rdquo;⊕&rdquo;来表示。常见操作定义如下：</p>
+<p>文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回1。常用符号&rdquo;⊕&rdquo;来表示。常见操作定义如下：</p>
 
 <pre><code>    1⊕1=0
     1⊕0=1
@@ -300,7 +300,7 @@ sxor(val,'bb')=&gt;'aa'
 <p>64位的明文在完成初始转换后，会被分割成L0与R0左右两部分，每部分长度为32位，右半部分与生成的子密钥作为参数传入f函数，f函数的输出与左部分异或后作为下一轮的右半部分，而右半部分将直接复制到下一轮的左半部分。即：</p>
 
 <pre><code> R1=f(R0,K1)⊕L0
- L1=L0
+ L1=R0
 </code></pre>
 
 <p>可见DES的<strong>每一轮只对输入内容的左半部分加密，右半部分只是简单复制到下一轮</strong>。</p>
@@ -613,7 +613,7 @@ K10=(W40,W41,W42,W43)
       <div class="social-links">
       <a href="https://github.com/justinhuang917" class="iconfont icon-github" title="github"></a>
       <a href="http://weibo.com/justinhuang917" class="iconfont icon-weibo" title="weibo"></a>
-  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+  <a href="http://sharecore.net/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
 </div>
 
 <div class="copyright">
