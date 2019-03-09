@@ -26,7 +26,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.43" />
+<meta name="generator" content="Hugo 0.54.0" />
 
 
 <link rel="canonical" href="http://sharecore.net/post/%E5%AF%B9go%E7%9A%84slice%E8%BF%9B%E8%A1%8Cappend%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%91/" />
@@ -53,22 +53,8 @@
 <meta property="og:description" content="今天我们说说Go为数不多的一个“坑”。这个“坑”的代码是这样的： func main() { arr1 := [5]int{1, 2, 3, 4, 5} slice1 := arr1[1:2] slice1 = append(slice1, 6, 7, 8) fmt.Println(&quot;slice1:&quot;, slice1) fmt.Println(&quot;arr1:&quot;, arr1) arr2 := [5]int{1, 2, 3, 4, 5} slice2 := arr2[1:3] slice2 = append(slice2, 6, 7," />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://sharecore.net/post/%E5%AF%B9go%E7%9A%84slice%E8%BF%9B%E8%A1%8Cappend%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%91/" />
-
-
-
 <meta property="article:published_time" content="2014-01-09T00:10:45&#43;00:00"/>
-
 <meta property="article:modified_time" content="2014-01-09T00:10:45&#43;00:00"/>
-
-
-
-
-
-
-
-
-
-
 
 <meta itemprop="name" content="对Go的Slice进行Append的一个坑">
 <meta itemprop="description" content="今天我们说说Go为数不多的一个“坑”。这个“坑”的代码是这样的： func main() { arr1 := [5]int{1, 2, 3, 4, 5} slice1 := arr1[1:2] slice1 = append(slice1, 6, 7, 8) fmt.Println(&quot;slice1:&quot;, slice1) fmt.Println(&quot;arr1:&quot;, arr1) arr2 := [5]int{1, 2, 3, 4, 5} slice2 := arr2[1:3] slice2 = append(slice2, 6, 7,">
@@ -462,7 +448,7 @@ static void growslice1(SliceType *t, Slice x, intgo newcap, Slice *ret)
 <script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
 
 
-<script>
+<script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;

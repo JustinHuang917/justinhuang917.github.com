@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>分布式锁进阶-设计概要 - Justin写字的地方</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="justin huang" />
+  <meta name="description" content="锁在并发编程领域很为常见，当有资源竞争时就会有锁，在单进程的程序里，由于编程语言一般均提供了相应的原语，只需要简单的一个函数调用或声明，及可" />
+
+  <meta name="keywords" content="Justin, JustinHuang, ShareCore" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0" />
+
+
+<link rel="canonical" href="http://sharecore.net/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%BF%9B%E9%98%B6-%E8%AE%BE%E8%AE%A1%E6%A6%82%E8%A6%81/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="分布式锁进阶-设计概要" />
+<meta property="og:description" content="锁在并发编程领域很为常见，当有资源竞争时就会有锁，在单进程的程序里，由于编程语言一般均提供了相应的原语，只需要简单的一个函数调用或声明，及可" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://sharecore.net/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%BF%9B%E9%98%B6-%E8%AE%BE%E8%AE%A1%E6%A6%82%E8%A6%81/" />
+<meta property="article:published_time" content="2016-11-01T23:42:14&#43;00:00"/>
+<meta property="article:modified_time" content="2016-11-01T23:42:14&#43;00:00"/>
+
+<meta itemprop="name" content="分布式锁进阶-设计概要">
+<meta itemprop="description" content="锁在并发编程领域很为常见，当有资源竞争时就会有锁，在单进程的程序里，由于编程语言一般均提供了相应的原语，只需要简单的一个函数调用或声明，及可">
+
+
+<meta itemprop="datePublished" content="2016-11-01T23:42:14&#43;00:00" />
+<meta itemprop="dateModified" content="2016-11-01T23:42:14&#43;00:00" />
+<meta itemprop="wordCount" content="3991">
+
+
+
+<meta itemprop="keywords" content="技术常识,架构," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="分布式锁进阶-设计概要"/>
+<meta name="twitter:description" content="锁在并发编程领域很为常见，当有资源竞争时就会有锁，在单进程的程序里，由于编程语言一般均提供了相应的原语，只需要简单的一个函数调用或声明，及可"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Justin&#39;s Notes</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Justin&#39;s Notes</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">分布式锁进阶-设计概要</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-11-01 </span>
+        
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <p>锁在并发编程领域很为常见，当有资源竞争时就会有锁，在单进程的程序里，由于编程语言一般均提供了相应的原语，只需要简单的一个函数调用或声明，及可实现线程的互斥访问和操作。比如：</p>
+
+<pre><code class="language-java"> lock(obj){
+   doSomthing();
+ }
+</code></pre>
+
+<p>但是，如果程序需要在不同的进程间互斥访问或操作共享资源，那语言级别的的锁定原语就无能为力。比如：我们有两个客户端对同一个文件进行修改，相互的修改需要互斥，不能相互覆盖也不能脏读，显然我们只在进程内加锁是无法实现多个客户端之间的协同和互斥的。对于此类场景，分布式锁就派上用场了。</p>
+
+<p>简单来说，分布式锁就是需要一个资源中心，客户端向该资源中心请求某一资源的锁定，如果请求成功，则锁定该资源，其他客户端不能继续锁定该资源，直到该资源被释放为止。</p>
+
+<p>说到资源中心，我们最容易想到的就是数据库了，数据库是天然收敛的，具有中心化特点，同时他有可以提供数据行级别的原子锁定操作，比较适合作为分布式锁的中心。可以创建一个如下的表：</p>
+
+<pre><code class="language-sql">CREATE TABLE lock_resource_t{
+	id int(11) NOT NULL AUTO_INCREMENT
+	resource_name varchar(200) NOT NULL,
+ 	insert_time timestamp  NULL,
+ 	lock_token varchar(32) NOT NULL,
+ 	PRIMARY KEY (id),
+ 	UNIQUE KEY uidx_resouce_name (resouce_name) USING BTREE
+}ENGINE=InnoDB;
+</code></pre>
+
+<p>为resource_name创建了唯一索引，用数据库的唯一约束来进行资源互斥。可以定义以下的操作：</p>
+
+<pre><code class="language-java">//锁定操作
+bool tryLock(string resouceName){ 
+	String lockToken=uuid();
+	return exex_sql(insert into lock_resource_t(resouce_name,lock_token) 
+	values(resouceName,lockToken);commit;);
+}
+
+//释放锁,lockToken用于保证只有当前锁定者才可以释放自己所锁定的资源
+bool releaseLock(string resouceName,string lockToken){
+	return exex_sql(delete from lock_resource_t where 
+	resouce_name = resouceName and lock_token=lockToken);commit;;
+}
+</code></pre>
+
+<p>上面的简单代码就基本模拟了一个分布式锁的核心功能：资源互斥。但是要作为一个可用的分布式锁这还远远不够。
+注意到上面的锁定和释放，均只调用了一次，当有资源互斥的时候，它们会直接返回失败，如果失败了，那客户端只能不断重试，对于此，我们可以将重试的逻辑加到lock和release的API中去，这样就可以精简客户端的调用：</p>
+
+<pre><code class="language-java">//锁定操作,并自动重试
+bool tryLock(string resouceName,int tryTimes){ 
+	String lockToken=uuid();
+	while(--tryTimes &gt;= 0)){
+		if(exex_sql(insert into lock_resource_t(resouce_name,lock_token) 
+		values(resouceName,lockToken);commit;)){
+			return true;
+		}else{
+			thread.sleep(200);
+		}
+	}
+	return false;
+}
+
+bool releaseLock(string resouceName,string lockToken,int tryTimes){
+	while(--tryTimes &gt;= 0)){
+		if(exex_sql(delete from lock_resource_t where 
+			resouce_name = resouceName and lock_token=lockToken;commit;)){
+			return true;
+		}else{
+			thread.sleep(200);
+		}
+	}
+	return false;
+}
+</code></pre>
+
+<p>以上实现，在客户端均能正常调用的情况下没有问题，但是当客户端出现异常时，可能导致锁无法被释放。比如某客户端锁定某资源后，还没有来得及释放该资源的锁就崩溃了，将导致该资源一直被锁定，其他客户端均无法访问该资源。对于此类问题，一般引入锁定的超时时间来解决，即在调用锁定失败之后，判断原来锁的时间与当前时间差是不是超过了锁定周期，如果超过，及释放掉原来的锁，重新获取锁成功。代码如：</p>
+
+<pre><code class="language-java">//锁定操作,并自动重试
+bool tryLock(string resouceName){ 
+	String lockToken=uuid();
+	int timeout=30000;
+	//先删除已过期的锁，再执行锁定，但必须保证删除和锁定的原子性
+	return exec(
+		delete from lock_resource_t where resouce_name = resouceName and insert_time&lt;now()-timeout;
+		insert into lock_resource_t(resouce_name,lock_token, insert_time) values(resouceName,lockToken,now());
+		commit;
+		);
+}
+</code></pre>
+
+<p>上述实现中，由于考虑到各个客户端可能存在时钟差异，我们直接使用数据库时钟来获取时间。
+受限于数据库的性能，基于数据库的分布式锁方案,当并发访问较高时，吞吐量一般，延时也较大, 可以使用redis来替代数据库。由于redis可以为某个key设置超时，所以我们只需要在插入该key时设置超时时间即可，而不用客户端再来处理超时：</p>
+
+<pre><code class="language-shell">SET resource_name lock_token NX PX 60000
+</code></pre>
+
+<p>以上指令将设置resource_name的值，仅当其不存在时生效(NX选项), 且设置其生存期为60000毫秒(PX选项)。并且上述指令是原子性的，所以只要上述命令能执行成功，即代表客户端可以获取到锁，否则认为失败。但是由于Redis没有提供能判断值的相等性后执行删除的原子命令，所以需要借助Lua脚本(Redis的单线程特性，执行Lua脚本命令也是单线程执行)</p>
+
+<pre><code class="language-Lua">if redis.call(&quot;get&quot;,KEYS[1]) == ARGV[1] then
+    return redis.call(&quot;del&quot;,KEYS[1])
+else
+    return 0
+end
+</code></pre>
+
+<p>现在有了互斥、重试以及超时管理，我们基本解决了客户端获取锁的问题，既保证了在任何时候只有一个客户端可以获得锁，也保证了锁在没有正常释放的情况下，资源也能继续被使用。但是还有一个问题需要解决，我们前面均只考虑了只存在一个中心的情况，无论是数据库还是redis，如果只有一个中心节点，那就存在单点问题。分布式锁作为系统的中心，如果其不可用(除了可用性问题，采用Redis的方案，如果单节点出现failover，可能导致数据丢失，锁的状态也可能丢失，引起锁的不安全性问题)，将导致所有客户端均不能正常使用。容易想到的解决方案是，建立数据库集群或者redis集群来解决。但是集群真的能锁的不安全问题吗？它会不会带来新的问题？</p>
+
+<p>举例来说，采取主从架构来部署Redis集群，每个Redis的主节点挂载一个从节点作为备份，当主节点不可用时，切换到从节点，可以明显提升Redis的可用性。但是这里忽略了一个问题，由于Redis的主从间数据复制时异步的，所以当主节点崩溃的时候，数据可能还未完全同步从节点，当从节点接管服务后，有可能丧失了锁的安全性。鉴于此情况，Redis的作者提出了基于N(N通常为奇数)个Redis节点的Redlock的算法(<a href="https://redis.io/topics/distlock">https://redis.io/topics/distlock</a> )，算法概述如下：</p>
+
+<p>1、客户端获取本地机器时间；</p>
+
+<p>2、客户端循环遍历N个Redis节点，执行以下命令以尝试获取锁：</p>
+
+<pre><code class="language-shell">SET resource_name lock_token NX PX 60000
+</code></pre>
+
+<p>3、由于需要向多个Redis节点获取锁，为了保证某个Redis节点不可用时算法可以继续运行，获取锁的操作过程中通常还需要设置一个超时时间，并且这个超时时间应该比锁的有效持有时间短很多。当客户端向某个Redis获取锁失败时，立即尝试从下一个节点获取锁。</p>
+
+<p>4、获取锁完成后用当前时间减去第一步记录的时间，得到获取锁过程的总时长，如果超过半数的Redis节点最终获取成功锁，并且获取锁的总时长小于锁的有效持有时间，则客户端成功获取锁，否则获取锁失败。</p>
+
+<p>5、如果客户端最终判断获取锁失败，则立即向每个Redis节点释放锁，需要注意的是，<strong>无论这个节点有没有获取成功，均需要释放</strong>，因为如果是超时引起的获取失败节点，其最终有没有锁成功的状态是未知的。</p>
+
+<p>以上基于通过超时来自动释放锁的方式，存在一个局限是要求客户端的实际操作必须在锁定超时时间内完成，如果客户端的处理时间超过超时时间，则状态会变成不安全，超时时间的选择是一个比较困难的点。Redlock要求获取锁的时间应远小于超时时间，以给客户端的操作预留足够的处理时间，所以该如何选择锁定成功的有效时间呢？又是一个比较困难的问题。除了这个问题，Redlock还是依然存在几种可能导致不安全锁的情况。</p>
+
+<p>先看第一种情况，假设有1、2、3三个Redis节点，分别发生以下锁获取的事件：</p>
+
+<ol>
+<li>客户端A通过成功从1、2节点获取锁，节点3未成功获取，最终判定为获取锁成功。</li>
+<li>此时节点2发生重启，导致客户端A在该节点上的锁定状态丢失。</li>
+<li>节点2重启之后，客户端B又通过从节点2、3成功获取相同资源的锁，即对于相同资源，两个客户端都同时获取到了锁，导致了不安全的情况。</li>
+</ol>
+
+<p>以上问题，默认情况下可以借助于Redis的AOF持久化机制来尽量保证数据状态不丢失，同时设置Redis每次修改操作都执行fsync，但会明显降低Redis的写入性能(不同的操作系统，fsync也不一定能完全保证不丢失数据)。</p>
+
+<p>第二种情况，同样假设有1、2、3三个Redis节点，分别发生以下事件：</p>
+
+<ol>
+<li>客户端A通过成功从1、2节点获取锁，最终判定为获取锁成功</li>
+<li>节点2的机器发生机器时间前移(比如有人手工更新了机器时间或NAT同步错误)，导致节点2上的锁快速过期</li>
+<li>客户端B又通过从节点2、3成功获取相同资源的锁,即对于相同资源，两个客户端都同时获取到了锁，导致了不安全的情况。</li>
+</ol>
+
+<p>以上问题，是由分布式锁的实现依赖了不可靠的时钟导致。</p>
+
+<p>另外以上所有基于超时时间来让锁自动解决的方案，存在一种解决不了的情况，那就是当客户端本身发生延时无法判断锁的有效性，导致不安全的情况。比如，分别发生以下事件:</p>
+
+<ol>
+<li>客户端A向分布式锁服务获取到了锁，并成功为锁设置超时时间</li>
+<li>客户端A获取锁后，马上进入了暂停状态，比如发生Full GC</li>
+<li>在客户端A暂停期间，锁过期，分布式锁的服务将锁分配给客户端B</li>
+<li>客户端A从暂停的状态中恢复，继续执行，此时客户端A并不知道自身的锁已经过时，即发生不安全情况，锁同时被客户端A和客户端B持有。</li>
+</ol>
+
+<p>接下来，我们来看看基于zookeeper的分布式锁实现，能不能解决上述问题呢？基于zookeeper来实现分布式锁的一般实现方式如下：</p>
+
+<ol>
+<li>客户端尝试向zookeeper创建一个节点“/lock_token”,如果客户端创建节点成功，则获取锁成功，否则则认为失败；</li>
+<li>客户端释放锁时，只需要将创建的节点删除，即可完成锁的释放</li>
+<li>由于zookeeper有临时节点的功能，所以只要创建的节点是临时节点，当客户端崩溃后，由于会话消失，临时节点会被自动删除，锁也一定会释放</li>
+</ol>
+
+<p>上述方案解决了上面说的锁自动释放问题，同时由于zookeeper的多节点持久化存储功能，所以也解决了由于数据状态丢失导致的不安全锁问题。但是回到上面说到的如果客户端获取后马上进入暂停状态，如Full GC，会不会发生不安全锁的问题？这主要要分析zookeeper时怎么判断会话丢失的。zookeeper的会话存活判断基于与客户端之间的心跳，心跳从客户端发往zookeeper，如果超过一定时间没有收到客户端的心跳即认为客户端已经不存活了，但是不幸的是，客户端进入Full GC的暂停状态时，或客户端与zookeeper间出现网络隔离，会话丢失，将同样会发生锁失效导致其他客户端同时获取锁的问题。所以，基于zookeeper的实现，也同样无法根本解决不安全锁的问题。</p>
+
+<p>尽管基于zookeeper的实现，无法提供真正安全的分布式锁，但借助于zookeeper的一些功能特性，将使得分布式锁的实现变得简单。</p>
+
+<p>一个是zookeeper的watch机制，客户端在没有获取成功锁时，不需要一直向zookeeper查询锁的状态，借助watch机制由zookeeper主动通知客户端来来唤醒，从而使客户端不用进入“自旋”状态。二是zookeeper可以建立顺序子节点，这一点非常有助于实现分布式锁的公平性，具体将在下一篇关于分布式锁的具体代码实现的文章里继续介绍。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">justin huang</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2016-11-01</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/%E6%8A%80%E6%9C%AF%E5%B8%B8%E8%AF%86/">技术常识</a>
+          
+          <a href="/tags/%E6%9E%B6%E6%9E%84/">架构</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/rpc%E6%9C%8D%E5%8A%A1%E8%BF%BD%E8%B8%AA%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">RPC服务追踪的原理与实践</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/%E6%87%B7%E6%89%8D%E4%B8%8D%E9%81%87/">
+            <span class="next-text nav-default">懷才不遇？</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/justinhuang917" class="iconfont icon-github" title="github"></a>
+      <a href="http://weibo.com/justinhuang917" class="iconfont icon-weibo" title="weibo"></a>
+  <a href="http://sharecore.net/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2013 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">justin huang</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-37230829-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

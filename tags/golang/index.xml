@@ -199,9 +199,7 @@ if s.closed {//判断关闭标识
 &lt;pre&gt;&lt;code&gt;s.updates &amp;lt;- item
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;`那以上问题我们有什么办法来避免呢？&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;`那以上问题我们有什么办法来避免呢？&lt;/p&gt;</description>
     </item>
     
   </channel>

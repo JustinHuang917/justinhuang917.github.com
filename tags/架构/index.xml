@@ -21,11 +21,11 @@
     </item>
     
     <item>
-      <title>分布式锁进阶1-基础</title>
-      <link>http://sharecore.net/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%BF%9B%E9%98%B61-%E5%9F%BA%E7%A1%80/</link>
+      <title>分布式锁进阶-设计概要</title>
+      <link>http://sharecore.net/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%BF%9B%E9%98%B6-%E8%AE%BE%E8%AE%A1%E6%A6%82%E8%A6%81/</link>
       <pubDate>Tue, 01 Nov 2016 23:42:14 +0000</pubDate>
       
-      <guid>http://sharecore.net/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%BF%9B%E9%98%B61-%E5%9F%BA%E7%A1%80/</guid>
+      <guid>http://sharecore.net/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%BF%9B%E9%98%B6-%E8%AE%BE%E8%AE%A1%E6%A6%82%E8%A6%81/</guid>
       <description>锁在并发编程领域很为常见，当有资源竞争时就会有锁，在单进程的程序里，由于编程语言一般均提供了相应的原语，只需要简单的一个函数调用或声明，及可</description>
     </item>
     
