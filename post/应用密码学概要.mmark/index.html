@@ -66,7 +66,7 @@
 
 <meta itemprop="datePublished" content="2018-09-22T15:28:14&#43;08:00" />
 <meta itemprop="dateModified" content="2018-09-22T15:28:14&#43;08:00" />
-<meta itemprop="wordCount" content="7807">
+<meta itemprop="wordCount" content="7803">
 
 
 
@@ -216,13 +216,13 @@
 <p>除了以上定义，异或操作还具有如下属性：</p>
 
 <ol>
-<li>顺序无关性：A⊕(B⊕C)=(A⊕B)⊕C</li>
-<li>可交换：A⊕B=B⊕A</li>
-<li>任何输入与自身异或，输出为0：A⊕A=0</li>
-<li>任何输入与0异或，其结果为其本身：1⊕0=1,0⊕0=0</li>
+<li>顺序无关性：$$ A\bigoplus (B \bigoplus C)=(A \bigoplus B) \bigoplus C $$</li>
+<li>可交换：$$ A \bigoplus B=B \bigoplus A $$</li>
+<li>任何输入与自身异或，输出为0：$$ A \bigoplus A=0 $$</li>
+<li>任何输入与0异或，其结果为其本身：$$ 1 \bigoplus 0=1,0 \bigoplus 0=0 $$</li>
 </ol>
 
-<p>而基于以上四个属性，我们可以推导地五条重要的属性：a⊕b⊕a=b</p>
+<p>而基于以上四个属性，我们可以推导地五条重要的属性：$$a \bigoplus b \bigoplus a=b$$</p>
 
 <pre><code>A⊕B⊕A=A⊕A⊕B(属性1)
 		=0⊕B(属性3)
@@ -570,11 +570,11 @@ K10=(W40,W41,W42,W43)
 <ol>
 <li>随机一个初始化向量(IV)值</li>
 <li>加密第一个分组：$$ y_1=E(x_1 \bigoplus IV) $$,即第一个明文与IV异或后进行加密，得第一个密文分组</li>
-<li>加密其他分组：$$ y_1=E(x<em>i \bigoplus y</em>{i-1}),i \geq 2 $$</li>
+<li>加密其他分组：$$ y_1=E(x_i \bigoplus y_{i-1}),i \geq 2 $$</li>
 
 <li><p>解密第一个分组：$$ x_1=D(y_1) \bigoplus IV $$，即第一个密文分组进行解密后再与IV异或，得第一个明文分组</p></li>
 
-<li><p>解密其他分组: $$ x_i = D(y<em>i) \bigoplus y</em>{i-1}$$,</p></li>
+<li><p>解密其他分组: $$ x_i = D(y_i) \bigoplus y_{i-1} $$,</p></li>
 </ol>
 
 <p>密码分组链接模式(CBC)要求每次加密都选择一个新的IV，通过这个随机的IV设定，提供了一个概率加密方案，可以很好地应对前文说的统计分析攻击，同时IV可以不用保密，可以直接以明文形式传递给解密者，重要的是IV设置要有充分的随机性。只要IV具有充分的随机性，代换攻击在此处也难以发挥的余地，因为攻击构建的相同明文信息无法得到相同的密文分组，也就无法从密文识别出任何模式。</p>
