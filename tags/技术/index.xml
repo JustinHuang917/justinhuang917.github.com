@@ -6,10 +6,28 @@
     <description>Recent content in 技术 on Justin写字的地方</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 09 Sep 2018 11:17:54 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 16 Feb 2019 18:08:26 +0800</lastBuildDate>
     
 	<atom:link href="http://sharecore.net/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>深度学习入门</title>
+      <link>http://sharecore.net/post/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8/</link>
+      <pubDate>Sat, 16 Feb 2019 18:08:26 +0800</pubDate>
+      
+      <guid>http://sharecore.net/post/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8/</guid>
+      <description>本文是前段时间在团队分享关于深度学习入门的PPT资料，介绍了从线性回归模型到神经网络模型的相关基础知识。</description>
+    </item>
+    
+    <item>
+      <title>应用密码学概要</title>
+      <link>http://sharecore.net/post/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E6%A6%82%E8%A6%81.mmark/</link>
+      <pubDate>Sat, 22 Sep 2018 15:28:14 +0800</pubDate>
+      
+      <guid>http://sharecore.net/post/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E6%A6%82%E8%A6%81.mmark/</guid>
+      <description>异或(XOR) 文章的开篇，我们从最简单的异或说起。异或是一个二元判断操作，当两个输入相同时返回0，相异时返回0。常用符号&amp;rdquo;⊕&amp;r</description>
+    </item>
     
     <item>
       <title>简单两层神经网络的实现</title>
