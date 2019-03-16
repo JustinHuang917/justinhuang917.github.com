@@ -66,7 +66,7 @@
 
 <meta itemprop="datePublished" content="2018-09-22T15:28:14&#43;08:00" />
 <meta itemprop="dateModified" content="2018-09-22T15:28:14&#43;08:00" />
-<meta itemprop="wordCount" content="7803">
+<meta itemprop="wordCount" content="7823">
 
 
 
@@ -188,8 +188,12 @@
 </ul></li>
 <li><a href="#分组加密及其模式与安全性探讨">分组加密及其模式与安全性探讨</a>
 <ul>
-<li><a href="#电子密码本模式-ecb">电子密码本模式(ECB)</a></li>
-<li><a href="#密码分组链接模式-cbc">密码分组链接模式(CBC)</a></li>
+<li><a href="#电子密码本模式-electronic-codeblock-ecb">电子密码本模式(Electronic codeblock,ECB)</a></li>
+<li><a href="#密码分组链接模式-cipher-block-chaining-cbc">密码分组链接模式(Cipher-block chaining, CBC)</a>
+<ul>
+<li><a href="#针对cbc模式的反转攻击">针对CBC模式的反转攻击</a></li>
+<li><a href="#针对cbc模式的字节填攻击">针对CBC模式的字节填攻击</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#公钥加密">公钥加密</a></li>
 <li><a href="#hash函数">Hash函数</a></li>
@@ -216,18 +220,39 @@
 <p>除了以上定义，异或操作还具有如下属性：</p>
 
 <ol>
-<li>顺序无关性：$$ A\bigoplus (B \bigoplus C)=(A \bigoplus B) \bigoplus C $$</li>
-<li>可交换：$$ A \bigoplus B=B \bigoplus A $$</li>
-<li>任何输入与自身异或，输出为0：$$ A \bigoplus A=0 $$</li>
-<li>任何输入与0异或，其结果为其本身：$$ 1 \bigoplus 0=1,0 \bigoplus 0=0 $$</li>
+<li>顺序无关性：
+<br /></li>
 </ol>
 
-<p>而基于以上四个属性，我们可以推导地五条重要的属性：$$a \bigoplus b \bigoplus a=b$$</p>
+<p>$$ A\bigoplus (B \bigoplus C)=(A \bigoplus B) \bigoplus C $$</p>
 
-<pre><code>A⊕B⊕A=A⊕A⊕B(属性1)
-		=0⊕B(属性3)
-			=B(属性4)
-</code></pre>
+<ol>
+<li>可交换：
+<br /></li>
+</ol>
+
+<p>$$ A \bigoplus B=B \bigoplus A $$</p>
+
+<ol>
+<li>任何输入与自身异或，输出为0：
+<br /></li>
+</ol>
+
+<p>$$ A \bigoplus A=0 $$</p>
+
+<ol>
+<li>任何输入与0异或，其结果为其本身：</li>
+</ol>
+
+<p>$$ 1 \bigoplus 0=1,0 \bigoplus 0=0 $$</p>
+
+<p>而基于以上四个属性，我们可以推导地五条重要的属性：</p>
+
+<p>$$ A \bigoplus B \bigoplus A=B $$</p>
+
+<p>推导如下：</p>
+
+<p>$$ A \bigoplus B \bigoplus A=A \bigoplus A \bigoplus B =0 \bigoplus B =B $$</p>
 
 <p>以上定义，除对“0”和“1”的异或操作满足外，可以推广到任何多个位的操作。如对两个数字或两个字符串进行按位异或操作，也均满足以上定义。</p>
 
@@ -388,7 +413,6 @@ sxor(val,'bb')=&gt;'aa'
 <p>而L16由R15平移而来，所以：</p>
 
 <pre><code>DL0=R16
-DR0=L16=R15
 </code></pre>
 
 <p>接着计算下一轮加密结果(DL1,DR1)</p>
@@ -536,7 +560,7 @@ K10=(W40,W41,W42,W43)
 
 <p>前文所介绍的DES、AES均通过将明文按照固定长度进行分组后加密，一个明文通常包含多个分组，需要有一个的方法将这些独立的分组加密组合成整个明文的加密密文作为输出，并保证安全。主流的分组加密提供了多种加密模式，本文主要介绍两种主流的操作模式：电子密码本模式(ECB)、密码分组链接模式(CFB)。</p>
 
-<h2 id="电子密码本模式-ecb">电子密码本模式(ECB)</h2>
+<h2 id="电子密码本模式-electronic-codeblock-ecb">电子密码本模式(Electronic codeblock,ECB)</h2>
 
 <p>电子密码本模式是最简单的分组加密操作模式，该模式采取将明文按算法要求分割成固定长度的组，如果明文不是固定长度的整数倍，则在加密前将不足长度的组填充固定值，使所有分组的长度均为固定长度，接下来分别对所有分组进行加密，最后将分组的密文组合成密文作为输出。以AES为例：</p>
 
@@ -556,7 +580,7 @@ K10=(W40,W41,W42,W43)
 
 <p><img src="/images/crypto/ECB_BIT.png" alt="ECB_BIT" /></p>
 
-<h2 id="密码分组链接模式-cbc">密码分组链接模式(CBC)</h2>
+<h2 id="密码分组链接模式-cipher-block-chaining-cbc">密码分组链接模式(Cipher-block chaining, CBC)</h2>
 
 <p>前文说到电子密码本模式(ECB)存在分组信息特定的缺点，而密码分组链接模式(CBC)针对此缺点给出了解决方案。密码分组链接模式(CBC)主要基于两种设计思想：</p>
 
@@ -567,19 +591,35 @@ K10=(W40,W41,W42,W43)
 
 <p>密码分组链接模式(CBC)加解密过程大概如下：</p>
 
+<p><img src="/images/crypto/CBC.png" alt="CBC" /></p>
+
 <ol>
 <li>随机一个初始化向量(IV)值</li>
-<li>加密第一个分组：$$ y_1=E(x_1 \bigoplus IV) $$,即第一个明文与IV异或后进行加密，得第一个密文分组</li>
-<li>加密其他分组：$$ y_1=E(x_i \bigoplus y_{i-1}),i \geq 2 $$</li>
 
-<li><p>解密第一个分组：$$ x_1=D(y_1) \bigoplus IV $$，即第一个密文分组进行解密后再与IV异或，得第一个明文分组</p></li>
+<li><p>加密第一个分组：即第一个明文与IV异或后进行加密，得第一个密文分组</p>
 
-<li><p>解密其他分组: $$ x_i = D(y_i) \bigoplus y_{i-1} $$,</p></li>
+<p>$$ y_1=E(x_1 \bigoplus IV) $$</p></li>
+
+<li><p>加密其他分组：</p>
+
+<p>$$ y_1=E(x_i \bigoplus y_{i-1}),i \geq 2 $$</p></li>
+
+<li><p>解密第一个分组：即第一个密文分组进行解密后再与IV异或，得第一个明文分组</p>
+
+<p>$$ x_1=D(y_1) \bigoplus IV $$，</p></li>
+
+<li><p>解密其他分组:</p>
+
+<p>$$ x_i = D(y_i) \bigoplus y_{i-1} $$</p></li>
 </ol>
 
 <p>密码分组链接模式(CBC)要求每次加密都选择一个新的IV，通过这个随机的IV设定，提供了一个概率加密方案，可以很好地应对前文说的统计分析攻击，同时IV可以不用保密，可以直接以明文形式传递给解密者，重要的是IV设置要有充分的随机性。只要IV具有充分的随机性，代换攻击在此处也难以发挥的余地，因为攻击构建的相同明文信息无法得到相同的密文分组，也就无法从密文识别出任何模式。</p>
 
 <p>但是CBC模式也是优代价的，因为每个密文的分组计算都依赖前一个密文的分组，所以无法进行并行的加解密计算，当出现某一密文分组的传输错误后，其后面的密文分组可能都无法解密，加解密均无法独立地并行执行。</p>
+
+<h3 id="针对cbc模式的反转攻击">针对CBC模式的反转攻击</h3>
+
+<h3 id="针对cbc模式的字节填攻击">针对CBC模式的字节填攻击</h3>
 
 <h1 id="公钥加密">公钥加密</h1>
 
